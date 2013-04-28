@@ -3,13 +3,26 @@
 	xmlns="http://ns.adobe.com/air/application/3.7"
 	minimumPatchLevel="0">
 
+  <!--
+    AIR application descriptor elements:
+    http://help.adobe.com/en_US/air/build/WSfffb011ac560372f2fea1812938a6e463-8000.html
+  -->
+
+  <!-- application identity -->
+  <id>csusbdt.Hello</id>
+  <name>
+    <text xml:lang="en">Hello AIR</text>
+  </name>
+  <filename>Hello AIR</filename>
+
+  <!-- application version -->
+  <versionNumber>1.0.0</versionNumber>
+  <versionLabel>ver 1.0.0</versionLabel> <!-- optional -->
+
   <supportedProfiles>desktop</supportedProfiles>
 
-  <versionNumber>1.0.0</versionNumber>
-  <versionLabel>v1</versionLabel>
   <allowBrowserInvocation>false</allowBrowserInvocation>
 
-  <id>app.Hello</id>
 
   <installFolder>HelloAIR</installFolder>
 
@@ -26,11 +39,7 @@
   </icon>
 -->
 
-  <name>
-    <text xml:lang="en">Hello AIR</text>
-  </name>
 
-  <filename>Hello AIR</filename>
 
   <description>
     <text xml:lang="en">Hello Adobe AIR application.</text>
@@ -44,21 +53,22 @@
 
   <initialWindow>
     <content>Main.swf</content>
-    <title>Hello Application</title>
+    <title>Hello AIR</title>
     <minimizable>true</minimizable>
     <maximizable>true</maximizable>
-    <resizable>true</resizable>
-    <fullscreen>false</fullscreen>
+    <resizable>false</resizable>
+    <fullScreen>false</fullScreen>
     <width>500</width>
     <height>500</height>
     <x>150</x>
     <y>150</y>
     <minSize>300 300</minSize>
     <maxSize>800 800</maxSize>
-    <visible>true</visible>
+    <visible>true</visible> <!-- how app can make itelf visible after init? -->
     <systemChrome>standard</systemChrome>
     <transparent>false</transparent>
-    <renderMode>direct</renderMode>
+    <renderMode>auto</renderMode>  <!-- not sure what is optimal here: auto, cpu, direct, or gpu -->
+    <requestedDisplayResolution>high</requestedDisplayResolution>  <!-- affects retina mac books only -->
   </initialWindow>
 
 </application>

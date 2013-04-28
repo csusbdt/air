@@ -1,6 +1,6 @@
 export APP_MSG="message from the compile script"
 mxmlc \
-  -debug=false                               \
+  -debug=true                                \
   -omit-trace-statements=false               \
   -title="Hello Desktop AIR Application"     \
   -description="Example Application"         \

@@ -1,5 +1,17 @@
 # Notes on Adobe Air
 
+The purpose of this repository is to keep a record of my research and experimentation
+on developing applications that run in Adobe AIR.
+
+My current project is to develop a process to develop an application using only text
+editor and command line tools with the following features.
+
+- Says _hello_ in a window -- that's all it does.
+- Runs in OS X and Windows desktop environments.
+- Installs and updates from a website.
+
+This project is in the folder named _hello_.
+
 ## References
 
 - [Adobe AIR](http://help.adobe.com/en_US/air/build/index.html)
@@ -7,17 +19,5 @@
 - [Packaging a desktop AIR installation file](http://help.adobe.com/en_US/air/build/WS5b3ccc516d4fbf351e63e3d118666ade46-7f66.html)
 - [Beginners Guide to Getting Started with AS3 (Without Learning Flex)](http://www.senocular.com/flash/tutorials/as3withmxmlc/)
 
-Perused [AIR application descriptor elements](http://help.adobe.com/en_US/air/build/WSfffb011ac560372f2fea1812938a6e463-8000.html)
-while modifying _descriptor.xml_.
-
-Action Script 3 source code files end with an extension of _.as_.
-
-You can define timeline functions that are provided outside a Flash movie.
-
-How to associate an ActionScript file with a Flash movie.
-
 For captive runtime, see http://www.shedosurashu.com/captive-runtime-not-what-i-thought-it-to-be
-
-A Sprite is a movie clip without a timeline and frames.
-
 

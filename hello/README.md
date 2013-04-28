@@ -87,4 +87,43 @@ Change the permissions to make run.sh executable and then run it.
     chmod +x run.sh
     ./run.sh
 
+Create file _create_keystore.sh_ with the following contents.
+
+```
+adt                  \
+   -certificate      \
+   -cn csusbdt       \
+   -validityPeriod 5 \
+   2048-RSA          \
+   keystore.p12      \
+   1234
+```
+
+Change the permissions to make the script executable and then run it
+to generate a self-signed certifacte and store in _keystore.p12_.
+
+    chmod +x create_keystore.sh
+    ./create_keystore.sh
+
+Create file _package.sh_ with the following contents.
+
+```
+adt                        \
+   -package                \
+   -storetype pkcs12       \
+   -keystore keystore.p12  \
+   -storepass 1234         \
+   -target air             \
+   hello.air               \
+   application.xml         \
+   Main.swf                \
+   icons
+```
+
+Change the permissions to make the script executable and then run it
+to generate _hello.air_.
+
+    chmod +x package.sh
+    ./package.sh
+
 

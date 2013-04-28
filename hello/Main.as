@@ -1,29 +1,21 @@
 package {
 
-import flash.display.Sprite;
-//   import flash.text.*;
+   import flash.display.Sprite;
+   import flash.text.TextField;
 
    public class Main extends Sprite
    {
+      private var greeting:TextField = new TextField();
+
       public function Main() : void
       {
-         trace("OK");
+         greeting.text = "Hello, AIR!";
+         greeting.x = 100;
+         greeting.y = 100;
+         addChild(greeting);
          trace(CONFIG::message);
       }
    }
 
 }
-
-/*
- public class HelloWorld extends Sprite {
-   private var greeting:TextField = new TextField();
-   
-   public function HelloWorld() {	  
-     greeting.text = "Hello World!";
-     greeting.x = 100;
-     greeting.y = 100;
-     addChild(greeting);
-   }
- }
-*/
 
