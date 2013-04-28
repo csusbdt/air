@@ -21,8 +21,8 @@
 
   <supportedProfiles>desktop</supportedProfiles>
 
-  <allowBrowserInvocation>false</allowBrowserInvocation>
-
+  <!-- If true, can rogue sites discredit app by launching it? -->
+  <allowBrowserInvocation>false</allowBrowserInvocation> 
 
   <installFolder>HelloAIR</installFolder>
 

@@ -7,6 +7,7 @@ mxmlc \
   -publisher="David Turner"                  \
   -creator="David Turner"                    \
   -define+=CONFIG::message,"'$APP_MSG'" --   \
+  -library-path+=$AIR/lib/air/airglobal.swc  \
   Main.as
 
 #  -library-path+=$AIR/lib/air/airglobal.swc  \

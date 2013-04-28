@@ -9,6 +9,7 @@ to build an application with the following characteristics.
 - All neccesary files are developed with a text editor or generated with command line tools.
 - The application runs in Adobe AIR in OS X and Windows desktop environments.
 - The application installs and updates from a website.
+- The application is distributed in platfrom-independent air format, so that 100% of development can be done in either Mac or Windows.
 - All development is done on a mac.
 
 Note that this process can easily be carried out in Windows
@@ -132,5 +133,30 @@ to generate _hello.air_.
 
     chmod +x package.sh
     ./package.sh
+
+Create a folder to contain the files that will be distributed via a web page.
+
+    mkdir web
+    cd web
+    cp $AIR/samples/badge/default_badge.html index.html
+    cp $AIR/samples/badge/AC_RunActiveContent.js .
+    cp $AIR/samples/badge/badge.swf .
+    cp $AIR/samples/badge/test.jpg .
+    cp ../hello.air myapp.air
+
+Deploy the contents of the web folder to a web server and test.
+
+In Chrome, I was prompted to install Adobe AIR.
+When I agreed, it complained about an unsandboxed plugin.
+
+In Safari, I didn't get a graphic.  I got a link to download the
+Adobe AIR runtime and My Application.  Clicking on these results in 
+downloading of _AdobeAIR.dmg_ and _myapp.air_, respectively.
+
+In both cases, it was not clear what to do next.
+I don't think this install process is seamless.
+
+MAYBE CONTINUE FROM HERE: http://help.adobe.com/en_US/air/build/WSfffb011ac560372f-1c6efe05128cca667e7-8000.html
+
 
 
