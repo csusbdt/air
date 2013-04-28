@@ -2,10 +2,17 @@
 
 ## Overview
 
-The purpose of this project is for me to learn and document 
-the process of building and deploying an Adobe AIR program 
-for OS X desktop using a text editor and command line tools.
-This page describes the process.
+The _hello_ folder of this repository documents a process
+to build an application with the following characteristics.
+
+- The application says _hello_ in a window -- that's all it does.
+- All neccesary files are developed with a text editor or generated with command line tools.
+- The application runs in Adobe AIR in OS X and Windows desktop environments.
+- The application installs and updates from a website.
+- All development is done on a mac.
+
+Note that this process can easily be carried out in Windows
+with small adjustments.
 
 ## Prerequisites
 

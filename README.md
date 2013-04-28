@@ -3,14 +3,7 @@
 The purpose of this repository is to keep a record of my research and experimentation
 on developing applications that run in Adobe AIR.
 
-My current project is to develop a process to develop an application using only text
-editor and command line tools with the following features.
-
-- Says _hello_ in a window -- that's all it does.
-- Runs in OS X and Windows desktop environments.
-- Installs and updates from a website.
-
-This project is in the folder named _hello_.
+The _hello_ project is currently under construction (75% complete).
 
 ## References
 
