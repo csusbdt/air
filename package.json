@@ -1,0 +1,12 @@
+{
+  "name": "csusbdt-air",
+  "version": "1.0.0",
+  "description": "Example App",
+  "dependencies": {
+  },
+  "engines": {
+     "node": "0.8.14",
+     "npm": "1.1.65"
+  }
+}
+
