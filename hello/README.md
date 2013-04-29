@@ -146,15 +146,15 @@ Create a folder to contain the files that will be distributed via a web page.
 
 Deploy the contents of the web folder to a web server and test.
 
-In Chrome, I was prompted to install Adobe AIR.
-When I agreed, it complained about an unsandboxed plugin.
+I created script _deploy.sh_ to generate an installable air package
+and copy to a web folder that I deploy into a Heroku web application.
+You can test my deployed app <a href="https://herokuapps.com/csusbdt-air/">here</a>.
 
-In Safari, I didn't get a graphic.  I got a link to download the
+
+
 Adobe AIR runtime and My Application.  Clicking on these results in 
 downloading of _AdobeAIR.dmg_ and _myapp.air_, respectively.
 
-In both cases, it was not clear what to do next.
-I don't think this install process is seamless.
 
 MAYBE CONTINUE FROM HERE: http://help.adobe.com/en_US/air/build/WSfffb011ac560372f-1c6efe05128cca667e7-8000.html
 
