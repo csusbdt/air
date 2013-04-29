@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Example App",
   "dependencies": {
+    "connect": "2.7.6"
   },
   "engines": {
      "node": "0.8.14",
