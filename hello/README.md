@@ -148,7 +148,7 @@ Deploy the contents of the web folder to a web server and test.
 
 I created script _deploy.sh_ to generate an installable air package
 and copy to a web folder that I deploy into a Heroku web application.
-You can test my deployed app <a href="https://herokuapps.com/csusbdt-air/">here</a>.
+You can test my deployed app <a href="https://csusbdt-air.herokuapp.com/">here</a>.
 
 
 
