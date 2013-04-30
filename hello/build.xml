@@ -1,16 +1,23 @@
 <project default="test"> 
 
-<!--
-  <property environment="env"/>
-  <property name="adl"     value="${env.AIR_SDK}/bin/adl"/> 
-  <property name="mxmlc"   value="${env.AIR_SDK}/bin/mxmlc"/> 
--->
+  <!-- Once set, ant properties can not be overridden. -->
+
+  <!-- Give build.properties the first opportunity to set properties. -->
+  <property file="build.properties" />
+
+  <!-- Give environmental variables the second chance to set properties. -->
+  <property environment="env" />
+  <property name="air_sdkx" value="${env.AIR_SDK}" /> 
+
+  <!-- Assign default values to properties that have not yet been set. -->
+  <property name="air_sdk" value="AIRSDK_Compiler" /> 
+
+  <!-- Set internally defined properties. -->
   <property name="adl"     value="${air_sdk}/bin/adl"/> 
   <property name="mxmlc"   value="${air_sdk}/bin/mxmlc"/> 
+  <property name="release" value="release" />
 
   <!--property name="ADT.JAR" value="${env.AIR_SDK}/lib/adt.jar"/--> 
-
-  <property name="release" value="release" />
 
   <target name="clean"> 
     <delete dir="${release}"/> 
@@ -32,11 +39,7 @@
 
   <target name="test"> 
     <exec executable="${adl}"> 
-      <arg value="app.xml"/> 
-<!--
-      <arg value="${APP_DESCRIPTOR}"/> 
-      <arg value="${APP_ROOT_DIR}"/> 
--->
+      <arg value="-help"/> 
     </exec>  
   </target>
 
