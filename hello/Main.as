@@ -9,11 +9,10 @@ package {
 
       public function Main() : void
       {
-         greeting.text = "Hello, AIR!";
-         greeting.x = 100;
-         greeting.y = 100;
+         greeting.text = CONFIG::message;
+         greeting.x = 50;
+         greeting.y = 50;
          addChild(greeting);
-         trace(CONFIG::message);
       }
    }
 

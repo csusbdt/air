@@ -1,5 +1,14 @@
 # Hello Project
 
+## References
+
+- [Developing AIR applications for the desktop](http://help.adobe.com/en_US/air/build/WSfffb011ac560372f20b57e08128cc91aa2f-8000.html)
+- [Packaging a desktop AIR installation file](http://help.adobe.com/en_US/air/build/WS5b3ccc516d4fbf351e63e3d118666ade46-7f66.html)
+- [AIR application descriptor elements](http://help.adobe.com/en_US/air/build/WSfffb011ac560372f2fea1812938a6e463-8000.html)
+- [Beginners Guide to Getting Started with AS3 (Without Learning Flex)](http://www.senocular.com/flash/tutorials/as3withmxmlc/)
+- [swfobject](https://code.google.com/p/swfobject/) (Javascript library for integrating Flash content)
+
+
 ## Overview
 
 The _hello_ folder of this repository documents a process
@@ -150,6 +159,11 @@ I created script _deploy.sh_ to generate an installable air package
 and copy to a web folder that I deploy into a Heroku web application.
 You can test my deployed app <a href="https://csusbdt-air.herokuapp.com/">here</a>.
 
+After agreeing to install AIR, Chrome does not install AIR, 
+but does display a small, hardly noticable, warning icon.
+Clicking on the icon results in a popup that says a plugin is trying to run in 
+unsandboxed mode.  My install page displays _Starting install..._ forever.
+I can not seem to get AIR or my app to install.
 
 
 Adobe AIR runtime and My Application.  Clicking on these results in 
