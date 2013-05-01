@@ -7,6 +7,7 @@
 - [AIR application descriptor elements](http://help.adobe.com/en_US/air/build/WSfffb011ac560372f2fea1812938a6e463-8000.html)
 - [Beginners Guide to Getting Started with AS3 (Without Learning Flex)](http://www.senocular.com/flash/tutorials/as3withmxmlc/)
 - [swfobject](https://code.google.com/p/swfobject/) (Javascript library for integrating Flash content)
+- [Ant, AIR and ANE](http://lancelotmobile.com/blog/ant-air-and-ane/)
 
 
 ## Overview
