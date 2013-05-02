@@ -1,0 +1,74 @@
+<project default="test"> 
+
+  <!-- Once set, ant properties can not be overridden. -->
+
+  <!-- Give build.properties the first opportunity to set properties. -->
+  <property file="build.properties" />
+
+  <!-- Give environmental variables the second chance to set properties. -->
+  <property environment="env" />
+  <property name="air_sdk" value="${env.AIR_SDK}" /> 
+
+  <!-- Assign default values to properties that have not yet been set. -->
+  <property name="air_sdk" value="AIRSDK_Compiler" /> 
+  <property name="app_msg" value="Hello from build file." /> 
+
+  <!-- Set internally defined properties. -->
+  <property name="adl"      value="${air_sdk}/bin/adl"/> 
+  <property name="mxmlc"    value="${air_sdk}/bin/mxmlc"/> 
+  <property name="tempdir"  value="temp" />
+
+  <!--property name="ADT.JAR" value="${env.AIR_SDK}/lib/adt.jar"/--> 
+
+  <target name="clean"> 
+    <delete dir="${tempdir}"/> 
+  </target>
+
+  <target name="init"> 
+    <mkdir dir="${tempdir}"/> 
+  </target> 
+
+  <target name="compile" depends="init"> 
+    <exec executable="${mxmlc}"> 
+      <arg value="-define+=CONFIG::message,&quot;'${app_msg}'&quot;" /> 
+      <arg line="-o ./${tempdir}/Main.swf" /> 
+      <arg value="--" /> 
+      <!--arg value="-library-path+=${air_sdk}/lib/air/airglobal.swc" /--> 
+      <arg value="Main.as" /> 
+    </exec>  
+  </target>
+
+  <target name="test" depends="compile"> 
+    <copy file="app.xml" todir="${tempdir}" />
+    <copy todir="${tempdir}">
+      <fileset dir="." includes="icons/**" />
+    </copy>
+    <exec executable="${adl}" dir="${tempdir}"> 
+      <arg value="app.xml" />
+    </exec>  
+  </target>
+
+  <target name="package" depends="compile">
+    <exec executable="${adl}" dir="${tempdir}"> 
+      <arg value="-package" />
+      <arg line="-target air" />
+      <arg value="app.xml" />
+    </exec>  
+
+
+<!--
+    adt                        \
+   -package                \
+   -storetype pkcs12       \
+   -keystore keystore.p12  \
+   -storepass 1234         \
+   -target air             \
+   hello.air               \
+   application.xml         \
+   Main.swf                \
+   icons
+-->
+  </target>
+
+</project>
+
