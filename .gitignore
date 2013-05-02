@@ -4,4 +4,6 @@ hello/hello.air
 hello/webserver
 .DS_Store
 node_modules
+captive/temp
+captive2/temp
 

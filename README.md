@@ -18,12 +18,17 @@ From [Adobe's roadmap whitepaper](http://www.adobe.com/devnet/flashplatform/whit
 > __Adobe recommends that all AIR content be distributed using a captive runtime,__ 
 > and not rely on an AIR runtime being installed in order for the application to run.
 
-Also, use of captive AIR runtime is the only way to get an AIR application to run on iOS.
+NOTE: use of captive AIR runtime is the only way to get an AIR application to run on iOS.
 
-For these reasons, I will focus on developing instructions for set up of a project
-that uses captive AIR runtime packaging.
+ALSO NOTE: AIR install through Chrome has not worked for over a year; see the footnotes
+in the criticism section in [
+Adobe Integrated Runtime](http://en.wikipedia.org/wiki/Adobe_Integrated_Runtime).
+
+CONCLUSION: I will focus on developing a project that uses captive AIR runtime packaging.
 
 ## References
 
 - [Adobe AIR](http://help.adobe.com/en_US/air/build/index.html)
+- [Beyond Plain Old HTML Objects NativeApplicationUpdater – updater for AIR apps packaged with native installers](http://www.riaspace.com/2010/08/nativeapplicationupdater-updater-for-air-apps-packaged-with-native-installers/)
+
 

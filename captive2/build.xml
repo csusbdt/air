@@ -21,7 +21,8 @@
   <property name="certificate-cn"     value="csusbdt"               />
   <property name="keystore-password"  value="1234"                  />
   <property name="keystore-file"      value="keystore.p12"          />
-  <property name="install-file"       value="helloair.dmg"          />
+  <property name="air-file"           value="helloair.air"          />
+  <property name="dmg-file"           value="helloair.dmg"          />
 
   <!--property name="ADT.JAR" value="${env.AIR_SDK}/lib/adt.jar"/--> 
 
@@ -34,7 +35,7 @@
   </target> 
 
   <target name="copy-resources" depends="init"> 
-    <copy file="app.xml" todir="${tempdir}" />
+    <copy file="application.xml" todir="${tempdir}" />
     <copy todir="${tempdir}">
       <fileset dir="." includes="icons/**" />
     </copy>
@@ -52,7 +53,7 @@
 
   <target name="test" depends="compile, copy-resources"> 
     <exec executable="${adl}" dir="${tempdir}"> 
-      <arg value="app.xml" />
+      <arg value="application.xml" />
     </exec>  
   </target>
 
@@ -69,17 +70,26 @@
     </exec>  
   </target>
 
-  <target name="package" depends="compile, keystore, copy-resources">
+  <target name="air" depends="compile, keystore, copy-resources">
     <exec executable="${adt}" dir="${tempdir}"> 
       <arg value="-package"                  />
       <arg line="-storetype pkcs12"          />
       <arg line="-keystore ${keystore-file}" />
       <arg line="-storepass 1234"            />
-      <arg line="-target native"             />
-      <arg value="${install-file}"           />
-      <arg value="app.xml"                   />
+      <arg line="-target air"                />
+      <arg value="${air-file}"               />
+      <arg value="application.xml"           />
       <arg value="Main.swf"                  />
       <arg value="icons"                     />
+    </exec>  
+  </target>
+
+  <target name="package-osx" depends="air">
+    <exec executable="${adt}" dir="${tempdir}"> 
+      <arg value="-package"                  />
+      <arg line="-target native"             />
+      <arg value="${dmg-file}"               />
+      <arg value="${air-file}"               />
     </exec>  
   </target>
 
