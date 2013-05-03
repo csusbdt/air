@@ -5,5 +5,10 @@ hello/webserver
 .DS_Store
 node_modules
 captive/temp
+
 captive2/temp
+captive2/keystore
+captive2/Main.air
+captive2/Main.swf
+captive2/hello-air.dmg
 
