@@ -1,0 +1,126 @@
+<project default="-usage"> 
+
+  <!-- Once set, ant properties can not be overridden. -->
+
+  <!-- Give build.properties the first opportunity to set properties. -->
+  <property file="build.properties" />
+
+  <!-- Give environmental variables the second chance to set properties. -->
+  <property environment="env" />
+  <property name="air-sdk" value="${env.AIR_SDK}" /> 
+
+  <!-- Assign default values to properties that have not yet been set. -->
+  <property name="air-sdk"         value="AIRSDK_Compiler" /> 
+  <property name="config.message"  value="Hello from build file." /> 
+
+  <!-- Set internally defined properties. -->
+  <property name="adl"                    value="${air-sdk}/bin/adl"    /> 
+  <property name="adt"                    value="${air-sdk}/bin/adt"    /> 
+  <property name="mxmlc"                  value="${air-sdk}/bin/mxmlc"  /> 
+
+  <!--property name="ADT.JAR" value="${env.AIR_SDK}/lib/adt.jar"/--> 
+
+  <!-- To not allow automatic overwrite of keystore file. -->
+  <available file="keystore" property="keystore-exists" />
+
+  <target name="-usage">
+    <java classname="org.apache.tools.ant.Main">
+      <arg value="-projecthelp" />
+    </java>
+  </target>
+
+  <!--
+    The air package needs to be signed.
+    The keystore target generates a self-signed certificate and
+    stores this in a file called _keystore_.
+    Add the path to the keystore file to .gitignore to
+    avoid exposing to outside.
+    Clean does not remove the keystore file.
+    ADVICE: don't regenerate the keystore after dong a test install,
+            otherwise you need to thoroughly clean your filesystem
+            of the old air package and maybe re-install AIR.
+  -->
+  <target name="keystore" 
+          unless="keystore-exists"
+          description="Generate keystore with self-signed certificate.">
+    <exec executable="${adt}"> 
+      <arg value="-certificate"      />
+      <arg line="-cn csusbdt"        />
+      <arg line="-validityPeriod 5"  />
+      <arg value="2048-RSA"          />
+      <arg value="keystore"          />
+      <arg value="1234"              />
+    </exec> 
+  </target>
+
+  <target name="clean" description="Delete all derived files except keystore."> 
+    <delete file="Main.swf"                     />
+    <delete file="application.xml"              />
+    <delete file="web/public/hello-air-osx.air" />
+    <delete file="web/public/hello-air.dmg"     />
+  </target>
+
+  <!--
+    The compile target generates Main.swf. 
+    Configuration strings are passed in here.
+  -->
+  <target name="compile" description="Compile code under src folder into Main.swf."> 
+    <exec executable="${mxmlc}" dir="src"> 
+      <arg value="-define+=CONFIG::message,&quot;'${config.message}'&quot;" /> 
+      <arg line="-o ../Main.swf" /> 
+      <!--arg value="- -" /--> 
+      <!--arg value="-library-path+=${air_sdk}/lib/air/airglobal.swc" /--> 
+      <arg value="Main.as" /> 
+    </exec>  
+  </target>
+
+  <target name="test" depends="compile" description="Run the app directly."> 
+    <filter token="supportedProfiles" value="desktop" />
+    <copy file="app-template.xml" tofile="application.xml" filtering="true" overwrite="true" />
+    <exec executable="${adl}"> 
+      <arg value="application.xml" />
+    </exec>
+  </target>
+
+  <target name="-air" depends="compile">
+    <filter token="supportedProfiles" value="${supportedProfiles}" />
+    <copy file="app-template.xml" tofile="application.xml" filtering="true" overwrite="true" />
+    <exec executable="${adt}"> 
+      <arg value="-package"             />
+      <arg line="-storetype pkcs12"     />
+      <arg line="-keystore keystore"    />
+      <arg line="-storepass 1234"       />
+      <arg line="-target air"           />
+      <arg value="hello-air-osx.air"    />
+      <arg value="application.xml"      />
+      <arg value="Main.swf"             />
+      <arg value="icons"                />
+    </exec>
+  </target>
+
+  <target name="package-osx" 
+          description="Generate hello-air-osx.air and hello-air.dmg, and place in web/public.">
+    <antcall target="-air">
+      <param name="supportedProfiles" value="desktop extendedDesktop" />
+    </antcall>
+    <exec executable="${adt}"> 
+      <arg value="-package"            />
+      <arg line="-target native"       />
+      <arg value="hello-air.dmg"       />
+      <arg value="hello-air-osx.air"   />
+    </exec> 
+    <move file="hello-air-osx.air" todir="web/public" />
+    <move file="hello-air.dmg"     todir="web/public" />
+  </target>
+
+<!--
+  <target name="copy-resources" depends="init"> 
+    <copy file="application.xml" todir="${tempdir}" />
+    <copy todir="${tempdir}">
+      <fileset dir="." includes="icons/**" />
+    </copy>
+  </target> 
+-->
+
+</project>
+

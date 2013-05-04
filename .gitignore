@@ -1,13 +1,9 @@
-hello/keystore.p12
-hello/Main.swf
-hello/hello.air
-hello/webserver
 .DS_Store
-node_modules
-captive/temp
-
-captive2/dev-keystore
-captive2/Main.air
-captive2/Main.swf
-captive2/hello-air.dmg
+/node_modules
+/build.properties
+/keystore
+/Main.swf
+/application.xml
+/web/public/hello-air-osx.air
+/web/public/hello-air.dmg
 

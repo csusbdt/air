@@ -9,7 +9,7 @@
     <text xml:lang="en">Hello Desktop AIR</text>
   </name>
 
-  <filename>Hello Desktop AIR</filename>
+  <filename>HelloDesktopAIR</filename>
 
   <versionNumber>1.0.0</versionNumber>
   <versionLabel>ver 1.0.0</versionLabel> <!-- optional -->
@@ -20,14 +20,13 @@
 
   <copyright>Copyright 2013, David Turner</copyright>
 
-  <supportedProfiles>desktop</supportedProfiles>
+  <supportedProfiles>@supportedProfiles@</supportedProfiles>
 
-  <programMenuFolder>Hello AIR</programMenuFolder>
+  <programMenuFolder>Hello AIR</programMenuFolder> <!-- I think for windows only -->
 
-  <!-- If true, can rogue sites discredit app by launching it? -->
-  <allowBrowserInvocation>true</allowBrowserInvocation> 
+  <allowBrowserInvocation>false</allowBrowserInvocation> 
 
-  <installFolder>HelloDesktopAIR</installFolder>
+  <!--installFolder>HelloDesktopAIR</installFolder-->
 
   <icon>
     <image16x16>icons/AIRApp_16.png</image16x16>
@@ -36,11 +35,11 @@
     <image128x128>icons/AIRApp_128.png</image128x128>
   </icon>
 
-  <customUpdateUI>false</customUpdateUI>
+  <customUpdateUI>true</customUpdateUI>
 
   <initialWindow>
     <content>Main.swf</content>
-    <title>Hello Desktop AIR</title>
+    <title>Hello AIR</title>
     <minimizable>true</minimizable>
     <maximizable>true</maximizable>
     <resizable>true</resizable>
@@ -49,10 +48,10 @@
     <height>500</height>
     <x>150</x>
     <y>150</y>
-    <minSize>300 300</minSize>
+    <minSize>500 500</minSize>
     <maxSize>800 800</maxSize>
     <visible>true</visible> <!-- How can the app make itelf visible after init? -->
-    <systemChrome>standard</systemChrome>
+    <systemChrome>standard</systemChrome> <!-- standard, none, ? -->
     <transparent>false</transparent>
     <renderMode>auto</renderMode>  <!-- not sure what is optimal here: auto, cpu, direct, or gpu? -->
     <requestedDisplayResolution>high</requestedDisplayResolution>  <!-- affects retina mac books only -->
