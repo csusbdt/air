@@ -142,6 +142,13 @@
     </antcall>
   </target>
 
+  <target name="web" 
+          description="Run web server on localhost."> 
+    <exec executable="node" dir="web"> 
+      <arg value="main.js" />
+    </exec>
+  </target>
+
 <!--
   <target name="copy-resources" depends="init"> 
     <copy file="application.xml" todir="${tempdir}" />
