@@ -14,17 +14,16 @@
   <property name="config-message"  value="Hello from build file." /> 
 
   <!-- Set internally defined properties. -->
-  <property name="adl"                value="${air_sdk}/bin/adl"    /> 
-  <property name="adt"                value="${air_sdk}/bin/adt"    /> 
-  <property name="mxmlc"              value="${air_sdk}/bin/mxmlc"  /> 
-  <property name="certificate-cn"     value="csusbdt"               />
-  <property name="keystore-password"  value="1234"                  />
-  <property name="dmg-file"           value="hello-air.dmg"         />
+  <property name="adl"                    value="${air_sdk}/bin/adl"    /> 
+  <property name="adt"                    value="${air_sdk}/bin/adt"    /> 
+  <property name="mxmlc"                  value="${air_sdk}/bin/mxmlc"  /> 
+  <property name="certificate-cn"         value="csusbdt"               />
+  <property name="dmg-file"               value="hello-air.dmg"         />
 
   <!--property name="ADT.JAR" value="${env.AIR_SDK}/lib/adt.jar"/--> 
 
   <!-- To not allow automatic overwrite of keystore file. -->
-  <available file="keystore" property="keystore-exists" />
+  <available file="dev-keystore" property="dev-keystore-exists" />
 
   <!--
     The air package needs to be signed.
@@ -34,16 +33,16 @@
     Add the path to the keystore file to .gitignore to
     avoid exposing to outside.
   -->
-  <target name="keystore" 
-          unless="keystore-exists"
+  <target name="dev-keystore" 
+          unless="dev-keystore-exists"
           description="generate keystore with self-signed certificate">
     <exec executable="${adt}"> 
       <arg value="-certificate" />
       <arg line="-cn ${certificate-cn}" />
       <arg line="-validityPeriod 5" />
       <arg value="2048-RSA" />
-      <arg value="keystore" />
-      <arg value="${keystore-password}" />
+      <arg value="dev-keystore" />
+      <arg value="1234" />
     </exec> 
   </target>
 
@@ -78,14 +77,14 @@
     <exec executable="${adt}"> 
       <arg value="-package"                  />
       <arg line="-storetype pkcs12"          />
-      <arg line="-keystore keystore"         />
+      <arg line="-keystore dev-keystore"     />
       <arg line="-storepass 1234"            />
       <arg line="-target air"                />
       <arg value="Main.air"                  />
       <arg value="application.xml"           />
       <arg value="Main.swf"                  />
       <arg value="icons"                     />
-    </exec>  
+    </exec>
   </target>
 
   <target name="package-osx" depends="air">

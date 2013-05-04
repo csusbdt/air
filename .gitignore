@@ -6,8 +6,7 @@ hello/webserver
 node_modules
 captive/temp
 
-captive2/temp
-captive2/keystore
+captive2/dev-keystore
 captive2/Main.air
 captive2/Main.swf
 captive2/hello-air.dmg
