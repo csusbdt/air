@@ -35,7 +35,7 @@ CONCLUSION: This project will use captive AIR runtime packaging.
 ## Trouble Shooting
 
 If you install an app with a certificate and then try to reinstall the app under a different
-certificate, the installation will fail.  I beleive that when the user installs Adobe AIR,
+certificate, the installation will fail.  I believe that when the user installs Adobe AIR,
 it scans the entore system for .air files, and when it finds then, makes a record of the
 certificate used to install them.  In my case, the AIR installer searched my trash and
 found deleted .air files.  These deleted files were installed with a different certificate,
@@ -52,5 +52,8 @@ which recorded logs written by AIR showing that it discovered .air files in the 
 - [Installation and deployment options in Adobe AIR 3](http://www.adobe.com/devnet/air/articles/air3-install-and-deployment-options.html)
 - [Blog note on reducing file size](http://www.shedosurashu.com/captive-runtime-not-what-i-thought-it-to-be)
 - [Installation and deployment options in Adobe AIR 3](http://www.adobe.com/devnet/air/articles/air3-install-and-deployment-options.html)
+
+## How to change version
+
 
 
