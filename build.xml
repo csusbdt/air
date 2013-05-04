@@ -71,7 +71,8 @@
     <exec executable="${mxmlc}" dir="src"> 
       <arg value="-define+=CONFIG::message,&quot;'${config.message}'&quot;" /> 
       <arg line="-o ../Main.swf" /> 
-      <!--arg value="-library-path+=${air_sdk}/lib/air/airglobal.swc" /--> 
+      <!--arg value="-library-path+=${air-sdk}/lib/air/airglobal.swc" /--> 
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/applicationupdater.swc" /> 
       <arg value="Main.as" /> 
     </exec>  
   </target>
@@ -146,6 +147,13 @@
           description="Run web server on localhost."> 
     <exec executable="node" dir="web"> 
       <arg value="main.js" />
+    </exec>
+  </target>
+
+  <target name="log-osx" 
+          description="Display installation log messages; use to troubleshoot install problems."> 
+    <exec executable="tail"> 
+      <arg line="-f /private/var/log/system.log" />
     </exec>
   </target>
 

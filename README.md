@@ -32,7 +32,7 @@ CONCLUSION: This project will use captive AIR runtime packaging.
 
 - [Beyond Plain Old HTML Objects NativeApplicationUpdater – updater for AIR apps packaged with native installers](http://www.riaspace.com/2010/08/nativeapplicationupdater-updater-for-air-apps-packaged-with-native-installers/)
 
-## Trouble Shooting
+## Troubleshooting
 
 If you install an app with a certificate and then try to reinstall the app under a different
 certificate, the installation will fail.  I believe that when the user installs Adobe AIR,
@@ -46,6 +46,12 @@ To help discover this problem, I looked at the following log file,
 which recorded logs written by AIR showing that it discovered .air files in the trash.
 
     /private/var/log/system.log
+
+The tail command is convenient for looking at what is being written into log files.
+
+    tail -f /private/var/log/system.log
+
+See [Logging for Adobe AIR 2 Desktop application and runtime installations](http://helpx.adobe.com/air/kb/logging-air-2-desktop-application.html).
 
 ## Reading
 
