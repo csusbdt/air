@@ -15,11 +15,13 @@
   <property name="config.message"  value="Message not set." /> 
 
   <!-- Set internally defined properties. -->
-  <property name="adl"                    value="${air-sdk}/bin/adl"    /> 
-  <property name="adt"                    value="${air-sdk}/bin/adt"    /> 
-  <property name="mxmlc"                  value="${air-sdk}/bin/mxmlc"  /> 
+  <property name="adl"         value="${air-sdk}/bin/adl"         /> 
+  <property name="adt"         value="${air-sdk}/bin/adt"         /> 
+  <property name="mxmlc"       value="${air-sdk}/bin/mxmlc"       /> 
+  <property name="aasdoc"       value="${air-sdk}/bin/aasdoc"       /> 
+  <!--property name="swcdepends"  value="${air-sdk}/bin/swcdepends"  /--> 
 
-  <!--property name="ADT.JAR" value="${env.AIR_SDK}/lib/adt.jar"/--> 
+  <!--taskdef resource="flexTasks.tasks" classpath="${air-sdk}/ant/lib/flexTasks.jar" /--> 
 
   <!-- To not allow automatic overwrite of keystore file.
        Regeneration of keystore may cause installation problems. -->
@@ -71,8 +73,15 @@
     <exec executable="${mxmlc}" dir="src"> 
       <arg value="-define+=CONFIG::message,&quot;'${config.message}'&quot;" /> 
       <arg line="-o ../Main.swf" /> 
-      <!--arg value="-library-path+=${air-sdk}/lib/air/airglobal.swc" /--> 
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/airglobal.swc" /> 
+      <arg value="-library-path+=../lib/NativeApplicationUpdater-0.5.1.swc" /> 
+<!--
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/applicationupdater_ui.swc" /> 
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/airglobal.swc" /> 
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/core.swc" /> 
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/aircore.swc" /> 
       <arg value="-library-path+=${air-sdk}/frameworks/libs/air/applicationupdater.swc" /> 
+-->
       <arg value="Main.as" /> 
     </exec>  
   </target>
@@ -156,6 +165,15 @@
       <arg line="-f /private/var/log/system.log" />
     </exec>
   </target>
+
+  <target name="doc" description="Generate documentation."> 
+    <exec executable="aasdoc"> 
+      <arg value="-define+=CONFIG::message,&quot;'${config.message}'&quot;" /> 
+      <arg line="-doc-sources src" />
+      <arg line="-output doc" />
+      <arg value="-lenient" />
+    </exec>
+  </target> 
 
 <!--
   <target name="copy-resources" depends="init"> 

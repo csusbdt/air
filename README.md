@@ -28,9 +28,7 @@ in the criticism section in
 
 CONCLUSION: This project will use captive AIR runtime packaging.
 
-## Potential Use
-
-- [Beyond Plain Old HTML Objects NativeApplicationUpdater – updater for AIR apps packaged with native installers](http://www.riaspace.com/2010/08/nativeapplicationupdater-updater-for-air-apps-packaged-with-native-installers/)
+WARNING: See [which AIR SDK versions will run which iOS versions](http://stackoverflow.com/questions/16243485/which-air-sdk-versions-will-run-which-ios-versions).
 
 ## Troubleshooting
 
@@ -58,8 +56,18 @@ See [Logging for Adobe AIR 2 Desktop application and runtime installations](http
 - [Installation and deployment options in Adobe AIR 3](http://www.adobe.com/devnet/air/articles/air3-install-and-deployment-options.html)
 - [Blog note on reducing file size](http://www.shedosurashu.com/captive-runtime-not-what-i-thought-it-to-be)
 - [Installation and deployment options in Adobe AIR 3](http://www.adobe.com/devnet/air/articles/air3-install-and-deployment-options.html)
+- [Relationship of Adobe AIR SDK and Flex SDK?](http://stackoverflow.com/questions/12554447/relationship-of-adobe-air-sdk-and-flex-sdk)
 
-## How to change version
+## Application update
 
+- [READ ME NEXT](http://www.adobe.com/devnet/air/articles/updating-air-apps-native-installer.html)
+- [Beyond Plain Old HTML Objects NativeApplicationUpdater – updater for AIR apps packaged with native installers](http://www.riaspace.com/2010/08/nativeapplicationupdater-updater-for-air-apps-packaged-with-native-installers/)
+
+
+## Research
+
+- Starling
+- Feathers
+- http://citrusengine.com/
 
 
