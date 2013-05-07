@@ -11,8 +11,7 @@
 
   <filename>HelloDesktopAIR</filename>
 
-  <versionNumber>1.0.3</versionNumber>
-  <versionLabel>ver 1.0.3</versionLabel> <!-- optional -->
+  <versionNumber>@versionNumber@</versionNumber>
 
   <description>
     <text xml:lang="en">This is an example AIR application for desktop computers.</text>

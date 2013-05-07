@@ -1,31 +1,14 @@
 <project default="-usage"> 
 
-  <!-- Ant properties can not be overridden; the
-       first mechanism to set a given property wins. -->
-
-  <!-- Give build.properties the first opportunity to set properties. -->
-  <property file="build.properties" />
-
-  <!-- Give environmental variables the second chance to set properties. -->
   <property environment="env" />
   <property name="air-sdk" value="${env.AIR_SDK}" /> 
+  <property file="build.properties" />
 
-  <!-- Assign default values to properties that have not yet been set. -->
-  <property name="air-sdk"         value="AIRSDK_Compiler" /> 
-  <property name="config.message"  value="Message not set." /> 
-
-  <!-- Set internally defined properties. -->
-  <property name="adl"         value="${air-sdk}/bin/adl"         /> 
-  <property name="adt"         value="${air-sdk}/bin/adt"         /> 
-  <property name="mxmlc"       value="${air-sdk}/bin/mxmlc"       /> 
-  <property name="aasdoc"       value="${air-sdk}/bin/aasdoc"       /> 
+  <property name="adl"         value="${air-sdk}/bin/adl"      /> 
+  <property name="adt"         value="${air-sdk}/bin/adt"      /> 
+  <property name="mxmlc"       value="${air-sdk}/bin/mxmlc"    /> 
+  <!--property name="aasdoc"      value="${air-sdk}/bin/aasdoc"   /--> 
   <!--property name="swcdepends"  value="${air-sdk}/bin/swcdepends"  /--> 
-
-  <!--taskdef resource="flexTasks.tasks" classpath="${air-sdk}/ant/lib/flexTasks.jar" /--> 
-
-  <!-- To not allow automatic overwrite of keystore file.
-       Regeneration of keystore may cause installation problems. -->
-  <available file="keystore" property="keystore-exists" />
 
   <target name="-usage">
     <java classname="org.apache.tools.ant.Main">
@@ -33,32 +16,7 @@
     </java>
   </target>
 
-  <!--
-    The air package needs to be signed.
-    The keystore target generates a self-signed certificate and
-    stores this in a file called _keystore_.
-    Add the path to the keystore file to .gitignore to
-    avoid exposing to outside.
-    Clean does not remove the keystore file.
-    ADVICE: don't regenerate the keystore after dong a test install,
-            otherwise you will need to thoroughly clean your filesystem
-            of the old air package, including emptying the trash, and 
-            maybe reinstalling AIR.
-  -->
-  <target name="keystore" 
-          unless="keystore-exists"
-          description="Generate keystore with self-signed certificate.">
-    <exec executable="${adt}"> 
-      <arg value="-certificate"      />
-      <arg line="-cn csusbdt"        />
-      <arg line="-validityPeriod 5"  />
-      <arg value="2048-RSA"          />
-      <arg value="keystore"          />
-      <arg value="1234"              />
-    </exec> 
-  </target>
-
-  <target name="clean" description="Delete all derived files except keystore."> 
+  <target name="clean" description="Delete derived files."> 
     <delete file="Main.swf"                     />
     <delete file="application.xml"              />
     <delete file="web/public/hello-air-osx.air" />
@@ -70,14 +28,14 @@
     Configuration strings are passed in here.
   -->
   <target name="compile" description="Compile code under src folder into Main.swf."> 
-    <exec executable="${mxmlc}" dir="src"> 
-      <arg value="-define+=CONFIG::message,&quot;'${config.message}'&quot;" /> 
+    <exec executable="${mxmlc}" dir="src" failonerror="true"> 
+      <arg value="-define+=CONFIG::versionUrl,&quot;'${versionUrl}'&quot;" /> 
+      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
+      <arg value="-debug=false" />
       <arg line="-o ../Main.swf" /> 
-      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/airglobal.swc" /> 
-      <arg value="-library-path+=../lib/NativeApplicationUpdater-0.5.1.swc" /> 
 <!--
-      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/applicationupdater_ui.swc" /> 
       <arg value="-library-path+=${air-sdk}/frameworks/libs/air/airglobal.swc" /> 
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/applicationupdater_ui.swc" /> 
       <arg value="-library-path+=${air-sdk}/frameworks/libs/core.swc" /> 
       <arg value="-library-path+=${air-sdk}/frameworks/libs/air/aircore.swc" /> 
       <arg value="-library-path+=${air-sdk}/frameworks/libs/air/applicationupdater.swc" /> 
@@ -88,6 +46,7 @@
 
   <!-- Generate application.xml from app-template.xml and given properties. -->
   <target name="-app">
+    <filter token="versionNumber" value="${versionNumber}" />
     <filter token="supportedProfiles" value="${supportedProfiles}" />
     <copy file="app-template.xml" tofile="application.xml" filtering="true" overwrite="true" />
   </target>
