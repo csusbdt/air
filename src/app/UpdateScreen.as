@@ -68,7 +68,8 @@ package app
       var versionNumber:String = updateDescriptorLoader.data;
       if (trim(versionNumber) === CONFIG::versionNumber)
       {
-        status.text = "Version number good.";
+        parent.addChild(new TitleScreen());
+        parent.removeChild(this);
       }
       else
       {
