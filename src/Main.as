@@ -1,7 +1,7 @@
 package 
 {
    import flash.display.Sprite;
-   import app.UpdateScreen;
+   import app.VersionCheckScreen;
 
    /**
     * This is the application's main class, so and instance of it
@@ -11,8 +11,7 @@ package
    {
       public function Main() : void
       {
-        //nativeApplication = NativeApplication.nativeApplication;
-        addChild(new UpdateScreen());
+        addChild(new VersionCheckScreen());
       }
    }
 

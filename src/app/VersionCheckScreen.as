@@ -32,9 +32,10 @@ package app
       status.y                 = 50;
       addChild(status);
       attachListeners();
+      var url:String = CONFIG::installerSite + CONFIG::installerFilenameResource;
       try
       {
-        urlLoader.load(new URLRequest(CONFIG::versionUrl));
+        urlLoader.load(new URLRequest(url));
       }
       catch(error:Error)
       {
@@ -65,8 +66,8 @@ package app
     {
       detachListeners();
       urlLoader.close();
-      var versionNumber:String = urlLoader.data;
-      if (trim(versionNumber) === CONFIG::versionNumber)
+      var installerFilename:String = urlLoader.data;
+      if (trim(installerFilename) === CONFIG::installerFilename)
       {
         parent.addChild(new TitleScreen());
       }

@@ -4,19 +4,27 @@ package app
   import flash.text.TextField;
   import flash.text.TextFieldAutoSize;
 
-  import flash.events.Event;
-  import flash.events.IOErrorEvent;
-  import flash.net.URLLoader;
-  import flash.net.URLRequest;
-
-  import flash.utils.Timer;
-  import flash.events.TimerEvent;
+import flash.desktop.NativeApplication;
+import flash.desktop.NativeProcess;
+import flash.desktop.NativeProcessStartupInfo;
+import flash.events.Event;
+import flash.events.IOErrorEvent;
+import flash.events.ProgressEvent;
+import flash.filesystem.File;
+import flash.filesystem.FileMode;
+import flash.filesystem.FileStream;
+import flash.net.URLLoader;
+import flash.net.URLRequest;
+import flash.net.URLStream;
+import flash.utils.ByteArray;
 
   public class NewVersionDownloadScreen extends Screen
   {
     private var status:TextField = new TextField();
 
-    private var urlLoader:URLLoader = new URLLoader();
+    private var urlStream:URLStream = new URLStream();
+    private var fileStream:FileStream = new FileStream;
+    private var file:File = new File();
 
     private function trim(s:String):String
     {
@@ -33,33 +41,62 @@ package app
       addChild(status);
       attachListeners();
 
-      urlStream = new URLStream;
-      urlStream.addEventListener(Event.OPEN, urlStream_openHandler);
-      urlStream.addEventListener(ProgressEvent.PROGRESS, urlStream_progressHandler);
-      urlStream.addEventListener(Event.COMPLETE, urlStream_completeHandler);
-      urlStream.addEventListener(IOErrorEvent.IO_ERROR, urlStream_ioErrorHandler);
-      urlStream.load(new URLRequest(updateUrl));
+      var fileName:String = "hello-air.dmg";
+      var file:File = File.createTempDirectory().resolvePath(fileName);
 
-      try
-      {
-        urlLoader.load(new URLRequest(CONFIG::versionUrl));
-      }
-      catch(error:Error)
-      {
-        status.text = error.message;
-      }
+      attachListeners();
+      var url:String = CONFIG::installerSite + CONFIG::installerFilename;
+      urlStream.load(new URLRequest(CONFIG::url));
     }
 
     private function attachListeners():void
     {
-      urlLoader.addEventListener(Event.COMPLETE, handleCompleteEvent);
-      urlLoader.addEventListener(IOErrorEvent.IO_ERROR, handleIoErrorEvent);
+      urlStream.addEventListener(Event.OPEN,             handleOpenEvent);
+      urlStream.addEventListener(ProgressEvent.PROGRESS, handleProgressEvent);
+      urlStream.addEventListener(Event.COMPLETE,         handleCompleteEvent);
+      urlStream.addEventListener(IOErrorEvent.IO_ERROR,  handleIoErrorEvent);
     }
 
     private function detachListeners():void
     {
-      urlLoader.removeEventListener(Event.COMPLETE, handleCompleteEvent);
-      urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, handleIoErrorEvent);
+      urlStream.removeEventListener(Event.OPEN,             handleOpenEvent);
+      urlStream.removeEventListener(ProgressEvent.PROGRESS, handleProgressEvent);
+      urlStream.removeEventListener(Event.COMPLETE,         handleCompleteEvent);
+      urlStream.removeEventListener(IOErrorEvent.IO_ERROR,  handleIoErrorEvent);
+    }
+
+    private function handleOpenEvent(event:Event):void
+    {
+      fileStream.open(file, FileMode.WRITE);
+    }
+
+    private function handleProgressEvent(event:ProgressEvent):void
+    {
+      var loadedBytes:ByteArray = new ByteArray();
+      urlStream.readBytes(loadedBytes);
+      fileStream.writeBytes(loadedBytes);
+    }
+
+    private function handleCompleteEvent(event:Event):void
+    {
+      closeStreams();
+      installUpdate();
+    }
+
+    private function handleIoErrorEvent(event:IOErrorEvent):void
+    {
+      detachListeners();
+// CLOSE STUFF
+      status.text = "IO error";
+    }
+
+    protected function installUpdate():void
+    {
+      var info:NativeProcessStartupInfo = new NativeProcessStartupInfo;
+      info.executable = updateFile;
+      var process:NativeProcess = new NativeProcess;
+      process.start(info);
+      NativeApplication.nativeApplication.exit();
     }
 
     private function handleIoErrorEvent(event:IOErrorEvent):void

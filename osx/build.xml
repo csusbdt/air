@@ -2,15 +2,15 @@
 
   <include file="../common.xml" />
 
-  <property name="versionNumber" value="1.0.3"                              />
-  <property name="versionUrl"    value="http://localhost:5000/version-osx"  />
-  <property name="webDir"        value="../web/public"                      />
-  <property name="airFile"       value="hello-air.air"                      />
-  <property name="dmgFile"       value="hello-air.dmg"                      />
+  <property name="versionNumber"              value="1.0.3"                             />
+  <property name="installerSite"              value="http://localhost:5000/"            />
+  <property name="installerFilenameResource"  value="hello-air-installer-filename-osx"  /> 
+  <property name="installerFilename"          value="hello-air-${versionNumber}.dmg"    />
+  <property name="localWebDir"                value="../web/public"                     />
 
   <target name="clean" description="Delete derived files."> 
     <delete dir="temp" />
-    <delete file="${webDir}/${dmgFile}" />
+    <delete file="${localWebDir}/${installerFilename}" />
   </target>
 
   <!--
@@ -20,12 +20,13 @@
   <target name="compile" description="Compile code under src folder into Main.swf."> 
     <mkdir dir="temp" />
     <exec executable="${mxmlc}" dir="../src" failonerror="true"> 
-      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
-      <arg value="-define+=CONFIG::versionUrl,&quot;'${versionUrl}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;"                         /> 
+      <arg value="-define+=CONFIG::installerFilename,&quot;'${installerFilename}'&quot;"                 /> 
+      <arg value="-define+=CONFIG::installerFilenameResource,&quot;'${installerFilenameResource}'&quot;" /> 
       <arg value="-debug=false" />
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/airglobal.swc" /> 
       <arg line="-o ../osx/temp/Main.swf" /> 
 <!--
-      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/airglobal.swc" /> 
       <arg value="-library-path+=${air-sdk}/frameworks/libs/air/applicationupdater_ui.swc" /> 
       <arg value="-library-path+=${air-sdk}/frameworks/libs/core.swc" /> 
       <arg value="-library-path+=${air-sdk}/frameworks/libs/air/aircore.swc" /> 
@@ -52,19 +53,19 @@
 
   <target name="installer" 
           depends="compile,-app"
-          description="Generate the captive native installer hello-air.dmg and move to the web folder.">
+          description="Generate the installer and move to the web folder.">
     <exec executable="${adt}" dir="temp"> 
       <arg value="-package"                 />
       <arg line="-storetype pkcs12"         />
       <arg line="-keystore ../../keystore"  />
       <arg line="-storepass 1234"           />
       <arg line="-target native"            />
-      <arg value="${dmgFile}"               />
+      <arg value="${installerFilename}"     />
       <arg value="application.xml"          />
       <arg value="Main.swf"                 />
       <arg line="-C ../../ icons"           />
     </exec>
-    <move file="temp/${dmgFile}" todir="${webDir}" />
+    <move file="temp/${installerFilename}" todir="${webDir}" />
   </target>
 
   <target name="log" 
