@@ -1,9 +1,5 @@
 .DS_Store
 /node_modules
-/build.properties
 /keystore
-/Main.swf
-/application.xml
-/web/public/hello-air-osx.air
 /web/public/hello-air.dmg
-/web/public/version
+/osx/temp

@@ -1,0 +1,78 @@
+<project name="osx" default= "common.-usage"> 
+
+  <include file="../common.xml" />
+
+  <property name="versionNumber" value="1.0.3"                              />
+  <property name="versionUrl"    value="http://localhost:5000/version-osx"  />
+  <property name="webDir"        value="../web/public"                      />
+  <property name="airFile"       value="hello-air.air"                      />
+  <property name="dmgFile"       value="hello-air.dmg"                      />
+
+  <target name="clean" description="Delete derived files."> 
+    <delete dir="temp" />
+    <delete file="${webDir}/${dmgFile}" />
+  </target>
+
+  <!--
+    The compile target generates Main.swf. 
+    Configuration strings are passed in here.
+  -->
+  <target name="compile" description="Compile code under src folder into Main.swf."> 
+    <mkdir dir="temp" />
+    <exec executable="${mxmlc}" dir="../src" failonerror="true"> 
+      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
+      <arg value="-define+=CONFIG::versionUrl,&quot;'${versionUrl}'&quot;" /> 
+      <arg value="-debug=false" />
+      <arg line="-o ../osx/temp/Main.swf" /> 
+<!--
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/airglobal.swc" /> 
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/applicationupdater_ui.swc" /> 
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/core.swc" /> 
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/aircore.swc" /> 
+      <arg value="-library-path+=${air-sdk}/frameworks/libs/air/applicationupdater.swc" /> 
+-->
+      <arg value="Main.as" /> 
+    </exec>  
+  </target>
+
+  <!-- Generate application.xml from template. -->
+  <target name="-app">
+    <mkdir dir="temp" />
+    <filter token="versionNumber" value="${versionNumber}" />
+    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
+  </target>
+
+  <target name="test" 
+          depends="compile, -app" 
+          description="Compile swf and run."> 
+    <exec executable="${adl}" dir="temp"> 
+      <arg value="application.xml" />
+    </exec>
+  </target>
+
+  <target name="installer" 
+          depends="compile,-app"
+          description="Generate the captive native installer hello-air.dmg and move to the web folder.">
+    <exec executable="${adt}" dir="temp"> 
+      <arg value="-package"                 />
+      <arg line="-storetype pkcs12"         />
+      <arg line="-keystore ../../keystore"  />
+      <arg line="-storepass 1234"           />
+      <arg line="-target native"            />
+      <arg value="${dmgFile}"               />
+      <arg value="application.xml"          />
+      <arg value="Main.swf"                 />
+      <arg line="-C ../../ icons"           />
+    </exec>
+    <move file="temp/${dmgFile}" todir="${webDir}" />
+  </target>
+
+  <target name="log" 
+          description="Display installation log messages; use to troubleshoot install problems."> 
+    <exec executable="tail"> 
+      <arg line="-f /private/var/log/system.log" />
+    </exec>
+  </target>
+
+</project>
+

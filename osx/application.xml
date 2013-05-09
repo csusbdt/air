@@ -19,7 +19,7 @@
 
   <copyright>Copyright 2013, David Turner</copyright>
 
-  <supportedProfiles>@supportedProfiles@</supportedProfiles>
+  <supportedProfiles>desktop extendedDesktop</supportedProfiles>
 
   <programMenuFolder>Hello AIR</programMenuFolder> <!-- I think for windows only -->
 
