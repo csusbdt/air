@@ -23,7 +23,7 @@ import flash.utils.ByteArray;
     private var status:TextField = new TextField();
 
     private var urlStream:URLStream = new URLStream();
-    private var fileStream:FileStream = new FileStream;
+    private var fileStream:FileStream = null;
     private var file:File = new File();
 
     private function trim(s:String):String
@@ -39,26 +39,21 @@ import flash.utils.ByteArray;
       status.x                 = 50;
       status.y                 = 50;
       addChild(status);
-      attachListeners();
 
-      var fileName:String = "hello-air.dmg";
-      var file:File = File.createTempDirectory().resolvePath(fileName);
+      file = File.createTempDirectory().resolvePath(CONFIG::installerFilename);
 
-      attachListeners();
       var url:String = CONFIG::installerSite + CONFIG::installerFilename;
-      urlStream.load(new URLRequest(CONFIG::url));
-    }
-
-    private function attachListeners():void
-    {
+      urlStream.load(new URLRequest(url));
       urlStream.addEventListener(Event.OPEN,             handleOpenEvent);
       urlStream.addEventListener(ProgressEvent.PROGRESS, handleProgressEvent);
       urlStream.addEventListener(Event.COMPLETE,         handleCompleteEvent);
       urlStream.addEventListener(IOErrorEvent.IO_ERROR,  handleIoErrorEvent);
     }
 
-    private function detachListeners():void
+    private function closeStreams():void
     {
+      if (fileStream) fileStream.close();
+      urlStream.close();
       urlStream.removeEventListener(Event.OPEN,             handleOpenEvent);
       urlStream.removeEventListener(ProgressEvent.PROGRESS, handleProgressEvent);
       urlStream.removeEventListener(Event.COMPLETE,         handleCompleteEvent);
@@ -67,6 +62,7 @@ import flash.utils.ByteArray;
 
     private function handleOpenEvent(event:Event):void
     {
+      fileStream = new FileStream();
       fileStream.open(file, FileMode.WRITE);
     }
 
@@ -85,41 +81,18 @@ import flash.utils.ByteArray;
 
     private function handleIoErrorEvent(event:IOErrorEvent):void
     {
-      detachListeners();
-// CLOSE STUFF
+      closeStreams();
       status.text = "IO error";
+      //parent.removeChild(this);
     }
 
     protected function installUpdate():void
     {
-      var info:NativeProcessStartupInfo = new NativeProcessStartupInfo;
-      info.executable = updateFile;
-      var process:NativeProcess = new NativeProcess;
+      var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
+      info.executable = file;
+      var process:NativeProcess = new NativeProcess();
       process.start(info);
       NativeApplication.nativeApplication.exit();
-    }
-
-    private function handleIoErrorEvent(event:IOErrorEvent):void
-    {
-      detachListeners();
-      urlLoader.close();
-      status.text = "IO error";
-    }
-
-    private function handleCompleteEvent(event:Event):void
-    {
-      detachListeners();
-      urlLoader.close();
-      var versionNumber:String = urlLoader.data;
-      if (trim(versionNumber) === CONFIG::versionNumber)
-      {
-        parent.addChild(new TitleScreen());
-      }
-      else
-      {
-        parent.addChild(new NewVersionDownloadScreen());
-      }
-      parent.removeChild(this);
     }
   }
 }

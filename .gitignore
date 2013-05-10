@@ -3,3 +3,5 @@
 /keystore
 /web/public/hello-air.dmg
 /osx/temp
+web/public/*.dmg
+
