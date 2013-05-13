@@ -14,14 +14,14 @@
   <versionNumber>@versionNumber@</versionNumber>
 
   <description>
-    <text xml:lang="en">This is an example AIR application for desktop computers.</text>
+    <text xml:lang="en">This is an example AIR application.</text>
   </description>
 
   <copyright>Copyright 2013, David Turner</copyright>
 
-  <supportedProfiles>desktop extendedDesktop</supportedProfiles>
+  <supportedProfiles>@supportedProfiles@</supportedProfiles>
 
-  <programMenuFolder>Hello AIR</programMenuFolder> <!-- I think for windows only -->
+  <programMenuFolder>Hello AIR</programMenuFolder> <!-- I think for windows only. -->
 
   <allowBrowserInvocation>false</allowBrowserInvocation> 
 
@@ -57,3 +57,4 @@
   </initialWindow>
 
 </application>
+

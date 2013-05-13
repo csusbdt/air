@@ -4,21 +4,23 @@ package app
   import flash.text.TextField;
   import flash.text.TextFieldAutoSize;
 
-import flash.desktop.NativeApplication;
-import flash.desktop.NativeProcess;
-import flash.desktop.NativeProcessStartupInfo;
-import flash.events.Event;
-import flash.events.IOErrorEvent;
-import flash.events.ProgressEvent;
-import flash.filesystem.File;
-import flash.filesystem.FileMode;
-import flash.filesystem.FileStream;
-import flash.net.URLLoader;
-import flash.net.URLRequest;
-import flash.net.URLStream;
-import flash.utils.ByteArray;
+  import flash.desktop.NativeApplication;
+  import flash.desktop.NativeProcess;
+  import flash.desktop.NativeProcessStartupInfo;
+  import flash.events.Event;
+  import flash.events.IOErrorEvent;
+  import flash.events.ProgressEvent;
+  import flash.filesystem.File;
+  import flash.filesystem.FileMode;
+  import flash.filesystem.FileStream;
+  import flash.system.Capabilities;
+  import flash.net.URLLoader;
+  import flash.net.URLRequest;
+  import flash.net.URLStream;
+  import flash.utils.setTimeout;
+  import flash.utils.ByteArray;
 
-  public class NewVersionDownloadScreen extends Screen
+  public class InstallerDownloadScreen extends Screen
   {
     private var status:TextField = new TextField();
 
@@ -31,13 +33,15 @@ import flash.utils.ByteArray;
       return s.replace(/^\s+|\s+$/gs, "");
     }
 
-    public function NewVersionDownloadScreen()
+    public function InstallerDownloadScreen()
     {
       status.defaultTextFormat = textFormat;
       status.autoSize          = TextFieldAutoSize.LEFT;
       status.text              = "Downloading update ...";
       status.x                 = 50;
       status.y                 = 50;
+      status.multiline = true;
+      status.wordWrap = true;
       addChild(status);
 
       file = File.createTempDirectory().resolvePath(CONFIG::installerFilename);
@@ -76,23 +80,46 @@ import flash.utils.ByteArray;
     private function handleCompleteEvent(event:Event):void
     {
       closeStreams();
-      installUpdate();
+      switch (Capabilities.os.substr(0, 3))
+      {
+        case "Mac":
+          installOsxUpdate();
+          break;
+        case "Win":
+          installWinUpdate();
+          break;
+        default:
+          status.text = Capabilities.os;
+          break;
+      }
     }
 
     private function handleIoErrorEvent(event:IOErrorEvent):void
     {
       closeStreams();
-      status.text = "IO error";
-      //parent.removeChild(this);
+      status.text += "InstallerDownloadScreen: IO error: " + event.text;
     }
 
-    protected function installUpdate():void
+    protected function installWinUpdate():void
     {
+trace("installWinUpdate");
       var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
       info.executable = file;
+status.text += "Running " + file.name;
       var process:NativeProcess = new NativeProcess();
       process.start(info);
-      NativeApplication.nativeApplication.exit();
+      setTimeout(NativeApplication.nativeApplication.exit, 200);
+    }
+
+    protected function installOsxUpdate():void
+    {
+trace("installMacUpdate");
+      var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
+      info.executable = file;
+status.text += "Running " + file.name;
+      var process:NativeProcess = new NativeProcess();
+      process.start(info);
+      setTimeout(NativeApplication.nativeApplication.exit, 200);
     }
   }
 }

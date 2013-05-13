@@ -1,7 +1,6 @@
 .DS_Store
-/node_modules
-/keystore
-/web/public/hello-air.dmg
-/osx/temp
-web/public/*.dmg
-
+/keystore/keystore
+/web/node_modules
+/web/public/*.dmg
+/temp
+/old

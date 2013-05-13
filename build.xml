@@ -1,0 +1,140 @@
+<project name="desktop"> 
+
+  <!-- Volatile Properties -->
+
+  <property name="versionNumber" value="1.0.9" />
+  <property name="installerSite" value="http://localhost:5000/" />
+
+  <!-- Derived Properties -->
+
+  <property name="osxInstallerFilenameResource"  value="hello-air-installer-filename-osx"  /> 
+  <property name="osxInstallerFilename"          value="hello-air-${versionNumber}.dmg"    />
+
+  <!-- Executables -->
+
+  <property environment="env" />
+  <property name="amxmlc" value="${env.AIR_SDK_HOME}/bin/amxmlc" /> 
+  <property name="adl"    value="${env.AIR_SDK_HOME}/bin/adl"   />
+  <property name="adt"    value="${env.AIR_SDK_HOME}/bin/adt"   />
+
+  <!-- Libraries -->
+
+  <property name="airglobal" value="${env.AIR_SDK_HOME}/frameworks/libs/air/airglobal.swc" /> 
+
+  <!-- Clean Target -->
+
+  <target name="clean" description="Delete derived files."> 
+    <delete dir="temp" />
+  </target>
+
+  <!-- Compile Targets -->
+
+  <target name="compile-test" description="Compile for test run."> 
+    <mkdir dir="temp" />
+    <exec executable="${amxmlc}" failonerror="true"> 
+      <arg line="-o temp/Main.swf"  /> 
+      <arg line="-source-path src"  />
+      <arg value="--"               />
+      <arg value="src/PlainMain.as" /> 
+    </exec>  
+  </target>
+<!--
+      <arg value="-library-path=${airglobal}" /> 
+-->
+
+  <target name="compile-osx" description="Compile for osx installer."> 
+    <mkdir dir="temp" />
+    <exec executable="${amxmlc}" failonerror="true"> 
+      <arg line="-o temp/Main.swf" /> 
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;"                            /> 
+      <arg value="-define+=CONFIG::installerFilename,&quot;'${osxInstallerFilename}'&quot;"                 /> 
+      <arg value="-define+=CONFIG::installerFilenameResource,&quot;'${osxInstallerFilenameResource}'&quot;" /> 
+      <arg value="-debug=true"     />
+      <arg line="-source-path src" />
+      <arg value="--"              /> 
+      <arg value="src/OsxMain.as"  /> 
+    </exec>  
+  </target>
+
+  <!-- Application Descriptor Targets -->
+
+  <target name="-app-test">
+    <mkdir dir="temp" />
+    <filter token="versionNumber" value="${versionNumber}" />
+    <filter token="supportedProfiles" value="desktop" />
+    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
+  </target>
+
+  <target name="-app-osx">
+    <mkdir dir="temp" />
+    <filter token="versionNumber" value="${versionNumber}" />
+    <filter token="supportedProfiles" value="extendedDesktop desktop" />
+    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
+  </target>
+
+  <!-- Test Target -->
+
+  <target name="test" 
+          depends="compile-test,-app-test" 
+          description="Test swf file."> 
+    <exec executable="${adl}" dir="temp"> 
+      <!--arg value="-nodebug" /-->
+      <arg value="application.xml" />
+    </exec>
+  </target>
+
+  <target name="test-osx" 
+          depends="compile-osx,-app-osx" 
+          description="Test swf file."> 
+    <exec executable="${adl}" dir="temp"> 
+      <arg line="-profile extendedDesktop" />
+      <arg value="application.xml" />
+    </exec>
+  </target>
+
+  <!-- OSX Package Target -->
+
+  <target name="osx" 
+          depends="compile-osx,-app-osx"
+          description="Generate the osx installer.">
+    <exec executable="${adt}" dir="temp"> 
+      <arg value="-package"                       />
+      <arg line="-storetype pkcs12"               />
+      <arg line="-keystore ../keystore/keystore"  />
+      <arg line="-storepass 1234"                 />
+      <arg line="-target native"                  />
+      <arg value="${osxInstallerFilename}"        />
+      <arg value="application.xml"                />
+      <arg value="Main.swf"                       />
+      <arg line="-C ../ icons"                    />
+    </exec>
+  </target>
+
+  <target name="log" 
+          description="Display installation log messages; use to troubleshoot install problems."> 
+    <exec executable="tail"> 
+      <arg line="-f /private/var/log/system.log" />
+    </exec>
+  </target>
+
+  <target name="touch" 
+          description="Touch."> 
+    <exec executable="touch"> 
+      <arg value="/Applications/HelloDesktopAIR.app/Contents/Resources/META-INF/AIR/debug" />
+    </exec>
+    <exec executable="open">
+      <arg value="/Applications/HelloDesktopAIR.app" />
+    </exec>
+  </target>
+
+  <!-- NOTES -->
+
+  <!--
+
+    To run debugger, run fdb and enter "run" at command prompt.
+    Then, start app.  Then enter "continue" at the fdb command prompt.
+
+  -->
+
+</project>
+

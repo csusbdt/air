@@ -15,7 +15,6 @@ package app
   public class VersionCheckScreen extends Screen
   {
     private var status:TextField = new TextField();
-
     private var urlLoader:URLLoader = new URLLoader();
 
     private function trim(s:String):String
@@ -31,7 +30,8 @@ package app
       status.x                 = 50;
       status.y                 = 50;
       addChild(status);
-      attachListeners();
+      urlLoader.addEventListener(Event.COMPLETE, handleCompleteEvent);
+      urlLoader.addEventListener(IOErrorEvent.IO_ERROR, handleIoErrorEvent);
       var url:String = CONFIG::installerSite + CONFIG::installerFilenameResource;
       try
       {
@@ -40,13 +40,8 @@ package app
       catch(error:Error)
       {
         status.text = error.message;
+        return;
       }
-    }
-
-    private function attachListeners():void
-    {
-      urlLoader.addEventListener(Event.COMPLETE, handleCompleteEvent);
-      urlLoader.addEventListener(IOErrorEvent.IO_ERROR, handleIoErrorEvent);
     }
 
     private function detachListeners():void
@@ -59,7 +54,7 @@ package app
     {
       detachListeners();
       urlLoader.close();
-      status.text = "IO error";
+      status.text = "VersionCheckScreen: IO error: " + event.text;
     }
 
     private function handleCompleteEvent(event:Event):void
@@ -73,7 +68,7 @@ package app
       }
       else
       {
-        parent.addChild(new NewVersionDownloadScreen());
+        parent.addChild(new InstallerDownloadScreen());
       }
       parent.removeChild(this);
     }
