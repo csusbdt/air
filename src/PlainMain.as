@@ -7,7 +7,6 @@ package
    {
       public function PlainMain() : void
       {
-trace("Inside PlainMain constructor.");
         addChild(new TitleScreen());
       }
    }

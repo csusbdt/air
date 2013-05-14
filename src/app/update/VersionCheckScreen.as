@@ -1,4 +1,4 @@
-package app
+package app.update
 {
   import flash.display.Sprite;
   import flash.text.TextField;
@@ -11,16 +11,22 @@ package app
 
   import flash.utils.Timer;
   import flash.events.TimerEvent;
+  import app.Screen;
 
+  /**
+   * This class checks to see that the name of the installer used
+   * to install the currently running program (myInstallerName)  
+   * matches the installer on the application's website
+   * (currentInstallerName).  If the names match, then the 
+   * application is up-to-date, and the screen transitions to the 
+   * title screen.  If the names don't match, then the new
+   * version of the application will be installed, and the
+   * screen transitions to the download installer screen.
+   */
   public class VersionCheckScreen extends Screen
   {
     private var status:TextField = new TextField();
     private var urlLoader:URLLoader = new URLLoader();
-
-    private function trim(s:String):String
-    {
-      return s.replace(/^\s+|\s+$/gs, "");
-    }
 
     public function VersionCheckScreen()
     {
@@ -61,14 +67,14 @@ package app
     {
       detachListeners();
       urlLoader.close();
-      var installerFilename:String = urlLoader.data;
-      if (trim(installerFilename) === CONFIG::installerFilename)
+      var installerFilename:String = trim(urlLoader.data);
+      if (installerFilename === CONFIG::installerFilename)
       {
-        parent.addChild(new TitleScreen());
+        parent.addChild(new app.TitleScreen());
       }
       else
       {
-        parent.addChild(new InstallerDownloadScreen());
+        parent.addChild(new InstallerDownloadScreen(installerFilename));
       }
       parent.removeChild(this);
     }

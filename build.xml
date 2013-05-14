@@ -2,7 +2,7 @@
 
   <!-- Volatile Properties -->
 
-  <property name="versionNumber" value="1.0.9" />
+  <property name="versionNumber" value="1.0.0" />
   <property name="installerSite" value="http://localhost:5000/" />
 
   <!-- Derived Properties -->
@@ -13,9 +13,10 @@
   <!-- Executables -->
 
   <property environment="env" />
-  <property name="amxmlc" value="${env.AIR_SDK_HOME}/bin/amxmlc" /> 
-  <property name="adl"    value="${env.AIR_SDK_HOME}/bin/adl"   />
-  <property name="adt"    value="${env.AIR_SDK_HOME}/bin/adt"   />
+  <property name="amxmlc" value="${env.AIR_SDK_HOME}/bin/amxmlc"  /> 
+  <property name="adl"    value="${env.AIR_SDK_HOME}/bin/adl"     />
+  <property name="adt"    value="${env.AIR_SDK_HOME}/bin/adt"     />
+  <property name="aasdoc" value="${env.AIR_SDK_HOME}/bin/aasdoc"  />
 
   <!-- Libraries -->
 
@@ -25,6 +26,22 @@
 
   <target name="clean" description="Delete derived files."> 
     <delete dir="temp" />
+  </target>
+
+  <!-- Doc Target -->
+
+  <target name="doc" description="Generate documentation."> 
+    <delete dir="doc" />
+    <exec executable="${aasdoc}">
+      <arg value="-define+=CONFIG::installerSite,&quot;'&#36;{installerSite}'&quot;"                            /> 
+      <arg value="-define+=CONFIG::installerFilename,&quot;'&#36;{osxInstallerFilename}'&quot;"                 /> 
+      <arg value="-define+=CONFIG::installerFilenameResource,&quot;'&#36;{osxInstallerFilenameResource}'&quot;" /> 
+      <arg line="-doc-sources src"  />
+      <arg line="-source-path src"  />
+      <arg line="-main-title &quot;Hello Air Documentation&quot;" />
+      <arg line="-window-title &quot;Hello Air Documentation&quot;" />
+      <arg line="-output doc"  />
+    </exec>
   </target>
 
   <!-- Compile Targets -->

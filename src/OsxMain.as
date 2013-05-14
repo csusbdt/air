@@ -1,7 +1,7 @@
 package 
 {
    import flash.display.Sprite;
-   import app.VersionCheckScreen;
+   import app.update.VersionCheckScreen;
 
    public class OsxMain extends Sprite
    {
