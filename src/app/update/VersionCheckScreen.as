@@ -12,6 +12,7 @@ package app.update
   import flash.utils.Timer;
   import flash.events.TimerEvent;
   import app.Screen;
+  import app.Util;
 
   /**
    * This class checks to see that the name of the installer used
@@ -25,16 +26,11 @@ package app.update
    */
   public class VersionCheckScreen extends Screen
   {
-    private var status:TextField = new TextField();
     private var urlLoader:URLLoader = new URLLoader();
 
     public function VersionCheckScreen()
     {
-      status.defaultTextFormat = textFormat;
-      status.autoSize          = TextFieldAutoSize.LEFT;
-      status.text              = "Checking for updates...";
-      status.x                 = 50;
-      status.y                 = 50;
+      status.text = "Checking for updates...";
       addChild(status);
       urlLoader.addEventListener(Event.COMPLETE, handleCompleteEvent);
       urlLoader.addEventListener(IOErrorEvent.IO_ERROR, handleIoErrorEvent);
@@ -60,14 +56,15 @@ package app.update
     {
       detachListeners();
       urlLoader.close();
-      status.text = "VersionCheckScreen: IO error: " + event.text;
+      status.text = "Connection Error";
     }
 
     private function handleCompleteEvent(event:Event):void
     {
       detachListeners();
       urlLoader.close();
-      var installerFilename:String = trim(urlLoader.data);
+      removeChild(status);
+      var installerFilename:String = Util.trim(urlLoader.data);
       if (installerFilename === CONFIG::installerFilename)
       {
         parent.addChild(new app.TitleScreen());

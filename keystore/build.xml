@@ -1,7 +1,7 @@
 <project default="-usage"> 
 
   <property environment="env" />
-  <property name="air-sdk" value="${env.AIR_SDK}" /> 
+  <property name="air-sdk" value="${env.AIR_SDK_HOME}" /> 
   <property name="adt" value="${air-sdk}/bin/adt" /> 
 
   <target name="-usage">

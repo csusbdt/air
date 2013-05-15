@@ -1,7 +1,9 @@
 package app {
 
   import flash.display.Sprite;
+  import flash.text.TextField;
   import flash.text.TextFormat;
+  import flash.text.TextFieldAutoSize;
 
   /**
    *  The title screen is displayed after the updater runs.
