@@ -19,32 +19,19 @@ package app.update
   import flash.net.URLStream;
   import flash.utils.setTimeout;
   import flash.utils.ByteArray;
-  import app.Screen;
+  import app.StatusText;
 
-  public class RunInstallerScreen extends Screen
+  public class RunInstallerScreen extends Sprite
   {
-    private var status:TextField = new TextField();
+    private var status:StatusText = new StatusText();
 
     private var installer:File = null;
-
-    private function trim(s:String):String
-    {
-      return s.replace(/^\s+|\s+$/gs, "");
-    }
 
     public function RunInstallerScreen(installer:File)
     {
       this.installer = installer;
-
-      status.defaultTextFormat = textFormat;
-      status.autoSize          = TextFieldAutoSize.LEFT;
-      status.text              = "Running installer ...";
-      status.x                 = 50;
-      status.y                 = 50;
-      status.multiline         = true;
-      status.wordWrap          = true;
+      status.setText("Running installer ...");
       addChild(status);
-
       var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
       info.executable = installer;
       var process:NativeProcess = new NativeProcess();

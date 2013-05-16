@@ -19,29 +19,18 @@ package app.update
   import flash.net.URLStream;
   import flash.utils.setTimeout;
   import flash.utils.ByteArray;
-  import app.Screen;
+  import app.StatusText;
 
-  public class InstallerDownloadScreen extends Screen
+  public class InstallerDownloadScreen extends Sprite
   {
-    private var status:TextField      = new TextField();
+    private var status:StatusText     = new StatusText();
     private var urlStream:URLStream   = new URLStream();
     private var fileStream:FileStream = new FileStream();
     private var file:File             = new File();
 
-    private function trim(s:String):String
-    {
-      return s.replace(/^\s+|\s+$/gs, "");
-    }
-
     public function InstallerDownloadScreen(installerFilename:String)
     {
-      status.defaultTextFormat = textFormat;
-      status.autoSize          = TextFieldAutoSize.LEFT;
-      status.text              = "Downloading update ...";
-      status.x                 = 50;
-      status.y                 = 50;
-      status.multiline         = true;
-      status.wordWrap          = true;
+      status.setText("Downloading update ...");
       addChild(status);
 
       //file = File.createTempDirectory().resolvePath(CONFIG::installerFilename);
@@ -83,17 +72,15 @@ trace("handle open event");
       removeListeners();
       fileStream.close();
       urlStream.close();
-trace(Capabilities.os);
       if (Capabilities.os.substr(0, 3) == "Mac")
       {
-trace("will call Mount...");
-//        parent.addChild(new MountOsxInstallerScreen(file));
+        parent.addChild(new MountOsxInstallerScreen(file));
       }
       else
       {
         parent.addChild(new RunInstallerScreen(file));
       }
-//      parent.removeChild(this);
+      parent.removeChild(this);
     }
 
     private function handleIoError(event:IOErrorEvent):void
@@ -101,7 +88,7 @@ trace("will call Mount...");
       removeListeners();
       fileStream.close();
       urlStream.close();
-      status.appendText("InstallerDownloadScreen: IO error: " + event.text);
+      status.setText("InstallerDownloadScreen: IO error: " + event.text);
     }
   }
 }

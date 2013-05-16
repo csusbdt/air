@@ -19,18 +19,19 @@ package app.update
   import flash.net.URLStream;
   import flash.utils.setTimeout;
   import flash.utils.ByteArray;
-  import app.Screen;
+  import app.StatusText;
 
-  public class MountOsxInstallerScreen extends Screen
+  public class MountOsxInstallerScreen extends Sprite
   {
     private var dmg            :File;
     private var nativeProcess  :NativeProcess;
     public  var mountPoint     :String;
+    private var status:StatusText = new StatusText();
 
     public function MountOsxInstallerScreen(dmg:File)
     {
       this.dmg = dmg;
-      status.text = "Mounting osx installer.";
+      status.setText("Mounting osx installer.");
       addChild(status);
 
       var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
@@ -68,7 +69,7 @@ package app.update
         prettyPrinting : false
       });
                                 
-      var plist:XML = new XML(hdiutilProcess.standardOutput.readUTFBytes(event.bytesLoaded));
+      var plist:XML = new XML(nativeProcess.standardOutput.readUTFBytes(event.bytesLoaded));
       var dicts:XMLList = plist.dict.array.dict;
 
       for each(var dict:XML in dicts)
@@ -91,7 +92,7 @@ package app.update
         var files:Array = attachedDmg.getDirectoryListing();    
         if (files.length != 1)
         {
-          status.text = "Mounted volume should contain only 1 install file!";
+          status.setText("Mounted volume should contain only 1 install file!");
           return;
         }
         var installFileFolder:File = File(files[0]).resolvePath("Contents/MacOS");
@@ -100,24 +101,23 @@ package app.update
         if (installFiles.length == 1)
         {
           parent.addChild(new RunInstallerScreen(installFiles[0]));
-          removeChild(status);
           parent.removeChild(this);
         }
         else
         {
-          status.text = "Contents/MacOS folder should contain only 1 install file!";
+          status.setText("Contents/MacOS folder should contain only 1 install file!");
         }
 
       }
       else
       {
-        status.text = "Couldn't find mount point!";
+        status.setText("Couldn't find mount point!");
       }
     }
 
     private function handleError(event:IOErrorEvent):void
     {
-      status.text = event.text;
+      status.setText(event.text);
     }
 
   }

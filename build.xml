@@ -2,7 +2,7 @@
 
   <!-- Volatile Properties -->
 
-  <property name="versionNumber" value="1.0.0" />
+  <property name="versionNumber" value="1.0.1" />
   <property name="installerSite" value="http://localhost:5000/" />
 
   <!-- Derived Properties -->

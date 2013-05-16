@@ -5,12 +5,11 @@ package app {
    /**
     *  The title screen is displayed after the updater runs.
     */
-   public class TitleScreen extends Screen
+   public class TitleScreen extends Sprite
    {
       public function TitleScreen()
       {
-         status.text = "Title Screen";
-         addChild(status);
+         addChild(new StatusText("Title Screen"));
 trace("title screen status added");
       }
    }

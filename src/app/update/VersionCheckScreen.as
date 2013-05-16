@@ -9,10 +9,9 @@ package app.update
   import flash.net.URLLoader;
   import flash.net.URLRequest;
 
-  import flash.utils.Timer;
-  import flash.events.TimerEvent;
-  import app.Screen;
+  import flash.utils.setTimeout;
   import app.Util;
+  import app.StatusText;
 
   /**
    * This class checks to see that the name of the installer used
@@ -24,26 +23,29 @@ package app.update
    * version of the application will be installed, and the
    * screen transitions to the download installer screen.
    */
-  public class VersionCheckScreen extends Screen
+  public class VersionCheckScreen extends Sprite
   {
     private var urlLoader:URLLoader = new URLLoader();
+    private var status:StatusText = new StatusText();
 
     public function VersionCheckScreen()
     {
-      status.text = "Checking for updates...";
+      status.setText("Checking for updates...");
       addChild(status);
-      urlLoader.addEventListener(Event.COMPLETE, handleCompleteEvent);
-      urlLoader.addEventListener(IOErrorEvent.IO_ERROR, handleIoErrorEvent);
-      var url:String = CONFIG::installerSite + CONFIG::installerFilenameResource;
-      try
-      {
-        urlLoader.load(new URLRequest(url));
-      }
-      catch(error:Error)
-      {
-        status.text = error.message;
-        return;
-      }
+      setTimeout(function():void {
+        urlLoader.addEventListener(Event.COMPLETE, handleCompleteEvent);
+        urlLoader.addEventListener(IOErrorEvent.IO_ERROR, handleIoErrorEvent);
+        var url:String = CONFIG::installerSite + CONFIG::installerFilenameResource;
+        try
+        {
+          urlLoader.load(new URLRequest(url));
+        }
+        catch(error:Error)
+        {
+          status.setText(error.message);
+          return;
+        }
+      }, 2000);
     }
 
     private function detachListeners():void
@@ -56,14 +58,13 @@ package app.update
     {
       detachListeners();
       urlLoader.close();
-      status.text = "Connection Error";
+      status.setText("Connection Error");
     }
 
     private function handleCompleteEvent(event:Event):void
     {
       detachListeners();
       urlLoader.close();
-      removeChild(status);
       var installerFilename:String = Util.trim(urlLoader.data);
       if (installerFilename === CONFIG::installerFilename)
       {
