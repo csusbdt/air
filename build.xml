@@ -1,14 +1,15 @@
 <project name="desktop"> 
 
-  <!-- Volatile Properties -->
+  <!-- Settable Properties -->
 
-  <property name="versionNumber" value="1.0.1" />
+  <property name="versionNumber" value="1.0.2" />
   <property name="installerSite" value="http://localhost:5000/" />
 
   <!-- Derived Properties -->
 
   <property name="osxInstallerFilenameResource"  value="hello-air-installer-filename-osx"  /> 
   <property name="osxInstallerFilename"          value="hello-air-${versionNumber}.dmg"    />
+  <property name="osxCaptiveInstaller"           value="hello-air-${versionNumber}.app"    />
 
   <!-- Executables -->
 
@@ -20,7 +21,9 @@
 
   <!-- Libraries -->
 
+  <!--  NOT USED - NOT NEEDED - WILL NEED STARLING, etc. (I think)
   <property name="airglobal" value="${env.AIR_SDK_HOME}/frameworks/libs/air/airglobal.swc" /> 
+  -->
 
   <!-- Clean Target -->
 
@@ -46,7 +49,7 @@
 
   <!-- Compile Targets -->
 
-  <target name="compile-test" description="Compile for test run."> 
+  <target name="compile-test" description="Compile without version check."> 
     <mkdir dir="temp" />
     <exec executable="${amxmlc}" failonerror="true"> 
       <arg line="-o temp/Main.swf"  /> 
@@ -56,10 +59,11 @@
     </exec>  
   </target>
 <!--
+ADD STARLING, ETC?
       <arg value="-library-path=${airglobal}" /> 
 -->
 
-  <target name="compile-osx" description="Compile for osx installer."> 
+  <target name="compile-osx" description="Compile for osx."> 
     <mkdir dir="temp" />
     <exec executable="${amxmlc}" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
@@ -93,7 +97,7 @@
 
   <target name="test" 
           depends="compile-test,-app-test" 
-          description="Test swf file."> 
+          description="Test swf file without version check."> 
     <exec executable="${adl}" dir="temp"> 
       <!--arg value="-nodebug" /-->
       <arg value="application.xml" />
@@ -102,7 +106,7 @@
 
   <target name="test-osx" 
           depends="compile-osx,-app-osx" 
-          description="Test swf file."> 
+          description="Test swf file for version check on osx."> 
     <exec executable="${adl}" dir="temp"> 
       <arg line="-profile extendedDesktop" />
       <arg value="application.xml" />
@@ -126,6 +130,24 @@
       <arg line="-C ../ icons"                    />
     </exec>
   </target>
+
+  <target name="captive-osx" 
+          depends="compile-osx,-app-osx"
+          description="Generate the osx captive installer.">
+    <exec executable="${adt}" dir="temp"> 
+      <arg value="-package"                       />
+      <arg line="-storetype pkcs12"               />
+      <arg line="-keystore ../keystore/keystore"  />
+      <arg line="-storepass 1234"                 />
+      <arg line="-target bundle"                  />
+      <arg value="${osxCaptiveInstaller}"         />
+      <arg value="application.xml"                />
+      <arg value="Main.swf"                       />
+      <arg line="-C ../ icons"                    />
+    </exec>
+  </target>
+
+  <!-- Utility targets for osx development -->
 
   <target name="log" 
           description="Display installation log messages; use to troubleshoot install problems."> 

@@ -1,50 +1,38 @@
 # Hello Adobe AIR
 
+## Project status
 
-https://code.google.com/p/nativeapplicationupdater/source/browse/trunk/NativeApplicationUpdater/src/com/riaspace/nativeApplicationUpdater/utils/HdiutilHelper.as
+This project currently supports OS X only.
 
-https://code.google.com/p/nativeapplicationupdater/source/browse/trunk/NativeApplicationUpdater/src/com/riaspace/nativeApplicationUpdater/NativeApplicationUpdater.as
+I have a captive-osx target, but the updating does not work for this.
 
-http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/system/Capabilities.html#os
+For iOS, consider this WARNING: See [which AIR SDK versions will run which iOS versions](http://stackoverflow.com/questions/16243485/which-air-sdk-versions-will-run-which-ios-versions).
 
-http://www.adobe.com/devnet/air/articles/updating-air-apps-native-installer.html
+I will look at the following:
 
+- Starling
+- Feathers
+- DragonBones
+- http://citrusengine.com/
+- [ANE-Push-Notification](https://github.com/freshplanet/ANE-Push-Notification)
 
-
-
+## Overview
 
 This project illustrates one way to setup an application development
 project that uses a common code base written in Action Script and
 runnable in both desktop and mobile computers by utilizing the Adobe AIR
 runtime.  All build operations are performed using Ant.
 
-This project currently supports OS X only.
+### Adobe AIR Installation badge
 
-## Prerequisites
+The Adobe AIR Installation badge (runs in Flash plugin) has not worked in Chrome for over a year; 
+see the footnotes in the criticism section in 
+[Adobe Integrated Runtime](http://en.wikipedia.org/wiki/Adobe_Integrated_Runtime).
+Also, the installation badge does not support installation of applications that include
+native extensions.
+For these reasons, this project will not use the installation badge.
 
-- Install Apache Ant.
-- Install the AIR SDK. (Download and unpack somewhere.)
-
-Copy the Flex ant tasks into Ant's lib folder.
-
-    sudo cp ${AIR}/ant/lib/flexTasks.jar ${ANT}/lib/
-
-On my system:
-
-    AIR = /Users/turner/apps/AIRSDK_Compiler 
-    ANT = /usr/share/java/ant-1.8.2/lib/
-
-__I'm not sure about the following:__
-
-Create ~/mm.cfg with the following contents.
-
-    ErrorReportingEnable=1
-    TraceOutputFileEnable=1
-
-See [Editing the mm.cfg file](http://help.adobe.com/en_US/flex/using/WS2db454920e96a9e51e63e3d11c0bf69084-7fc9.html)
-for an explanation.
-
-## Captive AIR runtime
+### Captive AIR runtime
 
 From [Adobe's roadmap whitepaper](http://www.adobe.com/devnet/flashplatform/whitepapers/roadmap.html):
 
@@ -59,13 +47,28 @@ NOTE: Captive AIR runtime distribution is required for iOS because iOS does
 not support the shared runtime model needed otherwise; see 
 [Installation and deployment options in Adobe AIR 3](http://www.adobe.com/devnet/air/articles/air3-install-and-deployment-options.html).
 
-ALSO NOTE: AIR installation through Chrome has not worked for over a year; see the footnotes
-in the criticism section in 
-[Adobe Integrated Runtime](http://en.wikipedia.org/wiki/Adobe_Integrated_Runtime).
+## References
 
-CONCLUSION: This project will use captive AIR runtime packaging.
+- [Actionscript 3](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/)
+- [Updating Adobe AIR applications packaged with a native installer](http://www.adobe.com/devnet/air/articles/updating-air-apps-native-installer.html)
+- [Adobe Flash Platform](http://help.adobe.com/en_US/as3/dev/index.html)
+- [Programming Adobe ActionScript 3.0 for Adobe Flash](http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3)
+- [Installation and deployment options in Adobe AIR 3](http://www.adobe.com/devnet/air/articles/air3-install-and-deployment-options.html)
+- [Blog note on reducing file size](http://www.shedosurashu.com/captive-runtime-not-what-i-thought-it-to-be)
+- [Relationship of Adobe AIR SDK and Flex SDK?](http://stackoverflow.com/questions/12554447/relationship-of-adobe-air-sdk-and-flex-sdk)
+- [Clarify usage of playerglobal.swc and airglobal.swc](https://issues.apache.org/jira/browse/FLEX-33089)
 
-WARNING: See [which AIR SDK versions will run which iOS versions](http://stackoverflow.com/questions/16243485/which-air-sdk-versions-will-run-which-ios-versions).
+## Prerequisites
+
+- Install Apache Ant.
+- Install the AIR SDK. (Download and unpack somewhere.)
+
+After unpacking the AIR SDK, set environmental variable AIR_SDK_HOME 
+to its location and ad its bin folder to the system path.  On my system,
+I added the following to _.bash_profile_
+
+    export AIR_SDK_HOME=$HOME/apps/AIRSDK_Compiler
+    export PATH=$PATH:$AIR_SDK_HOME/bin
 
 ## Troubleshooting
 
@@ -85,8 +88,6 @@ file called _debug_ under the _META-INF/AIR_ folder
 in the installed application.  On my system, I did the following.
 
     touch /Applications/HelloDesktopAIR.app/Contents/Resources/META-INF/AIR/debug
-
-I beleive you also need to compile with _debug=true_.
 
 ### Changing Certificates
 
@@ -109,26 +110,4 @@ The tail command is convenient for looking at what is being written into log fil
 
 See [Logging for Adobe AIR 2 Desktop application and runtime installations](http://helpx.adobe.com/air/kb/logging-air-2-desktop-application.html).
 
-## Reading
-
-- [Updating Adobe AIR applications packaged with a native installer](http://www.adobe.com/devnet/air/articles/updating-air-apps-native-installer.html)
-- [Adobe Flash Platform](http://help.adobe.com/en_US/as3/dev/index.html)
-- [Programming Adobe ActionScript 3.0 for Adobe Flash](http://help.adobe.com/en_US/ActionScript/3.0_ProgrammingAS3)
-- [Installation and deployment options in Adobe AIR 3](http://www.adobe.com/devnet/air/articles/air3-install-and-deployment-options.html)
-- [Blog note on reducing file size](http://www.shedosurashu.com/captive-runtime-not-what-i-thought-it-to-be)
-- [Relationship of Adobe AIR SDK and Flex SDK?](http://stackoverflow.com/questions/12554447/relationship-of-adobe-air-sdk-and-flex-sdk)
-- [Clarify usage of playerglobal.swc and airglobal.swc](https://issues.apache.org/jira/browse/FLEX-33089)
-
-## Application update
-
-- [READ ME NEXT](http://www.adobe.com/devnet/air/articles/updating-air-apps-native-installer.html)
-- [Beyond Plain Old HTML Objects NativeApplicationUpdater – updater for AIR apps packaged with native installers](http://www.riaspace.com/2010/08/nativeapplicationupdater-updater-for-air-apps-packaged-with-native-installers/)
-
-
-## Research
-
-- Starling
-- Feathers
-- http://citrusengine.com/
-- [ANE-Push-Notification](https://github.com/freshplanet/ANE-Push-Notification)
 
