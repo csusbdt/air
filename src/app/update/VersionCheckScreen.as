@@ -66,9 +66,11 @@ package app.update
       detachListeners();
       urlLoader.close();
       var installerFilename:String = Util.trim(urlLoader.data);
+trace("installerFilename: " + installerFilename);
+trace("CONFIG::installerFilename: " + CONFIG::installerFilename);
       if (installerFilename === CONFIG::installerFilename)
       {
-        parent.addChild(new app.TitleScreen());
+        parent.addChild(new InstallerCleanupScreen());
       }
       else
       {

@@ -19,6 +19,7 @@ package app.update
   import flash.net.URLStream;
   import flash.utils.setTimeout;
   import flash.utils.ByteArray;
+  import flash.utils.setTimeout;
   import app.StatusText;
 
   public class MountOsxInstallerScreen extends Sprite
@@ -34,18 +35,20 @@ package app.update
       status.setText("Mounting osx installer.");
       addChild(status);
 
-      var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
-      info.executable = new File("/usr/bin/hdiutil");
+      setTimeout(function():void {
+        var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
+        info.executable = new File("/usr/bin/hdiutil");
                         
-      var args:Vector.<String> = new Vector.<String>();
-      args.push("attach", "-plist", dmg.nativePath);
-      info.arguments = args;
+        var args:Vector.<String> = new Vector.<String>();
+        args.push("attach", "-plist", dmg.nativePath);
+        info.arguments = args;
                         
-      nativeProcess = new NativeProcess();
-      nativeProcess.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  handleError);
-      nativeProcess.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, handleError);
-      nativeProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    handleOutputData);
-      nativeProcess.start(info);
+        nativeProcess = new NativeProcess();
+        nativeProcess.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  handleError);
+        nativeProcess.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, handleError);
+        nativeProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    handleOutputData);
+        nativeProcess.start(info);
+      }, 2000);
     }
 
     private function removeListeners():void

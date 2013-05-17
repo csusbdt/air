@@ -110,4 +110,12 @@ The tail command is convenient for looking at what is being written into log fil
 
 See [Logging for Adobe AIR 2 Desktop application and runtime installations](http://helpx.adobe.com/air/kb/logging-air-2-desktop-application.html).
 
+### Checking cleanup of installer
+
+To see that the installer files are deleted after use, 
+I looked in the following location.
+
+    ls "/Users/turner/Library/Application Support/com.herokuapp.csusbdt-air.desktop/Local Store/"
+
+
 
