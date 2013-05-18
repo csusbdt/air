@@ -60,8 +60,8 @@ package app.update
 
     private function handleOutputData(event:ProgressEvent):void
     {
-      removeListeners();
       nativeProcess.exit();
+      removeListeners();
                         
       var originalXmlSettings:Object = XML.settings();
       // Required settings for custom XML settings

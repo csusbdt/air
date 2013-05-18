@@ -22,7 +22,6 @@ package app.update
 
   import flash.utils.setTimeout;
   import app.StatusText;
-  import app.TitleScreen;
 
   /**
    * This screen deletes any installer files that it finds in the application
@@ -45,7 +44,7 @@ package app.update
       }
       var self:Sprite = this;
       setTimeout(function():void {
-        parent.addChild(new TitleScreen());
+        parent.addChild(new VersionCheckScreen());
         parent.removeChild(self);
       }, 2000);
     }

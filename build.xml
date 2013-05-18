@@ -2,7 +2,7 @@
 
   <!-- Settable Properties -->
 
-  <property name="versionNumber" value="1.0.4" />
+  <property name="versionNumber" value="1.0.5" />
   <property name="installerSite" value="http://localhost:5000/" />
 
   <!-- Derived Properties -->
@@ -131,6 +131,7 @@ ADD STARLING, ETC?
     </exec>
   </target>
 
+  <!-- captive installer not yet working -->
   <target name="captive-osx" 
           depends="compile-osx,-app-osx"
           description="Generate the osx captive installer.">
@@ -160,9 +161,6 @@ ADD STARLING, ETC?
           description="Touch."> 
     <exec executable="touch"> 
       <arg value="/Applications/HelloDesktopAIR.app/Contents/Resources/META-INF/AIR/debug" />
-    </exec>
-    <exec executable="open">
-      <arg value="/Applications/HelloDesktopAIR.app" />
     </exec>
   </target>
 

@@ -33,8 +33,6 @@ package app.update
       status.setText("Downloading update ...");
       addChild(status);
 
-      //file = File.createTempDirectory().resolvePath(CONFIG::installerFilename);
-      // TODO: how to clean up temp directory?
       file = File.applicationStorageDirectory.resolvePath(installerFilename);
 
       urlStream.addEventListener(Event.OPEN,             handleOpenEvent);

@@ -10,7 +10,6 @@ package app {
       public function TitleScreen()
       {
          addChild(new StatusText("Title Screen"));
-trace("title screen status added");
       }
    }
 

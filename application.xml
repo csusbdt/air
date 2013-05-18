@@ -38,7 +38,7 @@
 
   <initialWindow>
     <content>Main.swf</content>
-    <title>Hello AIR</title>
+    <title>Hello AIR @versionNumber@</title>
     <minimizable>true</minimizable>
     <maximizable>true</maximizable>
     <resizable>true</resizable>
