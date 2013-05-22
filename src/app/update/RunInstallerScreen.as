@@ -27,24 +27,24 @@ package app.update
   {
     private var status:StatusText = new StatusText();
 
-    private var installer:File = null;
+//    private var installer:File = null;
     private var process:NativeProcess = new NativeProcess();
 
     public function RunInstallerScreen(installer:File)
     {
-      setTimeout(NativeApplication.nativeApplication.exit, 1);
-      this.installer = installer;
+  //    setTimeout(NativeApplication.nativeApplication.exit, 1);
+  //    this.installer = installer;
       //status.setText("Running installer ...");
       status.setText("Running " + installer.nativePath);
 trace("Running " + installer.nativePath);
       addChild(status);
       var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
       info.executable = installer;
-      //process.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  handleIOError);
-      //process.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, handleIOError);
-      //process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    handleOutput);
-      //process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA,     handleDataError);
-      //process.addEventListener(NativeProcessExitEvent.EXIT,           handleExit);
+      process.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  handleIOError);
+      process.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, handleIOError);
+      process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    handleOutput);
+      process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA,     handleDataError);
+      process.addEventListener(NativeProcessExitEvent.EXIT,           handleExit);
       process.start(info);
     }
 
@@ -61,13 +61,13 @@ trace("Running " + installer.nativePath);
     public function handleExit(event:NativeProcessExitEvent):void
     {
         trace("Process exited with ", event.exitCode);
+      setTimeout(NativeApplication.nativeApplication.exit, 1);
     }
         
     public function handleIOError(event:IOErrorEvent):void
     {
         trace(event.toString());
     }
-
   }
 }
 

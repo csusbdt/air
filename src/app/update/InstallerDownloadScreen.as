@@ -54,7 +54,6 @@ package app.update
 
     private function handleOpenEvent(event:Event):void
     {
-trace("handle open event");
       fileStream.open(file, FileMode.WRITE);
     }
 
@@ -72,13 +71,12 @@ trace("handle open event");
       urlStream.close();
       if (Capabilities.os.substr(0, 3) == "Mac")
       {
-        parent.addChild(new MountOsxInstallerScreen(file));
+        app.Util.gotoScreen(this, MountOsxInstallerScreen, file);
       }
       else
       {
-        parent.addChild(new RunInstallerScreen(file));
+        app.Util.gotoScreen(this, RunInstallerScreen, file);
       }
-      parent.removeChild(this);
     }
 
     private function handleIoError(event:IOErrorEvent):void

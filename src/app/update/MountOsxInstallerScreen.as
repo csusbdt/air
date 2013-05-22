@@ -27,7 +27,7 @@ package app.update
     private var dmg            :File;
     private var nativeProcess  :NativeProcess;
     public  var mountPoint     :String;
-    private var status:StatusText = new StatusText();
+    private var status         :StatusText = new StatusText();
 
     public function MountOsxInstallerScreen(dmg:File)
     {
@@ -103,14 +103,12 @@ package app.update
 
         if (installFiles.length == 1)
         {
-          parent.addChild(new RunInstallerScreen(installFiles[0]));
-          parent.removeChild(this);
+          app.Util.gotoScreen(this, RunInstallerScreen, installFiles[0]);
         }
         else
         {
           status.setText("Contents/MacOS folder should contain only 1 install file!");
         }
-
       }
       else
       {
@@ -122,7 +120,6 @@ package app.update
     {
       status.setText(event.text);
     }
-
   }
 }
 
