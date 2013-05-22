@@ -69,13 +69,12 @@ package app.update
       var installerFilename:String = Util.trim(urlLoader.data);
       if (installerFilename === CONFIG::installerFilename)
       {
-        parent.addChild(new TitleScreen());
+        app.Util.gotoScreen(this, TitleScreen);
       }
       else
       {
-        parent.addChild(new InstallerDownloadScreen(installerFilename));
+        app.Util.gotoScreen(this, InstallerDownloadScreen, installerFilename);
       }
-      parent.removeChild(this);
     }
   }
 }

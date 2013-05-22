@@ -26,6 +26,7 @@ package app.update
   /**
    * This screen deletes any installer files that it finds in the application
    * storage directory.  The purpose is to clean up after an application update.
+   * This should be the first screen to load when a program starts.
    */
   public class InstallerCleanupScreen extends Sprite
   {
@@ -42,11 +43,7 @@ package app.update
           list[i].deleteFile();
         }
       }
-      var self:Sprite = this;
-      setTimeout(function():void {
-        parent.addChild(new VersionCheckScreen());
-        parent.removeChild(self);
-      }, 2000);
+      app.Util.gotoScreen(this, VersionCheckScreen);
     }
   }
 }
