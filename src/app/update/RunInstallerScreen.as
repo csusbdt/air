@@ -22,21 +22,15 @@ package app.update
   import flash.utils.ByteArray;
   import app.StatusText;
 
-
   public class RunInstallerScreen extends Sprite
   {
     private var status:StatusText = new StatusText();
 
-//    private var installer:File = null;
     private var process:NativeProcess = new NativeProcess();
 
     public function RunInstallerScreen(installer:File)
     {
-  //    setTimeout(NativeApplication.nativeApplication.exit, 1);
-  //    this.installer = installer;
-      //status.setText("Running installer ...");
-      status.setText("Running " + installer.nativePath);
-trace("Running " + installer.nativePath);
+      status.setText("Running installer ...");
       addChild(status);
       var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
       info.executable = installer;
@@ -60,7 +54,6 @@ trace("Running " + installer.nativePath);
         
     public function handleExit(event:NativeProcessExitEvent):void
     {
-        trace("Process exited with ", event.exitCode);
       setTimeout(NativeApplication.nativeApplication.exit, 1);
     }
         

@@ -34,7 +34,7 @@
     <image128x128>icons/AIRApp_128.png</image128x128>
   </icon>
 
-  <customUpdateUI>true</customUpdateUI>
+  <customUpdateUI>false</customUpdateUI>
 
   <initialWindow>
     <content>Main.swf</content>

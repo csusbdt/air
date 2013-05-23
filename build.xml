@@ -2,7 +2,7 @@
 
   <!-- Settable Properties -->
 
-  <property name="versionNumber" value="1.0.5" />
+  <property name="versionNumber" value="1.0.6" />
   <property name="installerSite" value="http://localhost:5000/" />
 
   <!-- Derived Properties -->
@@ -160,7 +160,8 @@ ADD STARLING, ETC?
   <target name="touch" 
           description="Touch."> 
     <exec executable="touch"> 
-      <arg value="/Applications/HelloDesktopAIR.app/Contents/Resources/META-INF/AIR/debug" />
+      <!--arg value="/Applications/HelloDesktopAIR.app/Contents/Resources/META-INF/AIR/debug" /-->
+      <arg value="/Volumes/Install HelloDesktopAIR/HelloDesktopAIR.app/Contents/Resources/META-INF/AIR/debug" />
     </exec>
   </target>
 
