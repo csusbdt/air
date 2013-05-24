@@ -11,6 +11,9 @@
   <property name="osxInstallerFilename"          value="hello-air-${versionNumber}.dmg"    />
   <property name="osxCaptiveInstaller"           value="hello-air-${versionNumber}.app"    />
 
+  <property name="winInstallerFilenameResource"  value="hello-air-installer-filename-win"  /> 
+  <property name="winInstallerFilename"          value="hello-air-${versionNumber}.msi"    />
+
   <!-- Executables -->
 
   <property environment="env" />
@@ -77,6 +80,21 @@ ADD STARLING, ETC?
     </exec>  
   </target>
 
+  <target name="compile-win">
+    <exec executable="cmd">
+      <arg value="/c"/>
+      <arg value="amxmlc.bat"/>
+      <arg line="-o temp/Main.swf" /> 
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;"                            /> 
+      <arg value="-define+=CONFIG::installerFilename,&quot;'${winInstallerFilename}'&quot;"                 /> 
+      <arg value="-define+=CONFIG::installerFilenameResource,&quot;'${winInstallerFilenameResource}'&quot;" /> 
+      <arg value="-debug=true"     />
+      <arg line="-source-path src" />
+      <arg value="--"              /> 
+      <arg value="src/WinMain.as"  /> 
+    </exec>
+  </target>
+
   <!-- Application Descriptor Targets -->
 
   <target name="-app-test">
@@ -87,6 +105,13 @@ ADD STARLING, ETC?
   </target>
 
   <target name="-app-osx">
+    <mkdir dir="temp" />
+    <filter token="versionNumber" value="${versionNumber}" />
+    <filter token="supportedProfiles" value="extendedDesktop desktop" />
+    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
+  </target>
+
+  <target name="-app-win">
     <mkdir dir="temp" />
     <filter token="versionNumber" value="${versionNumber}" />
     <filter token="supportedProfiles" value="extendedDesktop desktop" />
@@ -108,6 +133,15 @@ ADD STARLING, ETC?
           depends="compile-osx,-app-osx" 
           description="Test swf file for version check on osx."> 
     <exec executable="${adl}" dir="temp"> 
+      <arg line="-profile extendedDesktop" />
+      <arg value="application.xml" />
+    </exec>
+  </target>
+
+  <target name="test-win" 
+          depends="compile-win,-app-win" 
+          description="Test swf file for version check on win."> 
+    <exec executable="${adl}" dir="temp">
       <arg line="-profile extendedDesktop" />
       <arg value="application.xml" />
     </exec>
@@ -164,6 +198,25 @@ ADD STARLING, ETC?
       <arg value="/Volumes/Install HelloDesktopAIR/HelloDesktopAIR.app/Contents/Resources/META-INF/AIR/debug" />
     </exec>
   </target>
+
+  <!-- WIN Package Target -->
+
+  <target name="win" 
+          depends="compile-win,-app-win"
+          description="Generate the win installer.">
+    <exec executable="${adt}" dir="temp"> 
+      <arg value="-package"                       />
+      <arg line="-storetype pkcs12"               />
+      <arg line="-keystore ../keystore/keystore"  />
+      <arg line="-storepass 1234"                 />
+      <arg line="-target native"                  />
+      <arg value="${winInstallerFilename}"        />
+      <arg value="application.xml"                />
+      <arg value="Main.swf"                       />
+      <arg line="-C ../ icons"                    />
+    </exec>
+  </target>
+
 
   <!-- NOTES -->
 
