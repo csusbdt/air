@@ -7,19 +7,21 @@
   <!-- Settable Properties -->
 
   <property name="versionNumber" value="1.0.6" />
-  <property name="installerSite" value="http://localhost:5000/" />
+  <property name="installerSite" value="http://localhost:5000" />
 
   <!-- Derived Properties -->
 
-  <property name="osxInstallerFilename" value="hello-air-${versionNumber}.dmg" />
-  <property name="osxInstallerURL" value="${installerSite}${osxInstallerFilename}" />
-  <property name="osxInstallerURLURL" value="${installerSite}hello-air-osx" />
+  <property name="appName" value="hello-air" />
 
-  <!--property name="osxCaptiveInstaller"           value="hello-air-${versionNumber}.app"    /-->
+  <property name="osxInstallerFilename" value="${appName}-${versionNumber}.dmg" />
+  <property name="osxInstallerURL" value="${installerSite}/${osxInstallerFilename}" />
+  <property name="osxInstallerURLURL" value="${installerSite}/hello-air-osx" />
 
-  <property name="winInstallerFilename" value="hello-air-${versionNumber}.msi" />
-  <property name="winInstallerURL" value="${installerSite}${winInstallerFilename}" />
-  <property name="winInstallerURLURL" value="${installerSite}hello-air-win" />
+  <property name="osxCaptiveInstaller" value="${appName}-${versionNumber}.app" />
+
+  <property name="winInstallerFilename" value="${appName}-${versionNumber}.msi" />
+  <property name="winInstallerURL" value="${installerSite}/${winInstallerFilename}" />
+  <property name="winInstallerURLURL" value="${installerSite}/${appName}-win" />
   
   <!-- Libraries -->
 
@@ -169,7 +171,7 @@ ADD STARLING, ETC?
   <target name="captive-osx" 
           depends="compile-osx,app-osx"
           description="Generate the osx captive installer.">
-    <exec executable="${adt}" dir="temp"> 
+    <exec executable="adt" dir="temp"> 
       <arg value="-package"                       />
       <arg line="-storetype pkcs12"               />
       <arg line="-keystore ../keystore/keystore"  />

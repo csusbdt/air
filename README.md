@@ -6,8 +6,7 @@ This project currently supports OS X only.
 
 TODO: convert to captive runtime.  Read [Packaging a captive runtime bundle for desktop computers](http://help.adobe.com/en_US/air/build/WSfffb011ac560372f709e16db131e43659b9-8000.html).
 
-I have a captive-osx target, but the updating does not work for this.
-
+I have a captive-osx target, but updating is not supported for this.
 
 For iOS, consider this WARNING: See [which AIR SDK versions will run which iOS versions](http://stackoverflow.com/questions/16243485/which-air-sdk-versions-will-run-which-ios-versions).
 
@@ -53,8 +52,21 @@ not support the shared runtime model needed otherwise; see
 NOTE 2: Captive AIR runtime is now required for Android.
 See [Adobe AIR Android applications move to Captive Runtime](http://blogs.adobe.com/airodynamics/2013/03/11/android-shared-runtime-drop-support/).
 
+CONCLUSION: build targets for iOS and Android in this sample project will use captive runtime.
+
+### Update framework for desktop deployment
+
+If the application does not reply on native code or on extended desktop functionality
+(such as accessing the file system or using a native extension), then we can use 
+the Adobe AIR update framework.
+
+This project will try to illustrate an desktop update process for both pure AIR applications
+and application with native functionailty that need native installers.
+
 ## References
 
+- [Using the update framework](http://help.adobe.com/en_US/air/build/WS9CD40F06-4DD7-4230-B56A-88AA27541A1E.html)
+- [Installation logs on desktop computers](http://help.adobe.com/en_US/air/build/WS5b3ccc516d4fbf351e63e3d118666ade46-7fcb.html#WS60df0f297466d593625374fb1262e2ef77b-8000)
 - [Actionscript 3](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/)
 - [Updating Adobe AIR applications packaged with a native installer](http://www.adobe.com/devnet/air/articles/updating-air-apps-native-installer.html)
 - [Adobe Flash Platform](http://help.adobe.com/en_US/as3/dev/index.html)

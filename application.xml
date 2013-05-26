@@ -9,7 +9,7 @@
     <text xml:lang="en">Hello Desktop AIR</text>
   </name>
 
-  <filename>HelloDesktopAIR</filename>
+  <filename>hello-air</filename>
 
   <versionNumber>@versionNumber@</versionNumber>
 
@@ -51,7 +51,7 @@
     <maxSize>800 800</maxSize>
     <visible>true</visible> <!-- How can the app make itelf visible after init? -->
     <systemChrome>standard</systemChrome> <!-- standard, none, ? -->
-    <transparent>false</transparent>
+    <transparent>false</transparent> <!-- Transparency is costly. -->
     <renderMode>auto</renderMode>  <!-- not sure what is optimal here: auto, cpu, direct, or gpu? -->
     <requestedDisplayResolution>high</requestedDisplayResolution>  <!-- affects retina mac books only -->
   </initialWindow>
