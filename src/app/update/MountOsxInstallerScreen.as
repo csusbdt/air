@@ -17,8 +17,8 @@ package app.update
 
   public class MountOsxInstallerScreen extends Sprite
   {
-    private var nativeProcess  : NativeProcess;
     public  var mountPoint     : String;
+    private var nativeProcess  : NativeProcess = new NativeProcess();
     private var status         : StatusText = new StatusText();
 
     public function MountOsxInstallerScreen()
@@ -27,9 +27,9 @@ package app.update
       addChild(status);
       setTimeout(init, 2000);
     }
-	
-	private function init():void
-	{
+  
+    private function init():void
+    {
       var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
       info.executable = new File("/usr/bin/hdiutil");
                         
@@ -37,9 +37,9 @@ package app.update
       args.push("attach", "-plist", InstallerDownloadScreen.getDownloadFile().nativePath);
       info.arguments = args;
                         
-      nativeProcess = new NativeProcess();
+      addListeners();
       nativeProcess.start(info);
-	}
+    }
 
     private function addListeners():void
     {
@@ -57,13 +57,13 @@ package app.update
       nativeProcess.removeEventListener(NativeProcessExitEvent.EXIT,           onExit);
     }
 
-	private function onExit(event:NativeProcessExitEvent):void
+    private function onExit(event:NativeProcessExitEvent):void
     {
-	  // I want to move logic here and ignore output data event.
-	  // See https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/hdiutil.1.html
+    // I want to move logic here and ignore output data event.
+    // See https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/hdiutil.1.html
       trace("Process exited with ", event.exitCode);
     }
-		
+    
     private function onOutputData(event:ProgressEvent):void
     {
       nativeProcess.exit();

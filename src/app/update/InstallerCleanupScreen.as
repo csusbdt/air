@@ -15,14 +15,14 @@ package app.update
   public class InstallerCleanupScreen extends Sprite
   {
     private var status:StatusText = new StatusText();
-	private var fromScreen:Sprite;
+    private var fromScreen:Sprite;
 
     public function InstallerCleanupScreen():void
     {
       status.setText("Installer cleanup ...");
       addChild(status);
-	  fromScreen = this;
-	  setTimeout(init, 2000);
+      fromScreen = this;
+      setTimeout(init, 2000);
     }
 	
     private function init():void

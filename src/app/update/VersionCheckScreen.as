@@ -27,25 +27,25 @@ package app.update
 
     public function VersionCheckScreen()
     {
-	  self = this;
+      self = this;
       status.setText("Checking for updates...");
       addChild(status);
       setTimeout(init, 2000);
     }
-	
-	private function init():void
-	{
-        urlLoader.addEventListener(Event.COMPLETE, onComplete);
-        urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIoError);
-        try
-        {
-          urlLoader.load(new URLRequest(CONFIG::installerURLURL));
-        }
-        catch(error:Error)
-        {
-          status.setText(error.message);
-        }
-	}
+
+    private function init():void
+    {
+      urlLoader.addEventListener(Event.COMPLETE, onComplete);
+      urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onIoError);
+      try
+      {
+        urlLoader.load(new URLRequest(CONFIG::installerURLURL));
+      }
+      catch(error:Error)
+      {
+        status.setText(error.message);
+      }
+    }
 
     private function removeListeners():void
     {
@@ -58,7 +58,7 @@ package app.update
       removeListeners();
       urlLoader.close();
       status.setText("Connection Error");
-	  setTimeout(gotoTitleScreen, 2000);
+      setTimeout(gotoTitleScreen, 2000);
     }
 
     private function onComplete(event:Event):void
@@ -68,7 +68,7 @@ package app.update
       var installerURL:String = Util.trim(urlLoader.data);
       if (installerURL === CONFIG::installerURL)
       {
-	    gotoTitleScreen();
+        gotoTitleScreen();
       }
       else
       {
@@ -76,9 +76,9 @@ package app.update
       }
     }
 	
-	private function gotoTitleScreen():void
-	{
+    private function gotoTitleScreen():void
+    {
       app.Util.gotoScreen(self, TitleScreen);
-	}
+    }
   }
 }

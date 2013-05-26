@@ -16,36 +16,38 @@ package app.update
 
   public class InstallerDownloadScreen extends Sprite
   {
+    private var self:InstallerDownloadScreen;
     private var installerURL:String;
     private var status:StatusText     = new StatusText();
     private var urlStream:URLStream   = new URLStream();
     private var fileStream:FileStream = new FileStream();
 
-	public static function getDownloadFile():File
-	{
-	  if (CONFIG::os === "osx")
-	  {
-	    return File.applicationStorageDirectory.resolvePath("temp.dmg");
-	  }
-	  else
-	  {
-	    return File.applicationStorageDirectory.resolvePath("temp.msi");
-	  }
-	}
-	
+    public static function getDownloadFile():File
+    {
+      if (CONFIG::os === "osx")
+      {
+        return File.applicationStorageDirectory.resolvePath("temp.dmg");
+      }
+      else
+      {
+        return File.applicationStorageDirectory.resolvePath("temp.msi");
+      }
+    }
+  
     public function InstallerDownloadScreen(installerURL:String)
     {
-	  this.installerURL = installerURL;
+      self = this;
+      this.installerURL = installerURL;
       status.setText("Downloading update ...");
       addChild(status);
-	  setTimeout(init, 2000);
+      setTimeout(init, 2000);
     }
-	
-	private function init():void
-	{
-	  addListeners();
+  
+    private function init():void
+    {
+      addListeners();
       urlStream.load(new URLRequest(installerURL));
-	}
+    }
 
     private function addListeners():void
     {
@@ -82,11 +84,11 @@ package app.update
       urlStream.close();
       if (CONFIG::os === "osx")
       {
-        app.Util.gotoScreen(this, MountOsxInstallerScreen);
+        app.Util.gotoScreen(self, MountOsxInstallerScreen);
       }
       else
       {
-        app.Util.gotoScreen(this, RunInstallerScreen, getDownloadFile());
+        app.Util.gotoScreen(self, RunInstallerScreen, getDownloadFile());
       }
     }
 

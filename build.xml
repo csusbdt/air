@@ -152,7 +152,7 @@ ADD STARLING, ETC?
   <target name="osx" 
           depends="compile-osx,app-osx"
           description="Generate the osx installer.">
-    <exec executable="${adt}" dir="temp"> 
+    <exec executable="adt" dir="temp"> 
       <arg value="-package"                       />
       <arg line="-storetype pkcs12"               />
       <arg line="-keystore ../keystore/keystore"  />

@@ -21,60 +21,67 @@ package app.update
 
     public function RunInstallerScreen(installer:File)
     {
-	  this.installer = installer;
+      this.installer = installer;
       status.setText("Running installer ...");
       addChild(status);
-	  setTimeout(init, 2000);
+      setTimeout(init, 2000);
     }
 	
     private function init():void
     {
-      addListeners();
+      //addListeners();
       var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
       info.executable = installer;
       process.start(info);
+      //setTimeout(NativeApplication.nativeApplication.exit, 1);
+      NativeApplication.nativeApplication.exit();
     }
-	
-	private function addListeners():void
-	{
+/*
+    private function addListeners():void
+    {
       process.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  onIOError);
       process.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, onIOError);
-      process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    onOutput);
-      process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA,     onDataError);
-      process.addEventListener(NativeProcessExitEvent.EXIT,           onExit);
-	}
-	
-	private function removeListeners():void
-	{
+//      process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    onOutput);
+//      process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA,     onDataError);
+//      process.addEventListener(NativeProcessExitEvent.EXIT,           onExit);
+    }
+*/
+
+/*	
+    private function removeListeners():void
+    {
       process.removeEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  onIOError);
       process.removeEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, onIOError);
-      process.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    onOutput);
-      process.removeEventListener(ProgressEvent.STANDARD_ERROR_DATA,     onDataError);
-      process.removeEventListener(NativeProcessExitEvent.EXIT,           onExit);
+//      process.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    onOutput);
+//      process.removeEventListener(ProgressEvent.STANDARD_ERROR_DATA,     onDataError);
+//      process.removeEventListener(NativeProcessExitEvent.EXIT,           onExit);
 	}
-
-    private function onOutput(event:ProgressEvent):void
-    {
-      process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable); 
-    }
+*/
+/*
+//    private function onOutput(event:ProgressEvent):void
+//    {
+//      process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable); 
+//    }
         
     private function onDataError(event:ProgressEvent):void
     {
       status.setText(event.toString());
-      process.standardError.readUTFBytes(process.standardError.bytesAvailable); 
+//      process.standardError.readUTFBytes(process.standardError.bytesAvailable); 
     }
         
-    private function onExit(event:NativeProcessExitEvent):void
-    {
-	  removeListeners();
-      setTimeout(NativeApplication.nativeApplication.exit, 1);
-    }
+//    private function onExit(event:NativeProcessExitEvent):void
+//    {
+//	  removeListeners();
+//      setTimeout(NativeApplication.nativeApplication.exit, 1);
+//    }
         
     private function onIOError(event:IOErrorEvent):void
     {
       status.setText(event.toString());
-	  removeListeners();
+//      removeListeners();
     }
+*/
+
   }
 }
 
