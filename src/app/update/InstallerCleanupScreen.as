@@ -1,25 +1,9 @@
 package app.update
 {
   import flash.display.Sprite;
-  import flash.text.TextField;
-  import flash.text.TextFieldAutoSize;
-
-  import flash.desktop.NativeApplication;
-  import flash.desktop.NativeProcess;
-  import flash.desktop.NativeProcessStartupInfo;
-  import flash.events.Event;
-  import flash.events.IOErrorEvent;
-  import flash.events.ProgressEvent;
   import flash.filesystem.File;
-  import flash.filesystem.FileMode;
   import flash.filesystem.FileStream;
-  import flash.system.Capabilities;
-  import flash.net.URLLoader;
-  import flash.net.URLRequest;
-  import flash.net.URLStream;
   import flash.utils.setTimeout;
-  import flash.utils.ByteArray;
-
   import flash.utils.setTimeout;
   import app.StatusText;
 
@@ -31,20 +15,22 @@ package app.update
   public class InstallerCleanupScreen extends Sprite
   {
     private var status:StatusText = new StatusText();
+	private var fromScreen:Sprite;
 
     public function InstallerCleanupScreen():void
     {
       status.setText("Installer cleanup ...");
       addChild(status);
-      var list:Array = File.applicationStorageDirectory.getDirectoryListing();
-      for (var i:uint = 0; i < list.length; i++) {
-        if (list[i].nativePath.search(".dmg") > -1 || list[i].nativePath.search(".msi") > -1)
-        {
-          list[i].deleteFile();
-        }
-      }
-      app.Util.gotoScreen(this, VersionCheckScreen);
+	  fromScreen = this;
+	  setTimeout(init, 2000);
     }
+	
+	private function init():void
+	{
+	  var file:File = InstallerDownloadScreen.getDownloadFile();
+	  if (file.exists()) try { file.deleteFile(); } catch (Error error) { }
+      app.Util.gotoScreen(fromScreen, VersionCheckScreen);
+	}
   }
 }
 

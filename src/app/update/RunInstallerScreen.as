@@ -1,9 +1,6 @@
 package app.update
 {
   import flash.display.Sprite;
-  import flash.text.TextField;
-  import flash.text.TextFieldAutoSize;
-
   import flash.desktop.NativeApplication;
   import flash.desktop.NativeProcess;
   import flash.desktop.NativeProcessStartupInfo;
@@ -12,54 +9,71 @@ package app.update
   import flash.events.ProgressEvent;
   import flash.events.NativeProcessExitEvent;
   import flash.filesystem.File;
-  import flash.filesystem.FileMode;
-  import flash.filesystem.FileStream;
-  import flash.system.Capabilities;
-  import flash.net.URLLoader;
-  import flash.net.URLRequest;
-  import flash.net.URLStream;
   import flash.utils.setTimeout;
-  import flash.utils.ByteArray;
+  
   import app.StatusText;
 
   public class RunInstallerScreen extends Sprite
   {
+    private var installer:File;
     private var status:StatusText = new StatusText();
-
     private var process:NativeProcess = new NativeProcess();
 
     public function RunInstallerScreen(installer:File)
     {
+	  this.installer = installer;
       status.setText("Running installer ...");
       addChild(status);
+	  setTimeout(init, 2000);
+    }
+	
+    private function init():void
+    {
+      addListeners();
       var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
       info.executable = installer;
-      process.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  handleIOError);
-      process.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, handleIOError);
-      process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    handleOutput);
-      process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA,     handleDataError);
-      process.addEventListener(NativeProcessExitEvent.EXIT,           handleExit);
       process.start(info);
     }
+	
+	private function addListeners():void
+	{
+      process.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  onIOError);
+      process.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, onIOError);
+      process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    onOutput);
+      process.addEventListener(ProgressEvent.STANDARD_ERROR_DATA,     onDataError);
+      process.addEventListener(NativeProcessExitEvent.EXIT,           onExit);
+	}
+	
+	private function removeListeners():void
+	{
+      process.removeEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  onIOError);
+      process.removeEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, onIOError);
+      process.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    onOutput);
+      process.removeEventListener(ProgressEvent.STANDARD_ERROR_DATA,     onDataError);
+      process.removeEventListener(NativeProcessExitEvent.EXIT,           onExit);
+	}
 
-    public function handleOutput(event:ProgressEvent):void
+    private function onOutput(event:ProgressEvent):void
     {
-        trace("Got: ", process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable)); 
+      process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable); 
     }
         
-    public function handleDataError(event:ProgressEvent):void
+    private function onDataError(event:ProgressEvent):void
     {
-        trace("ERROR -", process.standardError.readUTFBytes(process.standardError.bytesAvailable)); 
+      status.setText(event.toString());
+      process.standardError.readUTFBytes(process.standardError.bytesAvailable); 
     }
         
-    public function handleExit(event:NativeProcessExitEvent):void
+    private function onExit(event:NativeProcessExitEvent):void
     {
+	  removeListeners();
       setTimeout(NativeApplication.nativeApplication.exit, 1);
     }
         
-    public function handleIOError(event:IOErrorEvent):void
+    private function onIOError(event:IOErrorEvent):void
     {
-        trace(event.toString());
+      status.setText(event.toString());
+	  removeListeners();
     }
   }
 }

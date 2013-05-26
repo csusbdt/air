@@ -1,13 +1,13 @@
 package 
 {
    import flash.display.Sprite;
-   import app.TitleScreen;
+   import app.update.VersionCheckScreen;
 
    public class WinMain extends Sprite
    {
       public function WinMain() : void
       {
-        addChild(new TitleScreen());
+        addChild(new VersionCheckScreen());
       }
    }
 

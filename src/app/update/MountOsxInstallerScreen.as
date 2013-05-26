@@ -1,64 +1,70 @@
 package app.update
 {
   import flash.display.Sprite;
-  import flash.text.TextField;
-  import flash.text.TextFieldAutoSize;
-
   import flash.desktop.NativeApplication;
   import flash.desktop.NativeProcess;
   import flash.desktop.NativeProcessStartupInfo;
+  import flash.events.NativeProcessExitEvent;
   import flash.events.Event;
   import flash.events.IOErrorEvent;
   import flash.events.ProgressEvent;
   import flash.filesystem.File;
   import flash.filesystem.FileMode;
   import flash.filesystem.FileStream;
-  import flash.system.Capabilities;
-  import flash.net.URLLoader;
-  import flash.net.URLRequest;
-  import flash.net.URLStream;
-  import flash.utils.setTimeout;
   import flash.utils.ByteArray;
   import flash.utils.setTimeout;
   import app.StatusText;
 
   public class MountOsxInstallerScreen extends Sprite
   {
-    private var dmg            :File;
-    private var nativeProcess  :NativeProcess;
-    public  var mountPoint     :String;
-    private var status         :StatusText = new StatusText();
+    private var nativeProcess  : NativeProcess;
+    public  var mountPoint     : String;
+    private var status         : StatusText = new StatusText();
 
-    public function MountOsxInstallerScreen(dmg:File)
+    public function MountOsxInstallerScreen()
     {
-      this.dmg = dmg;
-      status.setText("Mounting osx installer.");
+      status.setText("Mounting dmg file.");
       addChild(status);
+      setTimeout(init, 2000);
+    }
+	
+	private function init():void
+	{
+      var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
+      info.executable = new File("/usr/bin/hdiutil");
+                        
+      var args:Vector.<String> = new Vector.<String>();
+      args.push("attach", "-plist", InstallerDownloadScreen.getDownloadFile().nativePath);
+      info.arguments = args;
+                        
+      nativeProcess = new NativeProcess();
+      nativeProcess.start(info);
+	}
 
-      setTimeout(function():void {
-        var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
-        info.executable = new File("/usr/bin/hdiutil");
-                        
-        var args:Vector.<String> = new Vector.<String>();
-        args.push("attach", "-plist", dmg.nativePath);
-        info.arguments = args;
-                        
-        nativeProcess = new NativeProcess();
-        nativeProcess.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  handleError);
-        nativeProcess.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, handleError);
-        nativeProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    handleOutputData);
-        nativeProcess.start(info);
-      }, 2000);
+    private function addListeners():void
+    {
+      nativeProcess.addEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  onError);
+      nativeProcess.addEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, onError);
+      nativeProcess.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    onOutputData);
+      nativeProcess.addEventListener(NativeProcessExitEvent.EXIT,           onExit);
     }
 
     private function removeListeners():void
     {
-      nativeProcess.removeEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  handleError);
-      nativeProcess.removeEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, handleError);
-      nativeProcess.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    handleOutputData);
+      nativeProcess.removeEventListener(IOErrorEvent.STANDARD_ERROR_IO_ERROR,  onError);
+      nativeProcess.removeEventListener(IOErrorEvent.STANDARD_OUTPUT_IO_ERROR, onError);
+      nativeProcess.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA,    onOutputData);
+      nativeProcess.removeEventListener(NativeProcessExitEvent.EXIT,           onExit);
     }
 
-    private function handleOutputData(event:ProgressEvent):void
+	private function onExit(event:NativeProcessExitEvent):void
+    {
+	  // I want to move logic here and ignore output data event.
+	  // See https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/hdiutil.1.html
+      trace("Process exited with ", event.exitCode);
+    }
+		
+    private function onOutputData(event:ProgressEvent):void
     {
       nativeProcess.exit();
       removeListeners();
@@ -116,7 +122,7 @@ package app.update
       }
     }
 
-    private function handleError(event:IOErrorEvent):void
+    private function onError(event:IOErrorEvent):void
     {
       status.setText(event.text);
     }

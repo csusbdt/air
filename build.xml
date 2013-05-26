@@ -1,5 +1,9 @@
 <project name="desktop"> 
 
+  <!-- Property overrides come first (because ant properties are immutable). -->
+
+  <property file="props.xml" />
+
   <!-- Settable Properties -->
 
   <property name="versionNumber" value="1.0.6" />
@@ -7,20 +11,23 @@
 
   <!-- Derived Properties -->
 
-  <property name="osxInstallerFilenameResource"  value="hello-air-installer-filename-osx"  /> 
   <property name="osxInstallerFilename"          value="hello-air-${versionNumber}.dmg"    />
-  <property name="osxCaptiveInstaller"           value="hello-air-${versionNumber}.app"    />
+  <!--property name="osxCaptiveInstaller"           value="hello-air-${versionNumber}.app"    /-->
 
-  <property name="winInstallerFilenameResource"  value="hello-air-installer-filename-win"  /> 
-  <property name="winInstallerFilename"          value="hello-air-${versionNumber}.msi"    />
-
+  <property name="winInstallerFilename" value="hello-air-${versionNumber}.msi" />
+  <property name="winInstallerURL" value="${installerSite}${winInstallerFilename}" />
+  <property name="winInstallerURLURL" value="${installerSite}hello-air-win" />
+  
+  
   <!-- Executables -->
 
+<!--
   <property environment="env" />
   <property name="amxmlc" value="${env.AIR_SDK_HOME}/bin/amxmlc"  /> 
   <property name="adl"    value="${env.AIR_SDK_HOME}/bin/adl"     />
   <property name="adt"    value="${env.AIR_SDK_HOME}/bin/adt"     />
   <property name="aasdoc" value="${env.AIR_SDK_HOME}/bin/aasdoc"  />
+-->
 
   <!-- Libraries -->
 
@@ -82,46 +89,45 @@ ADD STARLING, ETC?
 
   <target name="compile-win">
     <exec executable="cmd">
-      <arg value="/c"/>
-      <arg value="amxmlc.bat"/>
-      <arg line="-o temp/Main.swf" /> 
-      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;"                            /> 
-      <arg value="-define+=CONFIG::installerFilename,&quot;'${winInstallerFilename}'&quot;"                 /> 
-      <arg value="-define+=CONFIG::installerFilenameResource,&quot;'${winInstallerFilenameResource}'&quot;" /> 
-      <arg value="-debug=true"     />
+      <arg value="/c" />
+      <arg value="amxmlc.bat" />
+      <arg line="-o temp/Main.swf" />
+      <arg value="-define+=CONFIG::os,&quot;'win'&quot;" />
+      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerURL,&quot;'${winInstallerURL}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerURLURL,&quot;'${winInstallerURLURL}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerFilename,&quot;'${winInstallerFilename}'&quot;" /> 
+      <arg value="-debug=true" />
       <arg line="-source-path src" />
-      <arg value="--"              /> 
-      <arg value="src/WinMain.as"  /> 
+      <arg value="--" /> 
+      <arg value="src/WinMain.as" /> 
     </exec>
   </target>
 
   <!-- Application Descriptor Targets -->
 
-  <target name="-app-test">
+  <target name="app-test">
     <mkdir dir="temp" />
     <filter token="versionNumber" value="${versionNumber}" />
     <filter token="supportedProfiles" value="desktop" />
     <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
   </target>
 
-  <target name="-app-osx">
+  <target name="app-osx">
     <mkdir dir="temp" />
     <filter token="versionNumber" value="${versionNumber}" />
     <filter token="supportedProfiles" value="extendedDesktop desktop" />
     <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
   </target>
 
-  <target name="-app-win">
-    <mkdir dir="temp" />
-    <filter token="versionNumber" value="${versionNumber}" />
-    <filter token="supportedProfiles" value="extendedDesktop desktop" />
-    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
+  <target name="app-win">
+    <antcall target="app-osx" />
   </target>
 
   <!-- Test Target -->
 
   <target name="test" 
-          depends="compile-test,-app-test" 
+          depends="compile-test,app-test" 
           description="Test swf file without version check."> 
     <exec executable="${adl}" dir="temp"> 
       <!--arg value="-nodebug" /-->
@@ -130,7 +136,7 @@ ADD STARLING, ETC?
   </target>
 
   <target name="test-osx" 
-          depends="compile-osx,-app-osx" 
+          depends="compile-osx,app-osx" 
           description="Test swf file for version check on osx."> 
     <exec executable="${adl}" dir="temp"> 
       <arg line="-profile extendedDesktop" />
@@ -139,9 +145,9 @@ ADD STARLING, ETC?
   </target>
 
   <target name="test-win" 
-          depends="compile-win,-app-win" 
+          depends="compile-win,app-win" 
           description="Test swf file for version check on win."> 
-    <exec executable="${adl}" dir="temp">
+    <exec executable="adl" dir="temp">
       <arg line="-profile extendedDesktop" />
       <arg value="application.xml" />
     </exec>
@@ -150,7 +156,7 @@ ADD STARLING, ETC?
   <!-- OSX Package Target -->
 
   <target name="osx" 
-          depends="compile-osx,-app-osx"
+          depends="compile-osx,app-osx"
           description="Generate the osx installer.">
     <exec executable="${adt}" dir="temp"> 
       <arg value="-package"                       />
@@ -167,7 +173,7 @@ ADD STARLING, ETC?
 
   <!-- captive installer not yet working -->
   <target name="captive-osx" 
-          depends="compile-osx,-app-osx"
+          depends="compile-osx,app-osx"
           description="Generate the osx captive installer.">
     <exec executable="${adt}" dir="temp"> 
       <arg value="-package"                       />
@@ -202,7 +208,7 @@ ADD STARLING, ETC?
   <!-- WIN Package Target -->
 
   <target name="win" 
-          depends="compile-win,-app-win"
+          depends="compile-win,app-win"
           description="Generate the win installer.">
     <exec executable="${adt}" dir="temp"> 
       <arg value="-package"                       />

@@ -9,7 +9,7 @@ package app {
    {
       public function TitleScreen()
       {
-         addChild(new StatusText("Title Screen"));
+         addChild(new StatusText("Welcome to version " + CONFIG::versionNumber));
       }
    }
 

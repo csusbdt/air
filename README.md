@@ -4,7 +4,10 @@
 
 This project currently supports OS X only.
 
+TODO: convert to captive runtime.  Read [Packaging a captive runtime bundle for desktop computers](http://help.adobe.com/en_US/air/build/WSfffb011ac560372f709e16db131e43659b9-8000.html).
+
 I have a captive-osx target, but the updating does not work for this.
+
 
 For iOS, consider this WARNING: See [which AIR SDK versions will run which iOS versions](http://stackoverflow.com/questions/16243485/which-air-sdk-versions-will-run-which-ios-versions).
 
@@ -46,6 +49,9 @@ From [Adobe's roadmap whitepaper](http://www.adobe.com/devnet/flashplatform/whit
 NOTE: Captive AIR runtime distribution is required for iOS because iOS does
 not support the shared runtime model needed otherwise; see 
 [Installation and deployment options in Adobe AIR 3](http://www.adobe.com/devnet/air/articles/air3-install-and-deployment-options.html).
+
+NOTE 2: Captive AIR runtime is now required for Android.
+See [Adobe AIR Android applications move to Captive Runtime](http://blogs.adobe.com/airodynamics/2013/03/11/android-shared-runtime-drop-support/).
 
 ## References
 

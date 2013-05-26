@@ -1,19 +1,12 @@
 package app.update
 {
   import flash.display.Sprite;
-  import flash.text.TextField;
-  import flash.text.TextFieldAutoSize;
-
-  import flash.desktop.NativeApplication;
-  import flash.desktop.NativeProcess;
-  import flash.desktop.NativeProcessStartupInfo;
   import flash.events.Event;
   import flash.events.IOErrorEvent;
   import flash.events.ProgressEvent;
   import flash.filesystem.File;
   import flash.filesystem.FileMode;
   import flash.filesystem.FileStream;
-  import flash.system.Capabilities;
   import flash.net.URLLoader;
   import flash.net.URLRequest;
   import flash.net.URLStream;
@@ -23,63 +16,81 @@ package app.update
 
   public class InstallerDownloadScreen extends Sprite
   {
+    private var installerURL:String;
     private var status:StatusText     = new StatusText();
     private var urlStream:URLStream   = new URLStream();
     private var fileStream:FileStream = new FileStream();
-    private var file:File             = new File();
 
-    public function InstallerDownloadScreen(installerFilename:String)
+	public static function getDownloadFile():File
+	{
+	  if (CONFIG::os === "osx")
+	  {
+	    return File.applicationStorageDirectory.resolvePath("temp.dmg");
+	  }
+	  else
+	  {
+	    return File.applicationStorageDirectory.resolvePath("temp.msi");
+	  }
+	}
+	
+    public function InstallerDownloadScreen(installerURL:String)
     {
+	  this.installerURL = installerURL;
       status.setText("Downloading update ...");
       addChild(status);
+	  setTimeout(init, 2000);
+    }
+	
+	private function init():void
+	{
+	  addListeners();
+      urlStream.load(new URLRequest(installerURL));
+	}
 
-      file = File.applicationStorageDirectory.resolvePath(installerFilename);
-
-      urlStream.addEventListener(Event.OPEN,             handleOpenEvent);
-      urlStream.addEventListener(ProgressEvent.PROGRESS, handleProgressEvent);
-      urlStream.addEventListener(Event.COMPLETE,         handleCompleteEvent);
-      urlStream.addEventListener(IOErrorEvent.IO_ERROR,  handleIoError);
-
-      var urlRequest:URLRequest = new URLRequest(CONFIG::installerSite + installerFilename);
-      urlStream.load(urlRequest);
+    private function addListeners():void
+    {
+      urlStream.addEventListener(Event.OPEN,             onOpen);
+      urlStream.addEventListener(ProgressEvent.PROGRESS, onProgress);
+      urlStream.addEventListener(Event.COMPLETE,         onComplete);
+      urlStream.addEventListener(IOErrorEvent.IO_ERROR,  onIoError);
     }
 
     private function removeListeners():void
     {
-      urlStream.removeEventListener(Event.OPEN,             handleOpenEvent);
-      urlStream.removeEventListener(ProgressEvent.PROGRESS, handleProgressEvent);
-      urlStream.removeEventListener(Event.COMPLETE,         handleCompleteEvent);
-      urlStream.removeEventListener(IOErrorEvent.IO_ERROR,  handleIoError);
+      urlStream.removeEventListener(Event.OPEN,             onOpen);
+      urlStream.removeEventListener(ProgressEvent.PROGRESS, onProgress);
+      urlStream.removeEventListener(Event.COMPLETE,         onComplete);
+      urlStream.removeEventListener(IOErrorEvent.IO_ERROR,  onIoError);
     }
 
-    private function handleOpenEvent(event:Event):void
+    private function onOpen(event:Event):void
     {
-      fileStream.open(file, FileMode.WRITE);
+      fileStream.open(getDownloadFile(), FileMode.WRITE);
     }
 
-    private function handleProgressEvent(event:ProgressEvent):void
+    private function onProgress(event:ProgressEvent):void
     {
       var loadedBytes:ByteArray = new ByteArray();
       urlStream.readBytes(loadedBytes);
       fileStream.writeBytes(loadedBytes);
     }
 
-    private function handleCompleteEvent(event:Event):void
+    private function onComplete(event:Event):void
     {
       removeListeners();
       fileStream.close();
       urlStream.close();
-      if (Capabilities.os.substr(0, 3) == "Mac")
+      if (CONFIG::os === "osx")
       {
-        app.Util.gotoScreen(this, MountOsxInstallerScreen, file);
+        app.Util.gotoScreen(this, MountOsxInstallerScreen);
       }
       else
       {
-        app.Util.gotoScreen(this, RunInstallerScreen, file);
+        app.Util.gotoScreen(this, RunInstallerScreen, getDownloadFile());
       }
     }
 
-    private function handleIoError(event:IOErrorEvent):void
+    private function onIoError(event:IOErrorEvent):void
     {
       removeListeners();
       fileStream.close();
