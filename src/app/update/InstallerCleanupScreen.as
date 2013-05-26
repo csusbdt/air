@@ -25,12 +25,15 @@ package app.update
 	  setTimeout(init, 2000);
     }
 	
-	private function init():void
-	{
-	  var file:File = InstallerDownloadScreen.getDownloadFile();
-	  if (file.exists()) try { file.deleteFile(); } catch (Error error) { }
+    private function init():void
+    {
+      var file:File = InstallerDownloadScreen.getDownloadFile();
+      if (file.exists) 
+      { 
+        try { file.deleteFile(); } catch (e:Error) { } 
+      }
       app.Util.gotoScreen(fromScreen, VersionCheckScreen);
-	}
+    }
   }
 }
 

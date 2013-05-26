@@ -11,24 +11,16 @@
 
   <!-- Derived Properties -->
 
-  <property name="osxInstallerFilename"          value="hello-air-${versionNumber}.dmg"    />
+  <property name="osxInstallerFilename" value="hello-air-${versionNumber}.dmg" />
+  <property name="osxInstallerURL" value="${installerSite}${osxInstallerFilename}" />
+  <property name="osxInstallerURLURL" value="${installerSite}hello-air-osx" />
+
   <!--property name="osxCaptiveInstaller"           value="hello-air-${versionNumber}.app"    /-->
 
   <property name="winInstallerFilename" value="hello-air-${versionNumber}.msi" />
   <property name="winInstallerURL" value="${installerSite}${winInstallerFilename}" />
   <property name="winInstallerURLURL" value="${installerSite}hello-air-win" />
   
-  
-  <!-- Executables -->
-
-<!--
-  <property environment="env" />
-  <property name="amxmlc" value="${env.AIR_SDK_HOME}/bin/amxmlc"  /> 
-  <property name="adl"    value="${env.AIR_SDK_HOME}/bin/adl"     />
-  <property name="adt"    value="${env.AIR_SDK_HOME}/bin/adt"     />
-  <property name="aasdoc" value="${env.AIR_SDK_HOME}/bin/aasdoc"  />
--->
-
   <!-- Libraries -->
 
   <!--  NOT USED - NOT NEEDED - WILL NEED STARLING, etc. (I think)
@@ -75,11 +67,13 @@ ADD STARLING, ETC?
 
   <target name="compile-osx" description="Compile for osx."> 
     <mkdir dir="temp" />
-    <exec executable="${amxmlc}" failonerror="true"> 
+    <exec executable="amxmlc" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
-      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;"                            /> 
-      <arg value="-define+=CONFIG::installerFilename,&quot;'${osxInstallerFilename}'&quot;"                 /> 
-      <arg value="-define+=CONFIG::installerFilenameResource,&quot;'${osxInstallerFilenameResource}'&quot;" /> 
+      <arg value="-define+=CONFIG::os,&quot;'osx'&quot;" />
+      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerURL,&quot;'${osxInstallerURL}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerURLURL,&quot;'${osxInstallerURLURL}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerFilename,&quot;'${osxInstallerFilename}'&quot;" /> 
       <arg value="-debug=true"     />
       <arg line="-source-path src" />
       <arg value="--"              /> 
@@ -138,7 +132,7 @@ ADD STARLING, ETC?
   <target name="test-osx" 
           depends="compile-osx,app-osx" 
           description="Test swf file for version check on osx."> 
-    <exec executable="${adl}" dir="temp"> 
+    <exec executable="adl" dir="temp"> 
       <arg line="-profile extendedDesktop" />
       <arg value="application.xml" />
     </exec>
