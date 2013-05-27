@@ -60,8 +60,8 @@ If the application does not reply on native code or on extended desktop function
 (such as accessing the file system or using a native extension), then we can use 
 the Adobe AIR update framework.
 
-This project will try to illustrate an desktop update process for both pure AIR applications
-and application with native functionailty that need native installers.
+This project will try to illustrate a desktop update process for both pure AIR applications
+and applications with native functionality that need native installers.
 
 ## References
 

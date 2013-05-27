@@ -16,28 +16,16 @@
 
   <!-- Settable Properties -->
 
-  <property name="versionNumber" value="1.0.7" />
+  <property name="versionNumber" value="1.0.1" />
   <property name="installerSite" value="http://localhost:5000" />
 
   <!-- Derived Properties -->
 
   <property name="appName" value="hello-air" />
-
-  <property name="osxInstallerFilename" value="${appName}-${versionNumber}.dmg" />
-  <property name="osxInstallerURL" value="${installerSite}/${osxInstallerFilename}" />
-  <property name="osxInstallerURLURL" value="${installerSite}/${appName}-osx" />
-
-  <property name="osxCaptiveInstaller" value="${appName}-${versionNumber}.app" />
-
-  <property name="winInstallerFilename" value="${appName}-${versionNumber}.msi" />
-  <property name="winInstallerURL" value="${installerSite}/${winInstallerFilename}" />
-  <property name="winInstallerURLURL" value="${installerSite}/${appName}-win" />
-  
-  <!-- Libraries -->
-
-  <!--  NOT USED - NOT NEEDED - WILL NEED STARLING, etc. (I think)
-  <property name="airglobal" value="${env.AIR_SDK_HOME}/frameworks/libs/air/airglobal.swc" /> 
-  -->
+  <property name="osxNativeInstallerFilename"  value="${appName}-${versionNumber}.dmg" />
+  <property name="winNativeInstallerFilename"  value="${appName}-${versionNumber}.msi" />
+  <property name="osxCaptiveFilename"          value="${appName}-${versionNumber}.app" />
+  <!--property name="airglobal" value="${env.AIR_SDK_HOME}/frameworks/libs/air/airglobal.swc" /--> 
 
   <!-- Clean Target -->
 
@@ -50,9 +38,8 @@
   <target name="doc" description="Generate documentation."> 
     <delete dir="doc" />
     <exec executable="aasdoc">
-      <arg value="-define+=CONFIG::installerSite,&quot;'&#36;{installerSite}'&quot;"                            /> 
-      <arg value="-define+=CONFIG::installerFilename,&quot;'&#36;{osxInstallerFilename}'&quot;"                 /> 
-      <arg value="-define+=CONFIG::installerFilenameResource,&quot;'&#36;{osxInstallerFilenameResource}'&quot;" /> 
+      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
       <arg line="-doc-sources src"  />
       <arg line="-source-path src"  />
       <arg line="-main-title &quot;Hello Air Documentation&quot;" />
@@ -63,129 +50,195 @@
 
   <!-- Compile Targets -->
 
-  <target name="compile-test" description="Compile without version check."> 
-    <mkdir dir="temp" />
-    <exec executable="${amxmlc}" failonerror="true"> 
-      <arg line="-o temp/Main.swf"  /> 
-      <arg line="-source-path src"  />
-      <arg value="--"               />
-      <arg value="src/PlainMain.as" /> 
-    </exec>  
-  </target>
 <!--
 ADD STARLING, ETC?
       <arg value="-library-path=${airglobal}" /> 
 -->
 
-  <target name="compile-osx" description="Compile native installer for osx."> 
+  <target name="compile-desktop-osx" description="Compile desktop in osx."> 
+    <mkdir dir="temp" />
+    <exec executable="amxmlc" failonerror="true"> 
+      <arg line="-o temp/Main.swf" /> 
+      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
+<arg value="-debug=true" />
+      <arg line="-source-path src" />
+      <arg value="--" /> 
+      <arg value="src/MainDesktop.as" /> 
+    </exec>
+  </target>
+
+  <target name="compile-desktop-win" description="Compile desktop in win.">
+    <exec executable="cmd">
+      <arg value="/c" />
+      <arg value="amxmlc.bat" />
+      <arg line="-o temp/Main.swf" />
+      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
+<arg value="-debug=true" />
+      <arg line="-source-path src" />
+      <arg value="--" /> 
+      <arg value="src/MainDesktop.as" /> 
+    </exec>
+  </target>
+
+  <target name="compile-native-osx" description="Compile native installer for osx."> 
     <mkdir dir="temp" />
     <exec executable="amxmlc" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
       <arg value="-define+=CONFIG::os,&quot;'osx'&quot;" />
       <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-      <arg value="-debug=true" />
+<arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
       <arg value="src/MainNativeOsx.as" /> 
     </exec>
   </target>
 
-  <target name="compile-win">
+  <target name="compile-native-win" description="Compile native installer for win.">
     <exec executable="cmd">
       <arg value="/c" />
       <arg value="amxmlc.bat" />
       <arg line="-o temp/Main.swf" />
       <arg value="-define+=CONFIG::os,&quot;'win'&quot;" />
       <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
-      <arg value="-define+=CONFIG::installerURL,&quot;'${winInstallerURL}'&quot;" /> 
-      <arg value="-define+=CONFIG::installerURLURL,&quot;'${winInstallerURLURL}'&quot;" /> 
-      <arg value="-define+=CONFIG::installerFilename,&quot;'${winInstallerFilename}'&quot;" /> 
-      <arg value="-debug=true" />
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
+<arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
-      <arg value="src/WinMain.as" /> 
+      <arg value="src/MainNativeWin.as" /> 
     </exec>
   </target>
 
   <!-- Application Descriptor Targets -->
 
-  <target name="app-test">
+  <target name="app-desktop">
     <mkdir dir="temp" />
     <filter token="versionNumber" value="${versionNumber}" />
     <filter token="supportedProfiles" value="desktop" />
     <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
   </target>
 
-  <target name="app-osx">
+  <target name="app-native">
     <mkdir dir="temp" />
     <filter token="versionNumber" value="${versionNumber}" />
     <filter token="supportedProfiles" value="extendedDesktop desktop" />
     <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
   </target>
 
-  <target name="app-win">
-    <antcall target="app-osx" />
-  </target>
+  <!-- Test Targets -->
 
-  <!-- Test Target -->
-
-  <target name="test" 
-          depends="compile-test,app-test" 
-          description="Test swf file without version check."> 
-    <exec executable="${adl}" dir="temp"> 
-      <!--arg value="-nodebug" /-->
+  <target name="test-desktop-osx" 
+          depends="compile-desktop-osx,app-desktop" 
+          description="Test desktop in osx."> 
+    <exec executable="adl" dir="temp"> 
       <arg value="application.xml" />
     </exec>
   </target>
 
-  <target name="test-osx" 
-          depends="compile-osx,app-osx" 
-          description="Test swf file for version check on osx."> 
+  <target name="test-desktop-win" 
+          depends="compile-desktop-win,app-desktop" 
+          description="Test desktop in win."> 
+    <exec executable="adl" dir="temp"> 
+      <arg value="application.xml" />
+    </exec>
+  </target>
+
+  <target name="test-native-osx" 
+          depends="compile-native-osx,app-native" 
+          description="Test native desktop in osx."> 
     <exec executable="adl" dir="temp"> 
       <arg line="-profile extendedDesktop" />
       <arg value="application.xml" />
     </exec>
   </target>
 
-  <target name="test-win" 
-          depends="compile-win,app-win" 
-          description="Test swf file for version check on win."> 
-    <exec executable="adl" dir="temp">
+  <target name="test-native-win" 
+          depends="compile-native-win,app-native" 
+          description="Test native desktop in win."> 
+    <exec executable="adl" dir="temp"> 
       <arg line="-profile extendedDesktop" />
       <arg value="application.xml" />
     </exec>
   </target>
 
-  <!-- OSX Package Target -->
+  <!-- Installer Targets -->
 
-  <target name="osx" 
-          depends="compile-osx,app-osx"
-          description="Generate the osx installer.">
+  <target name="desktop-osx" 
+          depends="compile-desktop-osx,app-desktop"
+          description="Generate the desktop installer in osx.">
     <exec executable="adt" dir="temp"> 
       <arg value="-package"                       />
       <arg line="-storetype pkcs12"               />
       <arg line="-keystore ../keystore/keystore"  />
       <arg line="-storepass 1234"                 />
       <arg line="-target native"                  />
-      <arg value="${osxInstallerFilename}"        />
+      <arg value="${desktopInstallerFilename}"    />
       <arg value="application.xml"                />
       <arg value="Main.swf"                       />
       <arg line="-C ../ icons"                    />
     </exec>
   </target>
 
-  <!-- captive installer not yet working -->
+  <target name="desktop-win" 
+          depends="compile-desktop-win,app-desktop"
+          description="Generate the desktop installer in win.">
+    <exec executable="adt" dir="temp"> 
+      <arg value="-package"                       />
+      <arg line="-storetype pkcs12"               />
+      <arg line="-keystore ../keystore/keystore"  />
+      <arg line="-storepass 1234"                 />
+      <arg line="-target native"                  />
+      <arg value="${desktopInstallerFilename}"    />
+      <arg value="application.xml"                />
+      <arg value="Main.swf"                       />
+      <arg line="-C ../ icons"                    />
+    </exec>
+  </target>
+
+  <target name="native-osx" 
+          depends="compile-native-osx,app-native"
+          description="Generate the native osx installer.">
+    <exec executable="adt" dir="temp"> 
+      <arg value="-package"                       />
+      <arg line="-storetype pkcs12"               />
+      <arg line="-keystore ../keystore/keystore"  />
+      <arg line="-storepass 1234"                 />
+      <arg line="-target native"                  />
+      <arg value="${osxNativeInstallerFilename}"  />
+      <arg value="application.xml"                />
+      <arg value="Main.swf"                       />
+      <arg line="-C ../ icons"                    />
+    </exec>
+  </target>
+
+  <target name="native-win" 
+          depends="compile-native-win,app-native"
+          description="Generate the native win installer.">
+    <exec executable="adt" dir="temp"> 
+      <arg value="-package"                       />
+      <arg line="-storetype pkcs12"               />
+      <arg line="-keystore ../keystore/keystore"  />
+      <arg line="-storepass 1234"                 />
+      <arg line="-target native"                  />
+      <arg value="${winNativeInstallerFilename}"  />
+      <arg value="application.xml"                />
+      <arg value="Main.swf"                       />
+      <arg line="-C ../ icons"                    />
+    </exec>
+  </target>
+
   <target name="captive-osx" 
-          depends="compile-osx,app-osx"
-          description="Generate the osx captive installer.">
+          depends="compile-native-osx,app-native"
+          description="Generate the captive osx installer.">
     <exec executable="adt" dir="temp"> 
       <arg value="-package"                       />
       <arg line="-storetype pkcs12"               />
       <arg line="-keystore ../keystore/keystore"  />
       <arg line="-storepass 1234"                 />
       <arg line="-target bundle"                  />
-      <arg value="${osxCaptiveInstaller}"         />
+      <arg value="${osxCaptiveInstallerFilename}" />
       <arg value="application.xml"                />
       <arg value="Main.swf"                       />
       <arg line="-C ../ icons"                    />
@@ -194,7 +247,7 @@ ADD STARLING, ETC?
 
   <!-- Utility targets for osx development -->
 
-  <target name="log" 
+  <target name="log-osx" 
           description="Display installation log messages; use to troubleshoot install problems."> 
     <exec executable="tail"> 
       <arg line="-f /private/var/log/system.log" />
@@ -205,25 +258,7 @@ ADD STARLING, ETC?
           description="Touch."> 
     <exec executable="touch"> 
       <!--arg value="/Applications/HelloDesktopAIR.app/Contents/Resources/META-INF/AIR/debug" /-->
-      <arg value="/Volumes/Install HelloDesktopAIR/HelloDesktopAIR.app/Contents/Resources/META-INF/AIR/debug" />
-    </exec>
-  </target>
-
-  <!-- WIN Package Target -->
-
-  <target name="win" 
-          depends="compile-win,app-win"
-          description="Generate the win installer.">
-    <exec executable="${adt}" dir="temp"> 
-      <arg value="-package"                       />
-      <arg line="-storetype pkcs12"               />
-      <arg line="-keystore ../keystore/keystore"  />
-      <arg line="-storepass 1234"                 />
-      <arg line="-target native"                  />
-      <arg value="${winInstallerFilename}"        />
-      <arg value="application.xml"                />
-      <arg value="Main.swf"                       />
-      <arg line="-C ../ icons"                    />
+      <arg value="/Volumes/Install HelloAIR/HelloAIR.app/Contents/Resources/META-INF/AIR/debug" />
     </exec>
   </target>
 
@@ -231,10 +266,8 @@ ADD STARLING, ETC?
   <!-- NOTES -->
 
   <!--
-
     To run debugger, run fdb and enter "run" at command prompt.
     Then, start app.  Then enter "continue" at the fdb command prompt.
-
   -->
 
 </project>

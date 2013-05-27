@@ -45,7 +45,7 @@ package app.desktop.native
     public function UpdateStartScreen():void
     {
       self = this;
-      status.setText("Deleting previous installer...");
+      status.setText("Deleting previous installer.");
       addChild(status);
       setTimeout(cleanup, 2000);
     }
