@@ -1,4 +1,4 @@
-package app.update
+package app.desktop.native
 {
   import flash.display.Sprite;
   import flash.events.Event;
@@ -14,36 +14,24 @@ package app.update
   import flash.utils.ByteArray;
   import app.StatusText;
 
-  public class InstallerDownloadScreen extends Sprite
+  public class UpdateDownloadScreen extends Sprite
   {
-    private var self:InstallerDownloadScreen;
+    private var self:UpdateDownloadScreen;
     private var installerURL:String;
     private var status:StatusText     = new StatusText();
     private var urlStream:URLStream   = new URLStream();
     private var fileStream:FileStream = new FileStream();
 
-    public static function getDownloadFile():File
-    {
-      if (CONFIG::os === "osx")
-      {
-        return File.applicationStorageDirectory.resolvePath("temp.dmg");
-      }
-      else
-      {
-        return File.applicationStorageDirectory.resolvePath("temp.msi");
-      }
-    }
-  
-    public function InstallerDownloadScreen(installerURL:String)
+    public function UpdateDownloadScreen(installerURL:String)
     {
       self = this;
       this.installerURL = installerURL;
       status.setText("Downloading update ...");
       addChild(status);
-      setTimeout(init, 2000);
+      setTimeout(download, 2000);
     }
   
-    private function init():void
+    private function download():void
     {
       addListeners();
       urlStream.load(new URLRequest(installerURL));
@@ -67,7 +55,7 @@ package app.update
 
     private function onOpen(event:Event):void
     {
-      fileStream.open(getDownloadFile(), FileMode.WRITE);
+      fileStream.open(UpdateStartScreen.getDownloadFile(), FileMode.WRITE);
     }
 
     private function onProgress(event:ProgressEvent):void
@@ -79,16 +67,20 @@ package app.update
 
     private function onComplete(event:Event):void
     {
+      status.setText("Download complete.");
       removeListeners();
       fileStream.close();
       urlStream.close();
       if (CONFIG::os === "osx")
       {
-        app.Util.gotoScreen(self, MountOsxInstallerScreen);
+        app.Util.gotoScreen(self, UpdateDmgMountScreen);
       }
       else
       {
-        app.Util.gotoScreen(self, RunInstallerScreen, getDownloadFile());
+        app.Util.gotoScreen(
+          self, 
+          UpdateRunInstallerScreen, 
+          UpdateStartScreen.getDownloadFile());
       }
     }
 
@@ -97,7 +89,7 @@ package app.update
       removeListeners();
       fileStream.close();
       urlStream.close();
-      status.setText("InstallerDownloadScreen: IO error: " + event.text);
+      status.setText("UpdateDownloadScreen: IO error: " + event.text);
     }
   }
 }

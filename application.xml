@@ -6,10 +6,10 @@
   <id>com.herokuapp.csusbdt-air.desktop</id>
 
   <name>
-    <text xml:lang="en">Hello Desktop AIR</text>
+    <text xml:lang="en">Hello AIR</text>
   </name>
 
-  <filename>hello-air</filename>
+  <filename>HelloAir</filename>
 
   <versionNumber>@versionNumber@</versionNumber>
 

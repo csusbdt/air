@@ -1,4 +1,4 @@
-package app.update
+package app.desktop.native
 {
   import flash.display.Sprite;
   import flash.desktop.NativeApplication;
@@ -15,26 +15,28 @@ package app.update
   import flash.utils.setTimeout;
   import app.StatusText;
 
-  public class MountOsxInstallerScreen extends Sprite
+  public class UpdateDmgMountScreen extends Sprite
   {
+    private var self:UpdateDmgMountScreen;
     public  var mountPoint     : String;
     private var nativeProcess  : NativeProcess = new NativeProcess();
     private var status         : StatusText = new StatusText();
 
-    public function MountOsxInstallerScreen()
+    public function UpdateDmgMountScreen()
     {
+      self = this;
       status.setText("Mounting dmg file.");
       addChild(status);
-      setTimeout(init, 2000);
+      setTimeout(mount, 2000);
     }
   
-    private function init():void
+    private function mount():void
     {
       var info:NativeProcessStartupInfo = new NativeProcessStartupInfo();
       info.executable = new File("/usr/bin/hdiutil");
                         
       var args:Vector.<String> = new Vector.<String>();
-      args.push("attach", "-plist", InstallerDownloadScreen.getDownloadFile().nativePath);
+      args.push("attach", "-plist", UpdateStartScreen.getDownloadFile().nativePath);
       info.arguments = args;
                         
       addListeners();
@@ -66,8 +68,8 @@ package app.update
     
     private function onOutputData(event:ProgressEvent):void
     {
-      nativeProcess.exit();
       removeListeners();
+      nativeProcess.exit();
                         
       var originalXmlSettings:Object = XML.settings();
       // Required settings for custom XML settings
@@ -109,7 +111,7 @@ package app.update
 
         if (installFiles.length == 1)
         {
-          app.Util.gotoScreen(this, RunInstallerScreen, installFiles[0]);
+          app.Util.gotoScreen(this, UpdateRunInstallerScreen, installFiles[0]);
         }
         else
         {
@@ -124,6 +126,7 @@ package app.update
 
     private function onError(event:IOErrorEvent):void
     {
+      removeListeners();
       status.setText(event.text);
     }
   }

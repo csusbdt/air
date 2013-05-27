@@ -1,4 +1,14 @@
 <project name="desktop"> 
+  <!-- 
+       This ant build file is used to:
+
+       1. Build a self-updating OS X application with native extensions.
+       2. Build a self-updating Windows application with native extensions.
+       3. Build a self-updating OS X application that uses the Adobe update framework.
+       4. Build a self-updating Windows application that uses the Adobe update framework.
+       5. Build an OS X application with a captive AIR runtime (not self-updating).
+       6. Build a Windows application with a captive AIR runtime (not self-updating).
+  -->
 
   <!-- Property overrides come first (because ant properties are immutable). -->
 
@@ -6,7 +16,7 @@
 
   <!-- Settable Properties -->
 
-  <property name="versionNumber" value="1.0.6" />
+  <property name="versionNumber" value="1.0.7" />
   <property name="installerSite" value="http://localhost:5000" />
 
   <!-- Derived Properties -->
@@ -15,7 +25,7 @@
 
   <property name="osxInstallerFilename" value="${appName}-${versionNumber}.dmg" />
   <property name="osxInstallerURL" value="${installerSite}/${osxInstallerFilename}" />
-  <property name="osxInstallerURLURL" value="${installerSite}/hello-air-osx" />
+  <property name="osxInstallerURLURL" value="${installerSite}/${appName}-osx" />
 
   <property name="osxCaptiveInstaller" value="${appName}-${versionNumber}.app" />
 
@@ -39,7 +49,7 @@
 
   <target name="doc" description="Generate documentation."> 
     <delete dir="doc" />
-    <exec executable="${aasdoc}">
+    <exec executable="aasdoc">
       <arg value="-define+=CONFIG::installerSite,&quot;'&#36;{installerSite}'&quot;"                            /> 
       <arg value="-define+=CONFIG::installerFilename,&quot;'&#36;{osxInstallerFilename}'&quot;"                 /> 
       <arg value="-define+=CONFIG::installerFilenameResource,&quot;'&#36;{osxInstallerFilenameResource}'&quot;" /> 
@@ -67,20 +77,18 @@ ADD STARLING, ETC?
       <arg value="-library-path=${airglobal}" /> 
 -->
 
-  <target name="compile-osx" description="Compile for osx."> 
+  <target name="compile-osx" description="Compile native installer for osx."> 
     <mkdir dir="temp" />
     <exec executable="amxmlc" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
       <arg value="-define+=CONFIG::os,&quot;'osx'&quot;" />
       <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
-      <arg value="-define+=CONFIG::installerURL,&quot;'${osxInstallerURL}'&quot;" /> 
-      <arg value="-define+=CONFIG::installerURLURL,&quot;'${osxInstallerURLURL}'&quot;" /> 
-      <arg value="-define+=CONFIG::installerFilename,&quot;'${osxInstallerFilename}'&quot;" /> 
-      <arg value="-debug=true"     />
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
+      <arg value="-debug=true" />
       <arg line="-source-path src" />
-      <arg value="--"              /> 
-      <arg value="src/OsxMain.as"  /> 
-    </exec>  
+      <arg value="--" /> 
+      <arg value="src/MainNativeOsx.as" /> 
+    </exec>
   </target>
 
   <target name="compile-win">
