@@ -26,7 +26,7 @@ package app.desktop.native
     {
       self = this;
       this.installerURL = installerURL;
-      status.setText("Downloading update ...");
+      status.setText("Downloading update.");
       addChild(status);
       setTimeout(download, 2000);
     }

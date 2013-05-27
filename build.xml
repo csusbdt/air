@@ -12,7 +12,7 @@
 
   <!-- Property overrides come first (because ant properties are immutable). -->
 
-  <property file="props.xml" />
+  <property file="props.properties" />
 
   <!-- Settable Properties -->
 
@@ -21,7 +21,9 @@
 
   <!-- Derived Properties -->
 
-  <property name="appName" value="hello-air" />
+  <property name="appName"                     value="hello-air" />
+  <property name="desktopUpdateURL"            value="${installerSite}/${appName}.xml" />
+  <property name="desktopInstallerFilename"    value="${appName}-${versionNumber}.air" />
   <property name="osxNativeInstallerFilename"  value="${appName}-${versionNumber}.dmg" />
   <property name="winNativeInstallerFilename"  value="${appName}-${versionNumber}.msi" />
   <property name="osxCaptiveFilename"          value="${appName}-${versionNumber}.app" />
@@ -173,7 +175,7 @@ ADD STARLING, ETC?
       <arg line="-storetype pkcs12"               />
       <arg line="-keystore ../keystore/keystore"  />
       <arg line="-storepass 1234"                 />
-      <arg line="-target native"                  />
+      <arg line="-target air"                     />
       <arg value="${desktopInstallerFilename}"    />
       <arg value="application.xml"                />
       <arg value="Main.swf"                       />

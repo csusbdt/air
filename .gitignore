@@ -2,6 +2,8 @@
 /keystore/keystore
 /web/node_modules
 /web/public/*.dmg
+/web/public/*.msi
 /temp
-/old
 /doc
+/props.properties
+
