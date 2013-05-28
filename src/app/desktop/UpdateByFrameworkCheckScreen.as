@@ -5,8 +5,6 @@ package app.desktop
   import flash.events.ErrorEvent;
   import air.update.ApplicationUpdaterUI;
   import air.update.events.UpdateEvent;
-//  import air.update.events.StatusUpdateErrorEvent;
-//  import air.update.events.DownloadErrorEvent;
   import app.TitleScreen;
   import app.StatusText;
   import app.Util;
@@ -14,31 +12,30 @@ package app.desktop
   /**
    * TODO: comment
    */
-  public class UpdateByFrameworkScreen extends Sprite
+  public class UpdateByFrameworkCheckScreen extends Sprite
   {
-    private var self:UpdateByFrameworkScreen;
+    private var self:UpdateByFrameworkCheckScreen;
+    private var updater:ApplicationUpdaterUI; 
     private var status:StatusText = new StatusText();
-    private var updater:ApplicationUpdaterUI = new ApplicationUpdaterUI(); 
 
-    public function UpdateByFrameworkScreen():void
+    public function UpdateByFrameworkCheckScreen(updater:ApplicationUpdaterUI):void
     {
       self = this;
-      status.setText("Updating.");
+      this.updater = updater;
+      status.setText("Checking for updates.");
       addChild(status);
       setTimeout(init, 2000);
     }
-	
+
     private function init():void
     {
       addListeners();
-      updater.updateURL = CONFIG::installerSite + "/hello-air.xml"; 
-      updater.initialize();
+      updater.checkNow();
     }
 
     private function addListeners():void
     {
       updater.addEventListener(UpdateEvent.INITIALIZED, onInitialized);
-//      updater.addEventListener(StatusUpdateErrorEvent.UPDATE_ERROR, onError);
       updater.addEventListener(ErrorEvent.ERROR, onError);
     }
 

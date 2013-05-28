@@ -3,6 +3,7 @@
 /web/node_modules
 /web/public/*.dmg
 /web/public/*.msi
+/web/public/*.air
 /temp
 /doc
 /props.properties
