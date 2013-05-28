@@ -1,5 +1,10 @@
 # Hello Adobe AIR
 
+Uninstall AIR
+
+http://www.kevinblanchard.com/projects/uninstalling-adobe-air-on-os-x/
+http://flash-gallery.com/help/faq/uninstall-adobe-air/
+
 ## Project status
 
 This project currently supports OS X only.
