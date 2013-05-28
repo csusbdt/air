@@ -3,7 +3,7 @@ package app.desktop
   import flash.display.Sprite;
   import flash.utils.setTimeout;
   import flash.events.ErrorEvent;
-  import air.update.ApplicationUpdaterUI;
+  import air.update.ApplicationUpdater;
   import air.update.events.UpdateEvent;
   import app.TitleScreen;
   import app.StatusText;
@@ -16,7 +16,7 @@ package app.desktop
   {
     private var self:UpdateByFrameworkInitializeScreen;
     private var status:StatusText = new StatusText();
-    private var updater:ApplicationUpdaterUI = new ApplicationUpdaterUI(); 
+    private var updater:ApplicationUpdater = new ApplicationUpdater(); 
 
     public function UpdateByFrameworkInitializeScreen():void
     {
@@ -30,12 +30,6 @@ package app.desktop
     {
       addListeners();
       updater.updateURL = CONFIG::installerSite + "/hello-air.xml"; 
-      updater.isCheckForUpdateVisible = false;
-      updater.isDownloadUpdateVisible = false;
-      updater.isDownloadProgressVisible = true;
-      updater.isInstallUpdateVisible = false;
-      updater.isFileUpdateVisible = false;
-      updater.isUnexpectedErrorVisible = true;
       updater.initialize();
     }
 
@@ -62,6 +56,7 @@ package app.desktop
     {
       removeListeners();
       status.setText("Initialization error." + event.toString());
+      app.Util.gotoScreen(self, TitleScreen);
     }
   }
 }
