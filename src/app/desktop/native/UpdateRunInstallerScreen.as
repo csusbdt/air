@@ -4,10 +4,6 @@ package app.desktop.native
   import flash.desktop.NativeApplication;
   import flash.desktop.NativeProcess;
   import flash.desktop.NativeProcessStartupInfo;
-//  import flash.events.Event;
-//  import flash.events.IOErrorEvent;
-//  import flash.events.ProgressEvent;
-//  import flash.events.NativeProcessExitEvent;
   import flash.filesystem.File;
   import flash.utils.setTimeout;
   

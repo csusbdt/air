@@ -1,4 +1,4 @@
-package app.desktop.native
+package app.desktop.captive
 {
   import flash.display.Sprite;
   import flash.filesystem.File;
@@ -13,11 +13,12 @@ package app.desktop.native
   import app.StatusText;
 
   /**
-   * This class checks to see that the url of the installer used
-   * to install the currently running program matches the 
-   * installer on the application's website. If the urls match, 
-   * then the application is up-to-date.  If the urls don't match, 
-   * the installer is downloaded and launched.
+   * This class checks to see that the app version of the
+   * currently running program matches the 
+   * app version on the application's website.  
+   * If the version strings match, then the application is up-to-date.  
+   * If the version strings don't match, 
+   * the user informed that an update is available for downloaded.
    */
   public class UpdateStartScreen extends Sprite
   {
@@ -25,39 +26,22 @@ package app.desktop.native
     private var urlLoader:URLLoader = new URLLoader();
     private var status:StatusText = new StatusText();
 
-    public static function getDownloadFile():File
-    {
-      var filename:String = "temp" + (CONFIG::os === "osx" ? ".dmg" : ".exe");
-      return File.applicationStorageDirectory.resolvePath(filename);
-    }
-
     private static function getInstallerURLURL():String
     {
-      return CONFIG::installerSite + "/hello-air-native-" + CONFIG::os;
+      return CONFIG::installerSite + "/hello-air-captive-" + CONFIG::os;
     }
 
     private static function getInstallerURL():String
     {
-      return CONFIG::installerSite + "/hello-air-native-" + CONFIG::os + "-" + CONFIG::versionNumber + 
-             (CONFIG::os === "osx" ? ".dmg" : ".exe");
+      return CONFIG::installerSite + "/hello-air-captive-" + CONFIG::os + "-" + CONFIG::versionNumber + 
+             (CONFIG::os === "osx" ? ".dmg" : ".zip");
     }
 
     public function UpdateStartScreen():void
     {
       self = this;
-      status.setText("Deleting previous installer.");
-      addChild(status);
-      setTimeout(cleanup, 2000);
-    }
-	
-    private function cleanup():void
-    {
-      var file:File = getDownloadFile();
-      if (file.exists) 
-      { 
-        try { file.deleteFile(); } catch (e:Error) { } 
-      }
       status.setText("Checking for updates...");
+      addChild(status);
       setTimeout(checkVersion, 2000);
     }
 

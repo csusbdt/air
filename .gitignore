@@ -2,7 +2,7 @@
 /keystore/keystore
 /web/node_modules
 /web/public/*.dmg
-/web/public/*.msi
+/web/public/*.exe
 /web/public/*.air
 /temp
 /doc

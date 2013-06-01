@@ -25,8 +25,10 @@
   <property name="desktopUpdateURL"            value="${installerSite}/${appName}.xml" />
   <property name="desktopInstallerFilename"    value="${appName}-${versionNumber}.air" />
   <property name="osxNativeInstallerFilename"  value="${appName}-${versionNumber}.dmg" />
-  <property name="winNativeInstallerFilename"  value="${appName}-${versionNumber}.exe" />
-  <property name="osxCaptiveFilename"          value="${appName}-${versionNumber}.app" />
+  <property name="winNativeInstallerFilename"  value="${appName}-native-win-${versionNumber}.exe" />
+  <property name="osxCaptiveInstallerFilename" value="${appName}-captive-osx-${versionNumber}.app" />
+  <property name="winCaptiveDirname"           value="${appName}-captive-win-${versionNumber}" />
+  <property name="winCaptiveFilename"          value="${appName}-captive-win-${versionNumber}.zip" />
   <!--property name="airglobal" value="${env.AIR_SDK_HOME}/frameworks/libs/air/airglobal.swc" /--> 
 
   <!-- Clean Target -->
@@ -110,6 +112,35 @@ ADD STARLING, ETC?
       <arg line="-source-path src" />
       <arg value="--" /> 
       <arg value="src/MainNativeWin.as" /> 
+    </exec>
+  </target>
+
+  <target name="compile-captive-osx" description="Compile captive installer for osx."> 
+    <mkdir dir="temp" />
+    <exec executable="amxmlc" failonerror="true"> 
+      <arg line="-o temp/Main.swf" /> 
+      <arg value="-define+=CONFIG::os,&quot;'osx'&quot;" />
+      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
+<arg value="-debug=true" />
+      <arg line="-source-path src" />
+      <arg value="--" /> 
+      <arg value="src/MainDesktopCaptive.as" /> 
+    </exec>
+  </target>
+
+  <target name="compile-captive-win" description="Compile captive installer for win.">
+    <exec executable="cmd">
+      <arg value="/c" />
+      <arg value="amxmlc.bat" />
+      <arg line="-o temp/Main.swf" />
+      <arg value="-define+=CONFIG::os,&quot;'win'&quot;" />
+      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
+<arg value="-debug=true" />
+      <arg line="-source-path src" />
+      <arg value="--" /> 
+      <arg value="src/MainDesktopCaptive.as" /> 
     </exec>
   </target>
 
@@ -234,7 +265,7 @@ ADD STARLING, ETC?
   </target>
 
   <target name="captive-osx" 
-          depends="compile-native-osx,app-native"
+          depends="compile-captive-osx,app-native"
           description="Generate the captive osx installer.">
     <exec executable="adt" dir="temp"> 
       <arg value="-package"                       />
@@ -247,6 +278,25 @@ ADD STARLING, ETC?
       <arg value="Main.swf"                       />
       <arg line="-C ../ icons"                    />
     </exec>
+  </target>
+
+  <target name="captive-win" 
+          depends="compile-captive-win,app-native"
+          description="Generate the captive win installer.">
+    <exec executable="cmd" dir="temp">
+      <arg value="/c" />
+      <arg value="adt.bat" />
+      <arg value="-package"                       />
+      <arg line="-storetype pkcs12"               />
+      <arg line="-keystore ../keystore/keystore"  />
+      <arg line="-storepass 1234"                 />
+      <arg line="-target bundle"                  />
+      <arg value="${winCaptiveDirname}"           />
+      <arg value="application.xml"                />
+      <arg value="Main.swf"                       />
+      <arg line="-C ../ icons"                    />
+    </exec>
+	<zip destfile="temp/${winCaptiveFilename}" basedir="temp/${winCaptiveDirname}" />
   </target>
 
   <!-- Utility targets for osx development -->
