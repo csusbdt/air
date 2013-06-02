@@ -22,11 +22,11 @@
   <!-- Derived Properties -->
 
   <property name="appName"                     value="hello-air" />
-  <property name="desktopUpdateURL"            value="${installerSite}/${appName}.xml" />
-  <property name="desktopInstallerFilename"    value="${appName}-${versionNumber}.air" />
-  <property name="osxNativeInstallerFilename"  value="${appName}-${versionNumber}.dmg" />
+  <!-- property name="desktopUpdateURL"        value="${installerSite}/${appName}.xml" / -->
+  <property name="airFilename"                 value="${appName}-${versionNumber}.air" />
+  <property name="osxNativeInstallerFilename"  value="${appName}-native-osx-${versionNumber}.dmg" />
   <property name="winNativeInstallerFilename"  value="${appName}-native-win-${versionNumber}.exe" />
-  <property name="osxCaptiveInstallerFilename" value="${appName}-captive-osx-${versionNumber}.app" />
+  <property name="osxCaptiveFilename"          value="${appName}-captive-osx-${versionNumber}.app" />
   <property name="winCaptiveDirname"           value="${appName}-captive-win-${versionNumber}" />
   <property name="winCaptiveFilename"          value="${appName}-captive-win-${versionNumber}.zip" />
   <!--property name="airglobal" value="${env.AIR_SDK_HOME}/frameworks/libs/air/airglobal.swc" /--> 
@@ -59,7 +59,7 @@ ADD STARLING, ETC?
       <arg value="-library-path=${airglobal}" /> 
 -->
 
-  <target name="compile-desktop-osx" description="Compile desktop in osx."> 
+  <target name="compile-air-osx" description="Compile air file in osx."> 
     <mkdir dir="temp" />
     <exec executable="amxmlc" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
@@ -68,11 +68,11 @@ ADD STARLING, ETC?
 <arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
-      <arg value="src/MainDesktop.as" /> 
+      <arg value="src/Air.as" /> 
     </exec>
   </target>
 
-  <target name="compile-desktop-win" description="Compile desktop in win.">
+  <target name="compile-air-win" description="Compile air file in win.">
     <exec executable="cmd">
       <arg value="/c" />
       <arg value="amxmlc.bat" />
@@ -82,7 +82,7 @@ ADD STARLING, ETC?
 <arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
-      <arg value="src/MainDesktop.as" /> 
+      <arg value="src/Air.as" /> 
     </exec>
   </target>
 
@@ -90,13 +90,13 @@ ADD STARLING, ETC?
     <mkdir dir="temp" />
     <exec executable="amxmlc" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
-      <arg value="-define+=CONFIG::os,&quot;'osx'&quot;" />
+      <!--arg value="-define+=CONFIG::os,&quot;'osx'&quot;" /-->
       <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
 <arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
-      <arg value="src/MainNativeOsx.as" /> 
+      <arg value="src/NativeOsx.as" /> 
     </exec>
   </target>
 
@@ -105,13 +105,13 @@ ADD STARLING, ETC?
       <arg value="/c" />
       <arg value="amxmlc.bat" />
       <arg line="-o temp/Main.swf" />
-      <arg value="-define+=CONFIG::os,&quot;'win'&quot;" />
+      <!--arg value="-define+=CONFIG::os,&quot;'win'&quot;" /-->
       <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
 <arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
-      <arg value="src/MainNativeWin.as" /> 
+      <arg value="src/NativeWin.as" /> 
     </exec>
   </target>
 
@@ -119,13 +119,13 @@ ADD STARLING, ETC?
     <mkdir dir="temp" />
     <exec executable="amxmlc" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
-      <arg value="-define+=CONFIG::os,&quot;'osx'&quot;" />
+      <!--arg value="-define+=CONFIG::os,&quot;'osx'&quot;" /-->
       <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
 <arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
-      <arg value="src/MainDesktopCaptive.as" /> 
+      <arg value="src/CaptiveOsx.as" /> 
     </exec>
   </target>
 
@@ -134,19 +134,19 @@ ADD STARLING, ETC?
       <arg value="/c" />
       <arg value="amxmlc.bat" />
       <arg line="-o temp/Main.swf" />
-      <arg value="-define+=CONFIG::os,&quot;'win'&quot;" />
+      <!--arg value="-define+=CONFIG::os,&quot;'win'&quot;" /-->
       <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
 <arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
-      <arg value="src/MainDesktopCaptive.as" /> 
+      <arg value="src/CaptiveWin.as" /> 
     </exec>
   </target>
 
   <!-- Application Descriptor Targets -->
 
-  <target name="app-desktop">
+  <target name="app-air">
     <mkdir dir="temp" />
     <filter token="versionNumber" value="${versionNumber}" />
     <filter token="supportedProfiles" value="desktop" />
@@ -162,17 +162,17 @@ ADD STARLING, ETC?
 
   <!-- Test Targets -->
 
-  <target name="test-desktop-osx" 
-          depends="compile-desktop-osx,app-desktop" 
-          description="Test desktop in osx."> 
+  <target name="test-air-osx" 
+          depends="compile-air-osx,app-air" 
+          description="Test air file in osx."> 
     <exec executable="adl" dir="temp"> 
       <arg value="application.xml" />
     </exec>
   </target>
 
-  <target name="test-desktop-win" 
-          depends="compile-desktop-win,app-desktop" 
-          description="Test desktop in win."> 
+  <target name="test-air-win" 
+          depends="compile-air-win,app-air" 
+          description="Test air file in win."> 
     <exec executable="adl" dir="temp"> 
       <arg value="application.xml" />
     </exec>
@@ -180,7 +180,7 @@ ADD STARLING, ETC?
 
   <target name="test-native-osx" 
           depends="compile-native-osx,app-native" 
-          description="Test native desktop in osx."> 
+          description="Test native osx."> 
     <exec executable="adl" dir="temp"> 
       <arg line="-profile extendedDesktop" />
       <arg value="application.xml" />
@@ -189,48 +189,64 @@ ADD STARLING, ETC?
 
   <target name="test-native-win" 
           depends="compile-native-win,app-native" 
-          description="Test native desktop in win."> 
+          description="Test native win."> 
     <exec executable="adl" dir="temp"> 
       <arg line="-profile extendedDesktop" />
       <arg value="application.xml" />
     </exec>
   </target>
 
-  <!-- Installer Targets -->
+  <!-- Package Targets -->
 
-  <target name="desktop-osx" 
-          depends="compile-desktop-osx,app-desktop"
-          description="Generate the desktop installer in osx.">
+  <target name="air-osx" 
+          depends="compile-air-osx,app-air"
+          description="Generate the air file installer in osx.">
     <exec executable="adt" dir="temp"> 
       <arg value="-package"                       />
       <arg line="-storetype pkcs12"               />
       <arg line="-keystore ../keystore/keystore"  />
       <arg line="-storepass 1234"                 />
       <arg line="-target air"                     />
-      <arg value="${desktopInstallerFilename}"    />
+      <arg value="${airFilename}"                 />
       <arg value="application.xml"                />
       <arg value="Main.swf"                       />
       <arg line="-C ../ icons"                    />
     </exec>
   </target>
 
-  <target name="desktop-win" 
-          depends="compile-desktop-win,app-desktop"
-          description="Generate the desktop installer in win.">
+  <target name="package-air-osx" 
+          depends="compile-air-osx,app-air"
+          description="Generate the air file installer in osx.">
     <exec executable="adt" dir="temp"> 
       <arg value="-package"                       />
       <arg line="-storetype pkcs12"               />
       <arg line="-keystore ../keystore/keystore"  />
       <arg line="-storepass 1234"                 />
       <arg line="-target native"                  />
-      <arg value="${desktopInstallerFilename}"    />
+      <arg value="${airFilename}"                 />
       <arg value="application.xml"                />
       <arg value="Main.swf"                       />
       <arg line="-C ../ icons"                    />
     </exec>
   </target>
 
-  <target name="native-osx" 
+  <target name="package-air-win" 
+          depends="compile-air-win,app-air"
+          description="Generate the air file installer in win.">
+    <exec executable="adt" dir="temp"> 
+      <arg value="-package"                       />
+      <arg line="-storetype pkcs12"               />
+      <arg line="-keystore ../keystore/keystore"  />
+      <arg line="-storepass 1234"                 />
+      <arg line="-target native"                  />
+      <arg value="${airFilename}"                 />
+      <arg value="application.xml"                />
+      <arg value="Main.swf"                       />
+      <arg line="-C ../ icons"                    />
+    </exec>
+  </target>
+
+  <target name="package-native-osx" 
           depends="compile-native-osx,app-native"
           description="Generate the native osx installer.">
     <exec executable="adt" dir="temp"> 
@@ -246,7 +262,7 @@ ADD STARLING, ETC?
     </exec>
   </target>
 
-  <target name="native-win" 
+  <target name="package-native-win" 
           depends="compile-native-win,app-native"
           description="Generate the native win installer.">
     <exec executable="cmd" dir="temp">
@@ -264,25 +280,25 @@ ADD STARLING, ETC?
     </exec>
   </target>
 
-  <target name="captive-osx" 
+  <target name="package-captive-osx" 
           depends="compile-captive-osx,app-native"
-          description="Generate the captive osx installer.">
+          description="Generate the captive osx app.">
     <exec executable="adt" dir="temp"> 
       <arg value="-package"                       />
       <arg line="-storetype pkcs12"               />
       <arg line="-keystore ../keystore/keystore"  />
       <arg line="-storepass 1234"                 />
       <arg line="-target bundle"                  />
-      <arg value="${osxCaptiveInstallerFilename}" />
+      <arg value="${osxCaptiveFilename}"          />
       <arg value="application.xml"                />
       <arg value="Main.swf"                       />
       <arg line="-C ../ icons"                    />
     </exec>
   </target>
 
-  <target name="captive-win" 
+  <target name="package-captive-win" 
           depends="compile-captive-win,app-native"
-          description="Generate the captive win installer.">
+          description="Generate the captive win app (in zip file).">
     <exec executable="cmd" dir="temp">
       <arg value="/c" />
       <arg value="adt.bat" />
@@ -296,7 +312,7 @@ ADD STARLING, ETC?
       <arg value="Main.swf"                       />
       <arg line="-C ../ icons"                    />
     </exec>
-	<zip destfile="temp/${winCaptiveFilename}" basedir="temp/${winCaptiveDirname}" />
+    <zip destfile="temp/${winCaptiveFilename}" basedir="temp/${winCaptiveDirname}" />
   </target>
 
   <!-- Utility targets for osx development -->

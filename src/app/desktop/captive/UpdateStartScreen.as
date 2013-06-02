@@ -23,23 +23,25 @@ package app.desktop.captive
   public class UpdateStartScreen extends Sprite
   {
     private var self:UpdateStartScreen;
+    private var os:String;
     private var urlLoader:URLLoader = new URLLoader();
     private var status:StatusText = new StatusText();
 
-    private static function getInstallerURLURL():String
+    private static function getInstallerURLURL(os:String):String
     {
-      return CONFIG::installerSite + "/hello-air-captive-" + CONFIG::os;
+      return CONFIG::installerSite + "/hello-air-captive-" + os;
     }
 
-    private static function getInstallerURL():String
+    private static function getInstallerURL(os:String):String
     {
-      return CONFIG::installerSite + "/hello-air-captive-" + CONFIG::os + "-" + CONFIG::versionNumber + 
-             (CONFIG::os === "osx" ? ".dmg" : ".zip");
+      return CONFIG::installerSite + "/hello-air-captive-" + os + "-" + CONFIG::versionNumber + 
+             (os === "osx" ? ".dmg" : ".zip");
     }
 
-    public function UpdateStartScreen():void
+    public function UpdateStartScreen(os:String):void
     {
       self = this;
+      this.os = os;
       status.setText("Checking for updates...");
       addChild(status);
       setTimeout(checkVersion, 2000);
@@ -50,7 +52,7 @@ package app.desktop.captive
       addListeners();
       try
       {
-        urlLoader.load(new URLRequest(getInstallerURLURL()));
+        urlLoader.load(new URLRequest(getInstallerURLURL(os)));
       }
       catch(error:Error)
       {
@@ -84,9 +86,7 @@ package app.desktop.captive
       removeListeners();
       urlLoader.close();
       var installerURL:String = Util.trim(urlLoader.data);
-trace(installerURL);
-trace(getInstallerURL());
-      if (installerURL === getInstallerURL())
+      if (installerURL === getInstallerURL(os))
       {
         status.setText("Application is up to date.");
         setTimeout(gotoTitleScreen, 2000);

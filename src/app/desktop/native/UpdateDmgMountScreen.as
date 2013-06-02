@@ -36,7 +36,7 @@ package app.desktop.native
       info.executable = new File("/usr/bin/hdiutil");
                         
       var args:Vector.<String> = new Vector.<String>();
-      args.push("attach", "-plist", UpdateStartScreen.getDownloadFile().nativePath);
+      args.push("attach", "-plist", UpdateStartScreen.getDownloadFile("osx").nativePath);
       info.arguments = args;
                         
       addListeners();

@@ -22,29 +22,31 @@ package app.desktop.native
   public class UpdateStartScreen extends Sprite
   {
     private var self:UpdateStartScreen;
+    private var os:String;
     private var urlLoader:URLLoader = new URLLoader();
     private var status:StatusText = new StatusText();
 
-    public static function getDownloadFile():File
+    public static function getDownloadFile(os:String):File
     {
-      var filename:String = "temp" + (CONFIG::os === "osx" ? ".dmg" : ".exe");
+      var filename:String = "temp" + (os === "osx" ? ".dmg" : ".exe");
       return File.applicationStorageDirectory.resolvePath(filename);
     }
 
-    private static function getInstallerURLURL():String
+    private static function getInstallerURLURL(os:String):String
     {
-      return CONFIG::installerSite + "/hello-air-native-" + CONFIG::os;
+      return CONFIG::installerSite + "/hello-air-native-" + os;
     }
 
-    private static function getInstallerURL():String
+    private static function getInstallerURL(os:String):String
     {
-      return CONFIG::installerSite + "/hello-air-native-" + CONFIG::os + "-" + CONFIG::versionNumber + 
-             (CONFIG::os === "osx" ? ".dmg" : ".exe");
+      return CONFIG::installerSite + "/hello-air-native-" + os + "-" + CONFIG::versionNumber + 
+             (os === "osx" ? ".dmg" : ".exe");
     }
 
-    public function UpdateStartScreen():void
+    public function UpdateStartScreen(os:String):void
     {
       self = this;
+      this.os = os;
       status.setText("Deleting previous installer.");
       addChild(status);
       setTimeout(cleanup, 2000);
@@ -52,7 +54,7 @@ package app.desktop.native
 	
     private function cleanup():void
     {
-      var file:File = getDownloadFile();
+      var file:File = getDownloadFile(os);
       if (file.exists) 
       { 
         try { file.deleteFile(); } catch (e:Error) { } 
@@ -66,7 +68,7 @@ package app.desktop.native
       addListeners();
       try
       {
-        urlLoader.load(new URLRequest(getInstallerURLURL()));
+        urlLoader.load(new URLRequest(getInstallerURLURL(os)));
       }
       catch(error:Error)
       {
@@ -100,16 +102,14 @@ package app.desktop.native
       removeListeners();
       urlLoader.close();
       var installerURL:String = Util.trim(urlLoader.data);
-trace(installerURL);
-trace(getInstallerURL());
-      if (installerURL === getInstallerURL())
+      if (installerURL === getInstallerURL(os))
       {
         status.setText("Application is up to date.");
         setTimeout(gotoTitleScreen, 2000);
       }
       else
       {
-        app.Util.gotoScreen(self, UpdateDownloadScreen, installerURL);
+        app.Util.gotoScreen(self, UpdateDownloadScreen, os, installerURL);
       }
     }
 	

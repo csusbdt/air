@@ -1,4 +1,4 @@
-package app.desktop
+package app.desktop.air
 {
   import flash.display.Sprite;
   import flash.utils.setTimeout;
@@ -12,13 +12,13 @@ package app.desktop
   /**
    * TODO: comment
    */
-  public class UpdateByFrameworkCheckScreen extends Sprite
+  public class UpdateCheckVersionScreen extends Sprite
   {
-    private var self:UpdateByFrameworkCheckScreen;
+    private var self:UpdateCheckVersionScreen;
     private var updater:ApplicationUpdater; 
     private var status:StatusText = new StatusText();
 
-    public function UpdateByFrameworkCheckScreen(updater:ApplicationUpdater):void
+    public function UpdateCheckVersionScreen(updater:ApplicationUpdater):void
     {
       self = this;
       this.updater = updater;

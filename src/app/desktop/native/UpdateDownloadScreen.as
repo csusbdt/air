@@ -17,14 +17,16 @@ package app.desktop.native
   public class UpdateDownloadScreen extends Sprite
   {
     private var self:UpdateDownloadScreen;
+    private var os:String;
     private var installerURL:String;
     private var status:StatusText     = new StatusText();
     private var urlStream:URLStream   = new URLStream();
     private var fileStream:FileStream = new FileStream();
 
-    public function UpdateDownloadScreen(installerURL:String)
+    public function UpdateDownloadScreen(os:String, installerURL:String)
     {
       self = this;
+      this.os = os;
       this.installerURL = installerURL;
       status.setText("Downloading update.");
       addChild(status);
@@ -55,7 +57,7 @@ package app.desktop.native
 
     private function onOpen(event:Event):void
     {
-      fileStream.open(UpdateStartScreen.getDownloadFile(), FileMode.WRITE);
+      fileStream.open(UpdateStartScreen.getDownloadFile(os), FileMode.WRITE);
     }
 
     private function onProgress(event:ProgressEvent):void
@@ -71,7 +73,7 @@ package app.desktop.native
       removeListeners();
       fileStream.close();
       urlStream.close();
-      if (CONFIG::os === "osx")
+      if (os === "osx")
       {
         app.Util.gotoScreen(self, UpdateDmgMountScreen);
       }
@@ -80,7 +82,7 @@ package app.desktop.native
         app.Util.gotoScreen(
           self, 
           UpdateRunInstallerScreen, 
-          UpdateStartScreen.getDownloadFile());
+          UpdateStartScreen.getDownloadFile(os));
       }
     }
 

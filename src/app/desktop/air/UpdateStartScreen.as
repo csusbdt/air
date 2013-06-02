@@ -1,4 +1,4 @@
-package app.desktop
+package app.desktop.air
 {
   import flash.display.Sprite;
   import flash.utils.setTimeout;
@@ -12,13 +12,13 @@ package app.desktop
   /**
    * TODO: comment
    */
-  public class UpdateByFrameworkInitializeScreen extends Sprite
+  public class UpdateStartScreen extends Sprite
   {
-    private var self:UpdateByFrameworkInitializeScreen;
+    private var self:UpdateStartScreen;
     private var status:StatusText = new StatusText();
     private var updater:ApplicationUpdater = new ApplicationUpdater(); 
 
-    public function UpdateByFrameworkInitializeScreen():void
+    public function UpdateStartScreen():void
     {
       self = this;
       status.setText("Initializing update system.");
@@ -49,7 +49,7 @@ package app.desktop
     {
       status.setText("Initialized.");
       removeListeners();
-      app.Util.gotoScreen(self, UpdateByFrameworkCheckScreen, updater);
+      app.Util.gotoScreen(self, UpdateCheckVersionScreen, updater);
     }
 
     private function onError(event:ErrorEvent):void
