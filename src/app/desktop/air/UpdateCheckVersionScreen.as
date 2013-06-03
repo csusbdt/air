@@ -5,6 +5,7 @@ package app.desktop.air
   import flash.events.ErrorEvent;
   import air.update.ApplicationUpdater;
   import air.update.events.StatusUpdateEvent;
+  import air.update.events.StatusUpdateErrorEvent;
   import app.TitleScreen;
   import app.StatusText;
   import app.Util;
@@ -59,6 +60,13 @@ package app.desktop.air
       {
         status.setText("Installing new version.");
       }
+    }
+
+    private function onStatusUpdateError(event:StatusUpdateErrorEvent):void
+    {
+      removeListeners();
+      status.setText("Status update error." + event.toString());
+      app.Util.gotoScreen(self, TitleScreen);
     }
 
     private function onError(event:ErrorEvent):void

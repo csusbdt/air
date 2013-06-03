@@ -1,14 +1,5 @@
 <project name="desktop"> 
   <!-- 
-       This ant build file is used to:
-
-       1. Build a self-updating OS X application with native extensions.
-       2. Build a self-updating Windows application with native extensions.
-       3. Build a self-updating OS X application that uses the Adobe update framework.
-       4. Build a self-updating Windows application that uses the Adobe update framework.
-       5. Build an OS X application with a captive AIR runtime (not self-updating).
-       6. Build a Windows application with a captive AIR runtime (not self-updating).
-
        The compile-* targets build temp/Main.swf.
        The app-* targets build temp/application.xml.
        The package-* targets build the various distributables (*.air, *.exe, *.dmg, *.zip).
@@ -31,9 +22,9 @@
   <property name="osxNativeInstallerFilename"  value="${appName}-native-osx-${versionNumber}.dmg" />
   <property name="winNativeInstallerFilename"  value="${appName}-native-win-${versionNumber}.exe" />
   <property name="osxCaptiveFilename"          value="${appName}-captive-osx-${versionNumber}.app" />
-  <property name="osxCaptiveDmg"               value="${appName}-captive-osx-${versionNumber}.dmg" />
+  <property name="osxCaptiveDmgFilename"       value="${appName}-captive-osx-${versionNumber}.dmg" />
   <property name="winCaptiveDirname"           value="${appName}-captive-win-${versionNumber}" />
-  <property name="winCaptiveFilename"          value="${appName}-captive-win-${versionNumber}.zip" />
+  <property name="winCaptiveZipFilename"       value="${appName}-captive-win-${versionNumber}.zip" />
   <!--property name="airglobal" value="${env.AIR_SDK_HOME}/frameworks/libs/air/airglobal.swc" /--> 
 
   <!-- Clean Target -->
@@ -207,12 +198,14 @@ ADD STARLING, ETC?
   <target name="package-air-win" 
           depends="compile-air-win,app-air"
           description="Generate the air file installer in win.">
-    <exec executable="adt" dir="temp"> 
+    <exec executable="cmd" dir="temp">
+      <arg value="/c" />
+      <arg value="adt.bat" />
       <arg value="-package"                       />
       <arg line="-storetype pkcs12"               />
       <arg line="-keystore ../keystore/keystore"  />
       <arg line="-storepass 1234"                 />
-      <arg line="-target native"                  />
+      <arg line="-target air"                     />
       <arg value="${airFilename}"                 />
       <arg value="application.xml"                />
       <arg value="Main.swf"                       />
@@ -272,7 +265,7 @@ ADD STARLING, ETC?
     <delete file="temp/Main.swf" />
     <exec executable="hdiutil" dir="temp">
       <arg value="create" />
-      <arg value="${osxCaptiveDmg}" />
+      <arg value="${osxCaptiveDmgFilename}" />
       <arg line="-srcfolder ." />
       <arg line="-volname ${appName}-${versionNumber}" />
     </exec>
@@ -294,7 +287,7 @@ ADD STARLING, ETC?
       <arg value="Main.swf"                       />
       <arg line="-C ../ icons"                    />
     </exec>
-    <zip destfile="temp/${winCaptiveFilename}" basedir="temp/${winCaptiveDirname}" />
+    <zip destfile="temp/${winCaptiveZipFilename}" basedir="temp/${winCaptiveDirname}" />
   </target>
 
   <!-- Utility targets for osx development -->
