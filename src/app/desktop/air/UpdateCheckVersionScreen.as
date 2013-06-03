@@ -36,13 +36,15 @@ package app.desktop.air
     private function addListeners():void
     {
       updater.addEventListener(StatusUpdateEvent.UPDATE_STATUS, onStatus);
+      updater.addEventListener(StatusUpdateErrorEvent.UPDATE_ERROR, onStatusUpdateError);
       updater.addEventListener(ErrorEvent.ERROR, onError);
     }
 
     private function removeListeners():void
     {
-      updater.addEventListener(StatusUpdateEvent.UPDATE_STATUS, onStatus);
-      updater.addEventListener(ErrorEvent.ERROR, onError);
+      updater.removeEventListener(StatusUpdateEvent.UPDATE_STATUS, onStatus);
+      updater.removeEventListener(StatusUpdateErrorEvent.UPDATE_ERROR, onStatusUpdateError);
+      updater.removeEventListener(ErrorEvent.ERROR, onError);
     }
 
     private function onStatus(event:StatusUpdateEvent):void

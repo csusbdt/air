@@ -1,6 +1,7 @@
 package app {
 
    import flash.display.Sprite;
+   import air.update.ApplicationUpdater;
 
    /**
     *  The title screen is displayed after the updater runs.
@@ -9,7 +10,7 @@ package app {
    {
       public function TitleScreen()
       {
-         addChild(new StatusText("Welcome to version " + CONFIG::versionNumber));
+         addChild(new StatusText("Welcome to version " + new ApplicationUpdater().currentVersion));
       }
    }
 

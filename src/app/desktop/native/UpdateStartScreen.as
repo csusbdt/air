@@ -8,6 +8,9 @@ package app.desktop.native
   import flash.net.URLLoader;
   import flash.net.URLRequest;
   import flash.utils.setTimeout;
+  
+  import air.update.ApplicationUpdater;
+  
   import app.Util;
   import app.TitleScreen;
   import app.StatusText;
@@ -39,7 +42,7 @@ package app.desktop.native
 
     private static function getInstallerURL(os:String):String
     {
-      return CONFIG::installerSite + "/hello-air-native-" + os + "-" + CONFIG::versionNumber + 
+      return CONFIG::installerSite + "/hello-air-native-" + os + "-" + new ApplicationUpdater().currentVersion + 
              (os === "osx" ? ".dmg" : ".exe");
     }
 

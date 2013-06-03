@@ -8,6 +8,7 @@ package app.desktop.captive
   import flash.net.URLLoader;
   import flash.net.URLRequest;
   import flash.utils.setTimeout;
+  import air.update.ApplicationUpdater;
   import app.Util;
   import app.TitleScreen;
   import app.StatusText;
@@ -34,7 +35,7 @@ package app.desktop.captive
 
     private static function getInstallerURL(os:String):String
     {
-      return CONFIG::installerSite + "/hello-air-captive-" + os + "-" + CONFIG::versionNumber + 
+      return CONFIG::installerSite + "/hello-air-captive-" + os + "-" + new ApplicationUpdater().currentVersion + 
              (os === "osx" ? ".dmg" : ".zip");
     }
 

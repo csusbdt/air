@@ -5,12 +5,14 @@ package app.desktop.air
   import flash.events.ErrorEvent;
   import air.update.ApplicationUpdater;
   import air.update.events.UpdateEvent;
+  import air.update.events.StatusUpdateErrorEvent;
   import app.TitleScreen;
   import app.StatusText;
   import app.Util;
 
   /**
-   * TODO: comment
+   * Starting screen for air file distribution.
+   * Updating is done with the update framework.
    */
   public class UpdateStartScreen extends Sprite
   {
@@ -36,13 +38,15 @@ package app.desktop.air
     private function addListeners():void
     {
       updater.addEventListener(UpdateEvent.INITIALIZED, onInitialized);
+      updater.addEventListener(StatusUpdateErrorEvent.UPDATE_ERROR, onStatusUpdateError);
       updater.addEventListener(ErrorEvent.ERROR, onError);
     }
 
     private function removeListeners():void
     {
-      updater.addEventListener(UpdateEvent.INITIALIZED, onInitialized);
-      updater.addEventListener(ErrorEvent.ERROR, onError);
+      updater.removeEventListener(UpdateEvent.INITIALIZED, onInitialized);
+      updater.removeEventListener(StatusUpdateErrorEvent.UPDATE_ERROR, onStatusUpdateError);
+      updater.removeEventListener(ErrorEvent.ERROR, onError);
     }
 
     private function onInitialized(event:UpdateEvent):void
@@ -50,6 +54,13 @@ package app.desktop.air
       status.setText("Initialized.");
       removeListeners();
       app.Util.gotoScreen(self, UpdateCheckVersionScreen, updater);
+    }
+
+    private function onStatusUpdateError(event:StatusUpdateErrorEvent):void
+    {
+      removeListeners();
+      status.setText("Status update error." + event.toString());
+      app.Util.gotoScreen(self, TitleScreen);
     }
 
     private function onError(event:ErrorEvent):void

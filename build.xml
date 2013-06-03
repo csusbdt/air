@@ -8,6 +8,11 @@
        4. Build a self-updating Windows application that uses the Adobe update framework.
        5. Build an OS X application with a captive AIR runtime (not self-updating).
        6. Build a Windows application with a captive AIR runtime (not self-updating).
+
+       The compile-* targets build temp/Main.swf.
+       The app-* targets build temp/application.xml.
+       The package-* targets build the various distributables (*.air, *.exe, *.dmg, *.zip).
+       Each package target depends on a comple target and an app target.
   -->
 
   <!-- Property overrides come first (because ant properties are immutable). -->
@@ -22,7 +27,6 @@
   <!-- Derived Properties -->
 
   <property name="appName"                     value="hello-air" />
-  <!-- property name="desktopUpdateURL"        value="${installerSite}/${appName}.xml" / -->
   <property name="airFilename"                 value="${appName}-${versionNumber}.air" />
   <property name="osxNativeInstallerFilename"  value="${appName}-native-osx-${versionNumber}.dmg" />
   <property name="winNativeInstallerFilename"  value="${appName}-native-win-${versionNumber}.exe" />
@@ -60,85 +64,70 @@ ADD STARLING, ETC?
       <arg value="-library-path=${airglobal}" /> 
 -->
 
-  <target name="compile-air-osx" description="Compile air file in osx."> 
+  <target name="compile-air-osx" description="Compile Air.as in osx."> 
     <mkdir dir="temp" />
     <exec executable="amxmlc" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
-      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-<arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
       <arg value="src/Air.as" /> 
     </exec>
   </target>
 
-  <target name="compile-air-win" description="Compile air file in win.">
+  <target name="compile-air-win" description="Compile Air.as in win.">
+    <mkdir dir="temp" />
     <exec executable="cmd">
       <arg value="/c" />
       <arg value="amxmlc.bat" />
       <arg line="-o temp/Main.swf" />
-      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-<arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
       <arg value="src/Air.as" /> 
     </exec>
   </target>
 
-  <target name="compile-native-osx" description="Compile native installer for osx."> 
+  <target name="compile-native-osx" description="Compile NativeOsx.as for native osx installer."> 
     <mkdir dir="temp" />
     <exec executable="amxmlc" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
-      <!--arg value="-define+=CONFIG::os,&quot;'osx'&quot;" /-->
-      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-<arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
       <arg value="src/NativeOsx.as" /> 
     </exec>
   </target>
 
-  <target name="compile-native-win" description="Compile native installer for win.">
+  <target name="compile-native-win" description="Compile NativeWin.as for native win installer.">
     <exec executable="cmd">
       <arg value="/c" />
       <arg value="amxmlc.bat" />
       <arg line="-o temp/Main.swf" />
-      <!--arg value="-define+=CONFIG::os,&quot;'win'&quot;" /-->
-      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-<arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
       <arg value="src/NativeWin.as" /> 
     </exec>
   </target>
 
-  <target name="compile-captive-osx" description="Compile captive installer for osx."> 
+  <target name="compile-captive-osx" description="Compile CaptiveOsx.as for captive osx installer."> 
     <mkdir dir="temp" />
     <exec executable="amxmlc" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
-      <!--arg value="-define+=CONFIG::os,&quot;'osx'&quot;" /-->
-      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-<arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
       <arg value="src/CaptiveOsx.as" /> 
     </exec>
   </target>
 
-  <target name="compile-captive-win" description="Compile captive installer for win.">
+  <target name="compile-captive-win" description="Compile CaptiveWin.as for captive win installer.">
     <exec executable="cmd">
       <arg value="/c" />
       <arg value="amxmlc.bat" />
       <arg line="-o temp/Main.swf" />
-      <!--arg value="-define+=CONFIG::os,&quot;'win'&quot;" /-->
-      <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-<arg value="-debug=true" />
       <arg line="-source-path src" />
       <arg value="--" /> 
       <arg value="src/CaptiveWin.as" /> 
@@ -165,7 +154,7 @@ ADD STARLING, ETC?
 
   <target name="test-air-osx" 
           depends="compile-air-osx,app-air" 
-          description="Test air file in osx."> 
+          description="Test Main.swf for air installer in osx."> 
     <exec executable="adl" dir="temp"> 
       <arg value="application.xml" />
     </exec>
@@ -173,7 +162,7 @@ ADD STARLING, ETC?
 
   <target name="test-air-win" 
           depends="compile-air-win,app-air" 
-          description="Test air file in win."> 
+          description="Test Main.swf for air installer in win."> 
     <exec executable="adl" dir="temp"> 
       <arg value="application.xml" />
     </exec>
