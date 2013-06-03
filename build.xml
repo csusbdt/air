@@ -290,6 +290,19 @@ ADD STARLING, ETC?
     <zip destfile="temp/${winCaptiveZipFilename}" basedir="temp/${winCaptiveDirname}" />
   </target>
 
+  <!-- Web targets -->
+
+  <target name="web-air-osx" 
+          depends="package-air-osx"
+          description="Publish the air installer to the web in osx.">
+    <copy file="temp/${airFilename}" todir="web/public" />
+    <filter token="versionNumber" value="${versionNumber}" />
+    <filter token="url" value="${installerSite}/${airFilename}" />
+    <copy file="hello-air.xml" todir="web/public" filtering="true" overwrite="true" />
+    <!--concat destfile="web/public/${appName}">${installerSite}/${airFilename}</concat-->
+  </target>
+
+
   <!-- Utility targets for osx development -->
 
   <target name="log-osx" 

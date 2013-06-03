@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<update xmlns="http://ns.adobe.com/air/framework/update/description/2.5"> 
+  <versionNumber>@versionNumber@</versionNumber> 
+  <url>@url@</url> 
+  <description> 
+    <text xml:lang="en">This is the current version of Hello AIR.</text> 
+    <text xml:lang="es">Esta es la versión actual de Hola AIR.</text> 
+    <text xml:lang="fr">C'est la version en cours Bonjour AIR.</text> 
+  </description> 
+</update>
+

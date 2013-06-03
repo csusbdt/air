@@ -59,14 +59,17 @@ package app.desktop.air
     private function onStatusUpdateError(event:StatusUpdateErrorEvent):void
     {
       removeListeners();
-      status.setText("Status update error." + event.toString());
+      status.setText("Status update error.");
       app.Util.gotoScreen(self, TitleScreen);
     }
 
+    /**
+     * This gets called when running app with adl.
+     */
     private function onError(event:ErrorEvent):void
     {
       removeListeners();
-      status.setText("Initialization error." + event.toString());
+      status.setText("Initialization error.");
       app.Util.gotoScreen(self, TitleScreen);
     }
   }
