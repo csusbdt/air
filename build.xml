@@ -302,6 +302,13 @@ ADD STARLING, ETC?
     <!--concat destfile="web/public/${appName}">${installerSite}/${airFilename}</concat-->
   </target>
 
+  <target name="web-native-osx" 
+          depends="package-native-osx"
+          description="Publish the osx native installer to the web.">
+    <copy file="temp/${osxNativeInstallerFilename}" todir="web/public" />
+    <concat destfile="web/public/${appName}">${installerSite}/${osxNativeInstallerFilename}</concat>
+  </target>
+
 
   <!-- Utility targets for osx development -->
 
