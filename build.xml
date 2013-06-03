@@ -1,4 +1,29 @@
 <project name="desktop"> 
+
+<!-- 
+
+TODO: Remove common code by passing params to targets.
+      Also, this allows targets to be called with different parameters.
+
+    <target name="foo">
+      <antcall target="bar">
+        <param name="property1" value="aaaaa" />
+        <param name="foo" value="baz" />
+       </antcall>
+    </target>
+
+    <target name="bar" depends="init">
+      <echo message="prop is ${property1} ${foo}" />
+    </target>
+
+-->
+
+
+
+
+
+
+
   <!-- 
        The compile-* targets build temp/Main.swf.
        The app-* targets build temp/application.xml.
@@ -141,9 +166,9 @@ ADD STARLING, ETC?
     <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
   </target>
 
-  <!-- Test Targets -->
+  <!-- Run Targets -->
 
-  <target name="test-air-osx" 
+  <target name="run-air-osx" 
           depends="compile-air-osx,app-air" 
           description="Test Main.swf for air installer in osx."> 
     <exec executable="adl" dir="temp"> 
@@ -151,7 +176,7 @@ ADD STARLING, ETC?
     </exec>
   </target>
 
-  <target name="test-air-win" 
+  <target name="run-air-win" 
           depends="compile-air-win,app-air" 
           description="Test Main.swf for air installer in win."> 
     <exec executable="adl" dir="temp"> 
@@ -159,7 +184,7 @@ ADD STARLING, ETC?
     </exec>
   </target>
 
-  <target name="test-native-osx" 
+  <target name="run-native-osx" 
           depends="compile-native-osx,app-native" 
           description="Test native osx."> 
     <exec executable="adl" dir="temp"> 
@@ -168,7 +193,7 @@ ADD STARLING, ETC?
     </exec>
   </target>
 
-  <target name="test-native-win" 
+  <target name="run-native-win" 
           depends="compile-native-win,app-native" 
           description="Test native win."> 
     <exec executable="adl" dir="temp"> 
@@ -295,18 +320,21 @@ ADD STARLING, ETC?
   <target name="web-air-osx" 
           depends="package-air-osx"
           description="Publish the air installer to the web in osx.">
+    <antcall target="clean" />
     <copy file="temp/${airFilename}" todir="web/public" />
     <filter token="versionNumber" value="${versionNumber}" />
     <filter token="url" value="${installerSite}/${airFilename}" />
     <copy file="hello-air.xml" todir="web/public" filtering="true" overwrite="true" />
-    <!--concat destfile="web/public/${appName}">${installerSite}/${airFilename}</concat-->
+    <antcall target="clean" />
   </target>
 
   <target name="web-native-osx" 
           depends="package-native-osx"
           description="Publish the osx native installer to the web.">
+    <antcall target="clean" />
     <copy file="temp/${osxNativeInstallerFilename}" todir="web/public" />
     <concat destfile="web/public/${appName}">${installerSite}/${osxNativeInstallerFilename}</concat>
+    <antcall target="clean" />
   </target>
 
 
