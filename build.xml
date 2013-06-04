@@ -41,6 +41,7 @@ TODO: Remove common code by passing params to targets.
   <!-- Derived Properties -->
 
   <property name="appName"                     value="hello-air" />
+  <property name="appId"                       value="csusbdt.hello.air" />
   <property name="airFilename"                 value="${appName}-${versionNumber}.air" />
   <property name="osxNativeInstallerFilename"  value="${appName}-native-osx-${versionNumber}.dmg" />
   <property name="winNativeInstallerFilename"  value="${appName}-native-win-${versionNumber}.exe" />
@@ -149,15 +150,14 @@ ADD STARLING, ETC?
     </exec>
   </target>
 
-  <target name="compile-apk-osx" description="Compile Air.as for Android in osx."> 
+  <target name="compile-apk-osx" description="Compile Android.as in osx."> 
     <mkdir dir="temp" />
     <exec executable="amxmlc" failonerror="true"> 
       <arg line="-o temp/Main.swf" /> 
-      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
       <arg value="-compress=false" /> 
       <arg line="-source-path src" />
       <arg value="--" /> 
-      <arg value="src/Air.as" /> 
+      <arg value="src/Android.as" /> 
     </exec>
   </target>
 
@@ -336,7 +336,7 @@ ADD STARLING, ETC?
   <target name="package-apk-osx" 
           depends="compile-apk-osx,app-apk"
           description="Generate the captive android installer in osx.">
-    <exec executable="adt" dir="temp"> 
+    <exec executable="adt" dir="temp" failonerror="true"> 
       <arg value="-package"                       />
       <arg line="-target apk-captive-runtime"     />
       <arg line="-storetype pkcs12"               />
@@ -351,7 +351,32 @@ ADD STARLING, ETC?
     <delete file="temp/Main.swf" />
   </target>
 
+  <!-- Android -->
 
+  <target name="run-apk-osx"
+          depends="package-apk-osx"
+          description="Build, package, install and run apk from osx.">
+    <exec executable="adt" dir="temp" failonerror="true">
+      <arg value="-installApp"            />
+      <arg line="-platform android"       /> 
+      <arg line="-package ${apkFilename}" />
+    </exec>
+    <exec executable="adt" dir="temp" failonerror="true">
+      <arg value="-launchApp"             />
+      <arg line="-platform android"       /> 
+      <arg line="-appid ${appId}"         />
+    </exec>
+    <antcall target="clean" />
+  </target>
+
+  <target name="clean-apk-osx"
+          description="Uninstall apk from osx.">
+    <exec executable="adt" failonerror="true">
+      <arg value="-uninstallApp"         />
+      <arg line="-platform android"      /> 
+      <arg line="-appid ${appId}"        />
+    </exec>
+  </target>
 
   <!-- Web targets -->
 

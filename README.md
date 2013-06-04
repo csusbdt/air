@@ -96,6 +96,19 @@ I added the following to _.bash_profile_
     export PATH=$PATH:$AIR_SDK_HOME/bin
     export PATH=$PATH:$AIR_SDK_HOME/lib/android/bin
 
+## Testing on Android
+
+You need to enable applications to run from unknown sources.
+Under Androind 4.0, go to Settings ...Security ... Unknown Sources, 
+and then _allow installation of apps other than the Play Store_.
+
+You need to enable USB debugging.
+Under Android 4.0, go to Settings ... Developer Options ... 
+Debugging, and check _Debugging mode launches when USB is connected.
+
+Connect the device to the desktop computer with a USB cable.
+Android indicates that the USB device is connected as a media device.
+
 ## Troubleshooting
 
 ### _application descriptor not found_
