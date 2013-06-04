@@ -22,8 +22,6 @@ TODO: Remove common code by passing params to targets.
 
 
 
-
-
   <!-- 
        The compile-* targets build temp/Main.swf.
        The app-* targets build temp/application.xml.
@@ -50,6 +48,7 @@ TODO: Remove common code by passing params to targets.
   <property name="osxCaptiveDmgFilename"       value="${appName}-captive-osx-${versionNumber}.dmg" />
   <property name="winCaptiveDirname"           value="${appName}-captive-win-${versionNumber}" />
   <property name="winCaptiveZipFilename"       value="${appName}-captive-win-${versionNumber}.zip" />
+  <property name="apkFilename"                 value="${appName}-${versionNumber}.apk" />
   <!--property name="airglobal" value="${env.AIR_SDK_HOME}/frameworks/libs/air/airglobal.swc" /--> 
 
   <!-- Clean Target -->
@@ -65,8 +64,8 @@ TODO: Remove common code by passing params to targets.
     <exec executable="aasdoc">
       <arg value="-define+=CONFIG::versionNumber,&quot;'${versionNumber}'&quot;" /> 
       <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-      <arg line="-doc-sources src"  />
-      <arg line="-source-path src"  />
+      <arg line="-doc-sources src" />
+      <arg line="-source-path src" />
       <arg line="-main-title &quot;Hello Air Documentation&quot;" />
       <arg line="-window-title &quot;Hello Air Documentation&quot;" />
       <arg line="-output doc"  />
@@ -150,6 +149,18 @@ ADD STARLING, ETC?
     </exec>
   </target>
 
+  <target name="compile-apk-osx" description="Compile Air.as for Android in osx."> 
+    <mkdir dir="temp" />
+    <exec executable="amxmlc" failonerror="true"> 
+      <arg line="-o temp/Main.swf" /> 
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
+      <arg value="-compress=false" /> 
+      <arg line="-source-path src" />
+      <arg value="--" /> 
+      <arg value="src/Air.as" /> 
+    </exec>
+  </target>
+
   <!-- Application Descriptor Targets -->
 
   <target name="app-air">
@@ -163,6 +174,13 @@ ADD STARLING, ETC?
     <mkdir dir="temp" />
     <filter token="versionNumber" value="${versionNumber}" />
     <filter token="supportedProfiles" value="extendedDesktop desktop" />
+    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
+  </target>
+
+  <target name="app-apk">
+    <mkdir dir="temp" />
+    <filter token="versionNumber" value="${versionNumber}" />
+    <filter token="supportedProfiles" value="mobileDevice" />
     <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
   </target>
 
@@ -314,6 +332,26 @@ ADD STARLING, ETC?
     </exec>
     <zip destfile="temp/${winCaptiveZipFilename}" basedir="temp/${winCaptiveDirname}" />
   </target>
+
+  <target name="package-apk-osx" 
+          depends="compile-apk-osx,app-apk"
+          description="Generate the captive android installer in osx.">
+    <exec executable="adt" dir="temp"> 
+      <arg value="-package"                       />
+      <arg line="-target apk-captive-runtime"     />
+      <arg line="-storetype pkcs12"               />
+      <arg line="-keystore ../keystore/keystore"  />
+      <arg line="-storepass 1234"                 />
+      <arg value="${apkFilename}"                 />
+      <arg value="application.xml"                />
+      <arg value="Main.swf"                       />
+      <arg line="-C ../ icons"                    />
+    </exec>
+    <delete file="temp/application.xml" />
+    <delete file="temp/Main.swf" />
+  </target>
+
+
 
   <!-- Web targets -->
 

@@ -3,7 +3,7 @@
 	xmlns="http://ns.adobe.com/air/application/3.7"
 	minimumPatchLevel="0">
 
-  <id>com.herokuapp.csusbdt-air.desktop</id>
+  <id>csusbdt.hello.air</id>
 
   <name>
     <text xml:lang="en">Hello AIR</text>
@@ -52,9 +52,21 @@
     <visible>true</visible> <!-- How can the app make itelf visible after init? -->
     <systemChrome>standard</systemChrome> <!-- standard, none, ? -->
     <transparent>false</transparent> <!-- Transparency is costly. -->
-    <renderMode>auto</renderMode>  <!-- not sure what is optimal here: auto, cpu, direct, or gpu? -->
+    <renderMode>direct</renderMode>  <!-- direct recommended in documentation. -->
     <requestedDisplayResolution>high</requestedDisplayResolution>  <!-- affects retina mac books only -->
   </initialWindow>
+
+  <android> 
+    <manifestAdditions> 
+      <![CDATA[ 
+        <manifest> 
+          <uses-permission android:name="android.permission.INTERNET" /> 
+          <!-- application android:hardwareAccelerated="true"/ -->  <!-- Needed for StageWebView. -->
+          <!-- http://help.adobe.com/en_US/air/build/WSfffb011ac560372f-5d0f4f25128cc9cd0cb-7ffc.html#WS365a66ad37c9f5102ec8a8ba12f2d91095a-8000 -->
+        </manifest> 
+      ]]> 
+    </manifestAdditions> 
+  </android>
 
 </application>
 

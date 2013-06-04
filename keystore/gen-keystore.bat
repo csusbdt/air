@@ -1,14 +1,14 @@
 echo Generating keystore with self-signed certificate.
 
 
-%AIR_SDK_HOME%\bin\adt -certificate      ^
+%AIR_SDK_HOME%\bin\adt -certificate       ^
 
-                       -cn csusbdt       ^
+                       -cn csusbdt        ^
 
-                       -validityPeriod 5 ^
+                       -validityPeriod 25 ^
 
-                       2048-RSA          ^
+                       2048-RSA           ^
 
-                       keystore          ^
+                       keystore           ^
 
                        1234

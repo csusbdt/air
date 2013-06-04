@@ -1,5 +1,10 @@
 # Hello Adobe AIR
 
+See the following for info regarding StageWebView, which I believe is needed by facebook library.
+
+http://help.adobe.com/en_US/air/build/WSfffb011ac560372f-5d0f4f25128cc9cd0cb-7ffc.html#WS365a66ad37c9f5102ec8a8ba12f2d91095a-8000
+
+
 Uninstall AIR
 
 http://www.kevinblanchard.com/projects/uninstalling-adobe-air-on-os-x/
@@ -7,11 +12,7 @@ http://flash-gallery.com/help/faq/uninstall-adobe-air/
 
 ## Project status
 
-This project currently supports OS X only.
-
-TODO: convert to captive runtime.  Read [Packaging a captive runtime bundle for desktop computers](http://help.adobe.com/en_US/air/build/WSfffb011ac560372f709e16db131e43659b9-8000.html).
-
-I have a captive-osx target, but updating is not supported for this.
+- [Packaging a captive runtime bundle for desktop computers](http://help.adobe.com/en_US/air/build/WSfffb011ac560372f709e16db131e43659b9-8000.html).
 
 For iOS, consider this WARNING: See [which AIR SDK versions will run which iOS versions](http://stackoverflow.com/questions/16243485/which-air-sdk-versions-will-run-which-ios-versions).
 
@@ -70,6 +71,7 @@ and applications with native functionality that need native installers.
 
 ## References
 
+- [Adobe AIR](http://help.adobe.com/en_US/air/build/index.html)
 - [Using the update framework](http://help.adobe.com/en_US/air/build/WS9CD40F06-4DD7-4230-B56A-88AA27541A1E.html)
 - [Installation logs on desktop computers](http://help.adobe.com/en_US/air/build/WS5b3ccc516d4fbf351e63e3d118666ade46-7fcb.html#WS60df0f297466d593625374fb1262e2ef77b-8000)
 - [Actionscript 3](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/)
@@ -92,6 +94,7 @@ I added the following to _.bash_profile_
 
     export AIR_SDK_HOME=$HOME/apps/AIRSDK_Compiler
     export PATH=$PATH:$AIR_SDK_HOME/bin
+    export PATH=$PATH:$AIR_SDK_HOME/lib/android/bin
 
 ## Troubleshooting
 
