@@ -11,7 +11,7 @@
 
   <versionNumber>@versionNumber@</versionNumber>
 
-  <filename>@appFilenamePrefix@-@versionNumber@</filename>
+  <filename>@appFilename@-@versionNumber@</filename>
 
   <description>
     <text xml:lang="en">This is an example AIR application.</text>
@@ -38,7 +38,7 @@
       <![CDATA[ 
         <manifest> 
           <uses-permission android:name="android.permission.INTERNET" /> 
-          <!-- I beleive the following is needed for StageWebView. -->
+          <!-- I believe the following is needed for StageWebView. -->
           <application android:hardwareAccelerated="true" />  
           <!-- http://help.adobe.com/en_US/air/build/WSfffb011ac560372f-5d0f4f25128cc9cd0cb-7ffc.html#WS365a66ad37c9f5102ec8a8ba12f2d91095a-8000 -->
         </manifest> 

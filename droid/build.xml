@@ -1,4 +1,4 @@
-<project name="ios"> 
+<project name="android"> 
 
   <property file="../props.properties" />
   <property name="apkFilename" value="${appFilename}-${versionNumber}.apk" />
@@ -23,6 +23,7 @@
     <filter token="versionNumber" value="${versionNumber}"  />
     <filter token="appId"         value="${appId}"          />
     <filter token="appName"       value="${appName}"        />
+    <filter token="appFilename"   value="${appFilename}"    />
     <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
   </target>
 

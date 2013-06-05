@@ -23,6 +23,7 @@
     <filter token="versionNumber" value="${versionNumber}"  />
     <filter token="appId"         value="${appId}"          />
     <filter token="appName"       value="${appName}"        />
+    <filter token="appFilename"   value="${appFilename}"    />
     <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
   </target>
 

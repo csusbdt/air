@@ -5,9 +5,9 @@
 /web/public/*.exe
 /web/public/*.air
 /web/public/*.zip
-/temp
 /doc
 /props.properties
 /ios/temp
 /droid/temp
-
+/osx-native/temp
+/temp

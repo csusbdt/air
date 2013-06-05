@@ -19,9 +19,6 @@ TODO: Remove common code by passing params to targets.
 -->
 
 
-
-
-
   <!-- 
        The compile-* targets build temp/Main.swf.
        The app-* targets build temp/application.xml.
@@ -43,7 +40,6 @@ TODO: Remove common code by passing params to targets.
   <property name="appName"                     value="hello-air" />
   <property name="appId"                       value="csusbdt.hello.air" />
   <property name="airFilename"                 value="${appName}-${versionNumber}.air" />
-  <property name="osxNativeInstallerFilename"  value="${appName}-native-osx-${versionNumber}.dmg" />
   <property name="winNativeInstallerFilename"  value="${appName}-native-win-${versionNumber}.exe" />
   <property name="osxCaptiveFilename"          value="${appName}-captive-osx-${versionNumber}.app" />
   <property name="osxCaptiveDmgFilename"       value="${appName}-captive-osx-${versionNumber}.dmg" />
@@ -100,17 +96,6 @@ ADD STARLING, ETC?
       <arg line="-source-path src" />
       <arg value="--" /> 
       <arg value="src/Air.as" /> 
-    </exec>
-  </target>
-
-  <target name="compile-native-osx" description="Compile NativeOsx.as for native osx installer."> 
-    <mkdir dir="temp" />
-    <exec executable="amxmlc" failonerror="true"> 
-      <arg line="-o temp/Main.swf" /> 
-      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-      <arg line="-source-path src" />
-      <arg value="--" /> 
-      <arg value="src/NativeOsx.as" /> 
     </exec>
   </target>
 
@@ -183,15 +168,6 @@ ADD STARLING, ETC?
     </exec>
   </target>
 
-  <target name="run-native-osx" 
-          depends="compile-native-osx,app-native" 
-          description="Test native osx."> 
-    <exec executable="adl" dir="temp"> 
-      <arg line="-profile extendedDesktop" />
-      <arg value="application.xml" />
-    </exec>
-  </target>
-
   <target name="run-native-win" 
           depends="compile-native-win,app-native" 
           description="Test native win."> 
@@ -231,22 +207,6 @@ ADD STARLING, ETC?
       <arg line="-storepass 1234"                 />
       <arg line="-target air"                     />
       <arg value="${airFilename}"                 />
-      <arg value="application.xml"                />
-      <arg value="Main.swf"                       />
-      <arg line="-C ../ icons"                    />
-    </exec>
-  </target>
-
-  <target name="package-native-osx" 
-          depends="compile-native-osx,app-native"
-          description="Generate the native osx installer.">
-    <exec executable="adt" dir="temp"> 
-      <arg value="-package"                       />
-      <arg line="-storetype pkcs12"               />
-      <arg line="-keystore ../keystore/keystore"  />
-      <arg line="-storepass 1234"                 />
-      <arg line="-target native"                  />
-      <arg value="${osxNativeInstallerFilename}"  />
       <arg value="application.xml"                />
       <arg value="Main.swf"                       />
       <arg line="-C ../ icons"                    />
@@ -324,15 +284,6 @@ ADD STARLING, ETC?
     <filter token="versionNumber" value="${versionNumber}" />
     <filter token="url" value="${installerSite}/${airFilename}" />
     <copy file="hello-air.xml" todir="web/public" filtering="true" overwrite="true" />
-    <antcall target="clean" />
-  </target>
-
-  <target name="web-native-osx" 
-          depends="package-native-osx"
-          description="Publish the osx native installer to the web.">
-    <antcall target="clean" />
-    <copy file="temp/${osxNativeInstallerFilename}" todir="web/public" />
-    <concat destfile="web/public/${appName}">${installerSite}/${osxNativeInstallerFilename}</concat>
     <antcall target="clean" />
   </target>
 

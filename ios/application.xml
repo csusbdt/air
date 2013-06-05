@@ -11,7 +11,7 @@
 
   <versionNumber>@versionNumber@</versionNumber>
 
-  <filename>@appFilenamePrefix@-@versionNumber@</filename>
+  <filename>@appFilename@-@versionNumber@</filename>
 
   <description>
     <text xml:lang="en">This is an example AIR application.</text>

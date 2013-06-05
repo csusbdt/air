@@ -1,0 +1,66 @@
+<project name="osx-native"> 
+
+  <property file="../props.properties" />
+  <property name="dmgFilename" value="${appFilename}-native-osx-${versionNumber}.dmg" />
+
+  <target name="clean" description="Delete temp folder."> 
+    <delete dir="temp" />
+  </target>
+
+  <target name="compile" description="Compile as3 source into Main.swf."> 
+    <mkdir dir="temp" />
+    <exec executable="amxmlc" failonerror="true"> 
+      <arg line="-o temp/Main.swf" /> 
+      <arg line="-source-path ../src" />
+      <arg value="-compress=true" /> 
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
+      <arg value="--" /> 
+      <arg value="Main.as" /> 
+    </exec>
+  </target>
+
+  <target name="app" description="Generate application descriptor file.">
+    <mkdir dir="temp" />
+    <filter token="versionNumber" value="${versionNumber}"  />
+    <filter token="appId"         value="${appId}"          />
+    <filter token="appName"       value="${appName}"        />
+    <filter token="appFilename"   value="${appFilename}"    />
+    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
+  </target>
+
+  <target name="test"
+          depends="compile,app"
+          description="Test as desktop application.">
+    <exec executable="adl" dir="temp">
+      <arg value="application.xml" />
+    </exec>
+  </target>
+
+  <target name="package" 
+          depends="compile,app"
+          description="Generate the native osx installer.">
+    <exec executable="adt" dir="temp"> 
+      <arg value="-package"                          />
+      <arg line="-storetype pkcs12"                  />
+      <arg line="-keystore ../../keystore/keystore"  />
+      <arg line="-storepass 1234"                    />
+      <arg line="-target native"                     />
+      <arg value="${dmgFilename}"                    />
+      <arg value="application.xml"                   />
+      <arg value="Main.swf"                          />
+      <arg line="-C ../ icons"                       />
+    </exec>
+    <delete file="temp/Main.swf"         />
+    <delete file="temp/application.xml"  />
+  </target>
+
+  <target name="web" 
+          depends="package"
+          description="Publish the osx native installer to the web.">
+    <mkdir dir="../web/public" />
+    <copy file="temp/${dmgFilename}" todir="../web/public" />
+    <concat destfile="../web/public/${appFilename}-native-osx">${installerSite}/${dmgFilename}</concat>
+    <antcall target="clean" />
+  </target>
+
+</project>
