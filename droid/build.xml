@@ -1,7 +1,7 @@
 <project name="ios"> 
 
   <property file="../props.properties" />
-  <property name="ipaFilename" value="${appFilename}-${versionNumber}.ipa" />
+  <property name="apkFilename" value="${appFilename}-${versionNumber}.apk" />
 
   <target name="clean" description="Delete temp folder."> 
     <delete dir="temp" />
@@ -37,27 +37,45 @@
 
   <target name="package" 
           depends="compile,app"
-          description="Generate the IPA file.">
-    <echo message="See http://help.adobe.com/en_US/air/build/WSfffb011ac560372f3cb56e2a12cc36970aa-8000.html" />
+          description="Generate the APK file.">
     <exec executable="adt" dir="temp"> 
-      <arg value="-package"                                  />
-      <arg line="-target ipa-debug"                          />
-      <arg line="-storetype pkcs12"                          />
-      <arg line="-keystore ../../keystore/keystore"          />
-      <arg line="-storepass 1234"                            />
-      <arg line="-provisioning-profile ios.mobileprovision"  />
-      <arg value="${ipaFilename}"                            />
-      <arg value="application.xml"                           />
-      <arg value="Main.swf"                                  />
-      <arg line="-C ../ icons Default.png"                   />
+      <arg value="-package"                           />
+      <arg line="-target apk-captive-runtime"         />
+      <arg line="-storetype pkcs12"                   />
+      <arg line="-keystore ../../keystore/keystore"   />
+      <arg line="-storepass 1234"                     />
+      <arg value="${apkFilename}"                     />
+      <arg value="application.xml"                    />
+      <arg value="Main.swf"                           />
+      <arg line="-C ../ icons"                        />
     </exec>
+    <delete file="temp/application.xml" />
+    <delete file="temp/Main.swf" />
   </target>
 
+  <target name="run"
+          depends="package"
+          description="Compile, package, install and run on connected device.">
+    <exec executable="adt" dir="temp" failonerror="true">
+      <arg value="-installApp"            />
+      <arg line="-platform android"       /> 
+      <arg line="-package ${apkFilename}" />
+    </exec>
+    <exec executable="adt" dir="temp" failonerror="true">
+      <arg value="-launchApp"             />
+      <arg line="-platform android"       /> 
+      <arg line="-appid ${appId}"         />
+    </exec>
+    <antcall target="clean" />
+  </target>
 
-<!-- 
-     See the following to continue:
-     http://help.adobe.com/en_US/air/build/WSfffb011ac560372f3cb56e2a12cc36970aa-8000.html
--->
-
+  <target name="uninstall"
+          description="Uninstall apk from connected device.">
+    <exec executable="adt" failonerror="true">
+      <arg value="-uninstallApp"         />
+      <arg line="-platform android"      /> 
+      <arg line="-appid ${appId}"        />
+    </exec>
+  </target>
 
 </project>

@@ -4,11 +4,35 @@ See the following for info regarding StageWebView, which I believe is needed by 
 
 http://help.adobe.com/en_US/air/build/WSfffb011ac560372f-5d0f4f25128cc9cd0cb-7ffc.html#WS365a66ad37c9f5102ec8a8ba12f2d91095a-8000
 
+## Setup
 
-Uninstall AIR
+After cloning this repo, you need to do the following set up.
 
-http://www.kevinblanchard.com/projects/uninstalling-adobe-air-on-os-x/
-http://flash-gallery.com/help/faq/uninstall-adobe-air/
+- Create file props.properties with the following property definitions. (Use your own values.)
+
+    appId=csusbdt.hello.air
+    appName=Hello AIR
+    versionNumber=1.0.0
+    appFilename=hello-air
+
+- Install Nodejs. (Get from website.)
+- Install the Nodejs connect module with the npm command.
+
+    npm install connect
+
+- Download AIR SDK and unpack in a convenient location.  
+I unpacked the sdk to _$HOME/apps/AIRSDK_Compiler_.
+
+- Set environmental variables.  On mac, I added the following to _.bash_profile_.
+
+    export AIR_SDK_HOME=$HOME/apps/AIRSDK_Compiler
+    export PATH=$PATH:$AIR_SDK_HOME/bin
+    export PATH=$PATH:$AIR_SDK_HOME/lib/android/bin
+
+## Uninstall AIR
+
+- http://www.kevinblanchard.com/projects/uninstalling-adobe-air-on-os-x/
+- http://flash-gallery.com/help/faq/uninstall-adobe-air/
 
 ## Project status
 
