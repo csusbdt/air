@@ -59,7 +59,9 @@
           description="Publish the air installer to the web.">
     <mkdir dir="../web/public" />
     <copy file="temp/${airFilename}" todir="../web/public" />
-    <concat destfile="../web/public/${airFilename}">${installerSite}/${airFilename}</concat>
+    <filter token="versionNumber" value="${versionNumber}" />
+    <filter token="url" value="${installerSite}/${airFilename}" />
+    <copy file="hello-air.xml" todir="web/public" filtering="true" overwrite="true" />
     <antcall target="clean" />
   </target>
 

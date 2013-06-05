@@ -123,13 +123,6 @@ ADD STARLING, ETC?
 
   <!-- Application Descriptor Targets -->
 
-  <target name="app-air">
-    <mkdir dir="temp" />
-    <filter token="versionNumber" value="${versionNumber}" />
-    <filter token="supportedProfiles" value="desktop" />
-    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
-  </target>
-
   <target name="app-native">
     <mkdir dir="temp" />
     <filter token="versionNumber" value="${versionNumber}" />
@@ -165,22 +158,6 @@ ADD STARLING, ETC?
   </target>
 
   <!-- Package Targets -->
-
-  <target name="package-air-osx" 
-          depends="compile-air-osx,app-air"
-          description="Generate the air file installer in osx.">
-    <exec executable="adt" dir="temp"> 
-      <arg value="-package"                       />
-      <arg line="-storetype pkcs12"               />
-      <arg line="-keystore ../keystore/keystore"  />
-      <arg line="-storepass 1234"                 />
-      <arg line="-target air"                     />
-      <arg value="${airFilename}"                 />
-      <arg value="application.xml"                />
-      <arg value="Main.swf"                       />
-      <arg line="-C ../ icons"                    />
-    </exec>
-  </target>
 
   <target name="package-air-win" 
           depends="compile-air-win,app-air"
@@ -235,19 +212,6 @@ ADD STARLING, ETC?
       <arg line="-C ../ icons"                    />
     </exec>
     <zip destfile="temp/${winCaptiveZipFilename}" basedir="temp/${winCaptiveDirname}" />
-  </target>
-
-  <!-- Web targets -->
-
-  <target name="web-air-osx" 
-          depends="package-air-osx"
-          description="Publish the air installer to the web in osx.">
-    <antcall target="clean" />
-    <copy file="temp/${airFilename}" todir="web/public" />
-    <filter token="versionNumber" value="${versionNumber}" />
-    <filter token="url" value="${installerSite}/${airFilename}" />
-    <copy file="hello-air.xml" todir="web/public" filtering="true" overwrite="true" />
-    <antcall target="clean" />
   </target>
 
 
