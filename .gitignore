@@ -1,10 +1,7 @@
 .DS_Store
 /keystore/keystore
 /web/node_modules
-/web/public/*.dmg
-/web/public/*.exe
-/web/public/*.air
-/web/public/*.zip
+/web/public
 /doc
 /props.properties
 /ios/temp
