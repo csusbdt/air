@@ -41,8 +41,6 @@ TODO: Remove common code by passing params to targets.
   <property name="appId"                       value="csusbdt.hello.air" />
   <property name="airFilename"                 value="${appName}-${versionNumber}.air" />
   <property name="winNativeInstallerFilename"  value="${appName}-native-win-${versionNumber}.exe" />
-  <property name="osxCaptiveFilename"          value="${appName}-captive-osx-${versionNumber}.app" />
-  <property name="osxCaptiveDmgFilename"       value="${appName}-captive-osx-${versionNumber}.dmg" />
   <property name="winCaptiveDirname"           value="${appName}-captive-win-${versionNumber}" />
   <property name="winCaptiveZipFilename"       value="${appName}-captive-win-${versionNumber}.zip" />
   <!--property name="airglobal" value="${env.AIR_SDK_HOME}/frameworks/libs/air/airglobal.swc" /--> 
@@ -108,17 +106,6 @@ ADD STARLING, ETC?
       <arg line="-source-path src" />
       <arg value="--" /> 
       <arg value="src/NativeWin.as" /> 
-    </exec>
-  </target>
-
-  <target name="compile-captive-osx" description="Compile CaptiveOsx.as for captive osx installer."> 
-    <mkdir dir="temp" />
-    <exec executable="amxmlc" failonerror="true"> 
-      <arg line="-o temp/Main.swf" /> 
-      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-      <arg line="-source-path src" />
-      <arg value="--" /> 
-      <arg value="src/CaptiveOsx.as" /> 
     </exec>
   </target>
 
@@ -228,30 +215,6 @@ ADD STARLING, ETC?
       <arg value="application.xml"                />
       <arg value="Main.swf"                       />
       <arg line="-C ../ icons"                    />
-    </exec>
-  </target>
-
-  <target name="package-captive-osx" 
-          depends="compile-captive-osx,app-native"
-          description="Generate the captive osx app.">
-    <exec executable="adt" dir="temp"> 
-      <arg value="-package"                       />
-      <arg line="-storetype pkcs12"               />
-      <arg line="-keystore ../keystore/keystore"  />
-      <arg line="-storepass 1234"                 />
-      <arg line="-target bundle"                  />
-      <arg value="${osxCaptiveFilename}"          />
-      <arg value="application.xml"                />
-      <arg value="Main.swf"                       />
-      <arg line="-C ../ icons"                    />
-    </exec>
-    <delete file="temp/application.xml" />
-    <delete file="temp/Main.swf" />
-    <exec executable="hdiutil" dir="temp">
-      <arg value="create" />
-      <arg value="${osxCaptiveDmgFilename}" />
-      <arg line="-srcfolder ." />
-      <arg line="-volname ${appName}-${versionNumber}" />
     </exec>
   </target>
 

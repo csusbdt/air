@@ -1,7 +1,8 @@
-<project name="osx-native"> 
+<project name="osx-captive"> 
 
   <property file="../props.properties" />
-  <property name="dmgFilename" value="${appFilename}-native-osx-${versionNumber}.dmg" />
+  <property name="appFilename" value="${appFilename}-captive-osx-${versionNumber}.app" />
+  <property name="dmgFilename" value="${appFilename}-captive-osx-${versionNumber}.dmg" />
 
   <target name="clean" description="Delete temp folder."> 
     <delete dir="temp" />
@@ -38,20 +39,26 @@
 
   <target name="package" 
           depends="compile,app"
-          description="Generate the native osx installer.">
+          description="Generate the captive osx app.">
     <exec executable="adt" dir="temp"> 
       <arg value="-package"                          />
       <arg line="-storetype pkcs12"                  />
       <arg line="-keystore ../../keystore/keystore"  />
       <arg line="-storepass 1234"                    />
-      <arg line="-target native"                     />
-      <arg value="${dmgFilename}"                    />
+      <arg line="-target bundle"                     />
+      <arg value="${appFilename}"                    />
       <arg value="application.xml"                   />
       <arg value="Main.swf"                          />
-      <arg line="-C ../../osx/ icons"                />
+      <arg line="-C ../../osx icons"                 />
     </exec>
-    <delete file="temp/Main.swf"         />
-    <delete file="temp/application.xml"  />
+    <delete file="temp/application.xml" />
+    <delete file="temp/Main.swf" />
+    <exec executable="hdiutil" dir="temp">
+      <arg value="create" />
+      <arg value="${dmgFilename}" />
+      <arg line="-srcfolder ." />
+      <arg line="-volname ${appFilename}-${versionNumber}" />
+    </exec>
   </target>
 
   <target name="web" 
