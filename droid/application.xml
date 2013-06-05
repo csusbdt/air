@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<application 
+	xmlns="http://ns.adobe.com/air/application/3.7"
+	minimumPatchLevel="0">
+
+  <id>@appId@</id>
+
+  <name>
+    <text xml:lang="en">@appName@</text>
+  </name>
+
+  <versionNumber>@versionNumber@</versionNumber>
+
+  <filename>@appFilenamePrefix@-@versionNumber@</filename>
+
+  <description>
+    <text xml:lang="en">This is an example AIR application.</text>
+  </description>
+
+  <copyright>Copyright 2013, David Turner</copyright>
+
+  <supportedProfiles>mobileDevice</supportedProfiles>
+
+  <icon>
+    <image36x36>icons/AIRApp_36.png</image36x36>
+    <image48x48>icons/AIRApp_48.png</image48x48>
+    <image72x72>icons/AIRApp_72.png</image72x72>
+  </icon>
+
+  <initialWindow>
+    <content>Main.swf</content>
+    <title>@appName@ @versionNumber@</title>
+    <renderMode>direct</renderMode> 
+  </initialWindow>
+
+  <android> 
+    <manifestAdditions> 
+      <![CDATA[ 
+        <manifest> 
+          <uses-permission android:name="android.permission.INTERNET" /> 
+          <!-- I beleive the following is needed for StageWebView. -->
+          <application android:hardwareAccelerated="true" />  
+          <!-- http://help.adobe.com/en_US/air/build/WSfffb011ac560372f-5d0f4f25128cc9cd0cb-7ffc.html#WS365a66ad37c9f5102ec8a8ba12f2d91095a-8000 -->
+        </manifest> 
+      ]]> 
+    </manifestAdditions> 
+  </android>
+
+</application>
+

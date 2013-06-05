@@ -1,0 +1,63 @@
+<project name="ios"> 
+
+  <property file="../props.properties" />
+  <property name="ipaFilename" value="${appFilename}-${versionNumber}.ipa" />
+
+  <target name="clean" description="Delete temp folder."> 
+    <delete dir="temp" />
+  </target>
+
+  <target name="compile" description="Compile as3 source into Main.swf."> 
+    <mkdir dir="temp" />
+    <exec executable="amxmlc" failonerror="true"> 
+      <arg line="-o temp/Main.swf" /> 
+      <arg line="-source-path ../src" />
+      <arg value="-compress=false" /> 
+      <arg value="--" /> 
+      <arg value="Main.as" /> 
+    </exec>
+  </target>
+
+  <target name="app" description="Generate application descriptor file.">
+    <mkdir dir="temp" />
+    <filter token="versionNumber" value="${versionNumber}"  />
+    <filter token="appId"         value="${appId}"          />
+    <filter token="appName"       value="${appName}"        />
+    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
+  </target>
+
+  <target name="test"
+          depends="compile,app"
+          description="Test as desktop application.">
+    <exec executable="adl" dir="temp">
+      <arg value="application.xml" />
+      <arg line="-screensize iPhone" />
+    </exec>
+  </target>
+
+  <target name="package" 
+          depends="compile,app"
+          description="Generate the IPA file.">
+    <echo message="See http://help.adobe.com/en_US/air/build/WSfffb011ac560372f3cb56e2a12cc36970aa-8000.html" />
+    <exec executable="adt" dir="temp"> 
+      <arg value="-package"                                  />
+      <arg line="-target ipa-debug"                          />
+      <arg line="-storetype pkcs12"                          />
+      <arg line="-keystore ../../keystore/keystore"          />
+      <arg line="-storepass 1234"                            />
+      <arg line="-provisioning-profile ios.mobileprovision"  />
+      <arg value="${ipaFilename}"                            />
+      <arg value="application.xml"                           />
+      <arg value="Main.swf"                                  />
+      <arg line="-C ../ icons Default.png"                   />
+    </exec>
+  </target>
+
+
+<!-- 
+     See the following to continue:
+     http://help.adobe.com/en_US/air/build/WSfffb011ac560372f3cb56e2a12cc36970aa-8000.html
+-->
+
+
+</project>
