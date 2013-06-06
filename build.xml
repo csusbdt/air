@@ -73,17 +73,6 @@ ADD STARLING, ETC?
       <arg value="-library-path=${airglobal}" /> 
 -->
 
-  <target name="compile-air-osx" description="Compile Air.as in osx."> 
-    <mkdir dir="temp" />
-    <exec executable="amxmlc" failonerror="true"> 
-      <arg line="-o temp/Main.swf" /> 
-      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-      <arg line="-source-path src" />
-      <arg value="--" /> 
-      <arg value="src/Air.as" /> 
-    </exec>
-  </target>
-
   <target name="compile-air-win" description="Compile Air.as in win.">
     <mkdir dir="temp" />
     <exec executable="cmd">
@@ -121,38 +110,12 @@ ADD STARLING, ETC?
     </exec>
   </target>
 
-  <!-- Application Descriptor Targets -->
-
-  <target name="app-native">
-    <mkdir dir="temp" />
-    <filter token="versionNumber" value="${versionNumber}" />
-    <filter token="supportedProfiles" value="extendedDesktop desktop" />
-    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
-  </target>
-
   <!-- Run Targets -->
-
-  <target name="run-air-osx" 
-          depends="compile-air-osx,app-air" 
-          description="Test Main.swf for air installer in osx."> 
-    <exec executable="adl" dir="temp"> 
-      <arg value="application.xml" />
-    </exec>
-  </target>
 
   <target name="run-air-win" 
           depends="compile-air-win,app-air" 
           description="Test Main.swf for air installer in win."> 
     <exec executable="adl" dir="temp"> 
-      <arg value="application.xml" />
-    </exec>
-  </target>
-
-  <target name="run-native-win" 
-          depends="compile-native-win,app-native" 
-          description="Test native win."> 
-    <exec executable="adl" dir="temp"> 
-      <arg line="-profile extendedDesktop" />
       <arg value="application.xml" />
     </exec>
   </target>

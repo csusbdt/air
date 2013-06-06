@@ -1,8 +1,9 @@
-<project name="osx-captive"> 
+<project name="win-captive"> 
 
   <property file="../props.properties" />
-  <property name="appFilename" value="${appFilename}-captive-osx-${versionNumber}.app" />
-  <property name="dmgFilename" value="${appFilename}-captive-osx-${versionNumber}.dmg" />
+  <property name="exeFilename"   value="${appFilename}-captive-win-${versionNumber}.exe" />
+  <property name="dirname"       value="${appName}-captive-win-${versionNumber}" />
+  <property name="zipFilename"   value="${appName}-captive-win-${versionNumber}.zip" />
 
   <target name="clean" description="Delete temp folder."> 
     <delete dir="temp" />
@@ -10,7 +11,9 @@
 
   <target name="compile" description="Compile as3 source into Main.swf."> 
     <mkdir dir="temp" />
-    <exec executable="amxmlc" failonerror="true"> 
+    <exec executable="cmd" failonerror="true">
+      <arg value="/c" />
+      <arg value="amxmlc.bat" />
       <arg line="-o temp/Main.swf" /> 
       <arg line="-source-path ../src" />
       <arg value="-compress=true" /> 
@@ -26,7 +29,7 @@
     <filter token="appId"         value="${appId}"          />
     <filter token="appName"       value="${appName}"        />
     <filter token="appFilename"   value="${appFilename}"    />
-    <copy file="../osx/application.xml" todir="temp" filtering="true" overwrite="true" />
+    <copy file="../win/application.xml" todir="temp" filtering="true" overwrite="true" />
   </target>
 
   <target name="test"
@@ -39,35 +42,34 @@
 
   <target name="package" 
           depends="compile,app"
-          description="Generate the captive osx app.">
-    <exec executable="adt" dir="temp" failonerror="true"> 
+          description="Generate the captive win installer (in zip file).">
+    <exec executable="cmd" dir="temp">
+      <arg value="/c" />
+      <arg value="adt.bat" />
       <arg value="-package"                          />
+      <arg line="-target bundle"                     />
       <arg line="-storetype pkcs12"                  />
       <arg line="-keystore ../../keystore/keystore"  />
       <arg line="-storepass 1234"                    />
-      <arg line="-target bundle"                     />
-      <arg value="${appFilename}"                    />
+      <arg value="${dirname}"                        />
       <arg value="application.xml"                   />
       <arg value="Main.swf"                          />
-      <arg line="-C ../../osx icons"                 />
+      <arg line="-C ../../osx/ icons"                />  <!--  CHECK THIS !!!!!!!! -->
     </exec>
-    <delete file="temp/application.xml" />
-    <delete file="temp/Main.swf" />
-    <exec executable="hdiutil" dir="temp" failonerror="true">
-      <arg value="create" />
-      <arg value="${dmgFilename}" />
-      <arg line="-srcfolder ." />
-      <arg line="-volname ${appFilename}-${versionNumber}" />
-    </exec>
-    <delete file="temp/${appFilename}" /> <!-- THIS DOESN'T SEEM TO WORK> -->
+    <zip destfile="temp/${zipFilename}" basedir="temp/${dirname}" />
+<!--
+    <delete file="temp/Main.swf"         />
+    <delete file="temp/application.xml"  />
+    <delete dir="${dirname}"             />
+-->
   </target>
 
   <target name="web" 
           depends="package"
-          description="Publish the osx native installer to the web.">
+          description="Publish the win captive installer to the web.">
     <mkdir dir="../web/public" />
-    <copy file="temp/${dmgFilename}" todir="../web/public" />
-    <concat destfile="../web/public/${appFilename}-native-osx">${installerSite}/${dmgFilename}</concat>
+    <copy file="temp/${zipFilename}" todir="../web/public" />
+    <concat destfile="../web/public/${zipFilename}-captive-win">${installerSite}/${zipFilename}</concat>
     <antcall target="clean" />
   </target>
 
