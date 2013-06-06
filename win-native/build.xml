@@ -40,15 +40,15 @@
 
   <target name="package" 
           depends="compile,app"
-          description="Generate the native osx installer.">
+          description="Generate the native win installer.">
     <exec executable="cmd" dir="temp">
       <arg value="/c" />
       <arg value="adt.bat" />
       <arg value="-package"                          />
-      <arg line="-target native"                     />
       <arg line="-storetype pkcs12"                  />
       <arg line="-keystore ../../keystore/keystore"  />
       <arg line="-storepass 1234"                    />
+      <arg line="-target native"                     />
       <arg value="${exeFilename}"                    />
       <arg value="application.xml"                   />
       <arg value="Main.swf"                          />

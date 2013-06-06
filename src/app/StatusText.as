@@ -14,7 +14,7 @@ package app {
     {
       textFormat.font  = "Verdana";
       textFormat.color = 0x000000;
-      textFormat.size  = 12;
+      textFormat.size  = 24;
     }
 
     public function StatusText(text:String = "")

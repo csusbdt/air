@@ -14,6 +14,7 @@ After cloning this repo, you need to do the following set up.
     appName=Hello AIR
     versionNumber=1.0.0
     appFilename=hello-air
+    installerSite=http://localhost:5000
 
 - Install Nodejs. (Get from website.)
 - Install the Nodejs connect module with the npm command.
