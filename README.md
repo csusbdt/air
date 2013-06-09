@@ -94,6 +94,17 @@ Android environment when using AIR SDK 3.7.
 Similar to the iOS sub-project, the captive build for Android does not include
 webkit, so HTML can not be used in the app.
 
+### Build scripts
+
+Each sub-project has a file named _build.xml_, which controls the build process for
+the sub-project.  These build files contain the following common targets.
+
+- __compile__ Build _temp/Main.swf_.
+- __app__ Build _temp/application.xml_.
+- __package__ Build the various downloadables (*.air, *.exe, *.dmg, *.zip).
+- __web__ Prepare the web server to test the update function.
+
+
 ## How to Uninstall AIR
 
 - http://www.kevinblanchard.com/projects/uninstalling-adobe-air-on-os-x/

@@ -1,45 +1,14 @@
 <project name="air"> 
 
-  <property file="../props.properties" />
+  <import file="../common.xml" />
   <property name="airFilename" value="${appFilename}-${versionNumber}.air" />
-
-  <target name="clean" description="Delete temp folder."> 
-    <delete dir="temp" />
-  </target>
-
-  <target name="compile" description="Compile as3 source into Main.swf."> 
-    <mkdir dir="temp" />
-    <exec executable="amxmlc" failonerror="true"> 
-      <arg line="-o temp/Main.swf" /> 
-      <arg line="-source-path ../src" />
-      <arg value="-compress=true" /> 
-      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-      <arg value="--" /> 
-      <arg value="Main.as" /> 
-    </exec>
-  </target>
-
-  <target name="app" description="Generate application descriptor file.">
-    <mkdir dir="temp" />
-    <filter token="versionNumber" value="${versionNumber}"  />
-    <filter token="appId"         value="${appId}"          />
-    <filter token="appName"       value="${appName}"        />
-    <filter token="appFilename"   value="${appFilename}"    />
-    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
-  </target>
-
-  <target name="test"
-          depends="compile,app"
-          description="Test as desktop application.">
-    <exec executable="adl" dir="temp">
-      <arg value="application.xml" />
-    </exec>
-  </target>
 
   <target name="package" 
           depends="compile,app"
           description="Generate the air installer.">
-    <exec executable="adt" dir="temp"> 
+    <exec executable="adt" 
+	      dir="temp" 
+		  os="Mac OS X"> 
       <arg value="-package"                          />
       <arg line="-storetype pkcs12"                  />
       <arg line="-keystore ../../keystore/keystore"  />
@@ -48,7 +17,23 @@
       <arg value="${airFilename}"                    />
       <arg value="application.xml"                   />
       <arg value="Main.swf"                          />
-      <arg line="-C ../../osx icons"                 />
+      <arg line="-C .. icons"                        />
+    </exec>
+	<exec executable="cmd" 
+	      dir="temp" 
+		  failonerror="true" 
+		  os="Windows XP, Windows 7, Windows 8">
+      <arg value="/c"                                />
+      <arg value="adt.bat"                           />
+      <arg value="-package"                          />
+      <arg line="-storetype pkcs12"                  />
+      <arg line="-keystore ../../keystore/keystore"  />
+      <arg line="-storepass 1234"                    />
+      <arg line="-target air"                        />
+      <arg value="${airFilename}"                    />
+      <arg value="application.xml"                   />
+      <arg value="Main.swf"                          />
+      <arg line="-C .. icons"                        />
     </exec>
     <delete file="temp/Main.swf"         />
     <delete file="temp/application.xml"  />
@@ -61,7 +46,7 @@
     <copy file="temp/${airFilename}" todir="../web/public" />
     <filter token="versionNumber" value="${versionNumber}" />
     <filter token="url" value="${installerSite}/${airFilename}" />
-    <copy file="hello-air.xml" todir="web/public" filtering="true" overwrite="true" />
+    <copy file="hello-air.xml" todir="../web/public" filtering="true" overwrite="true" />
     <antcall target="clean" />
   </target>
 

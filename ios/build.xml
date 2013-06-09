@@ -1,40 +1,9 @@
 <project name="ios"> 
 
-  <property file="../props.properties" />
+  <property name="compressSwf" value="false" />
+  <property name="testLine" value="-screensize iPhone" />
+  <import file="../common.xml" />
   <property name="ipaFilename" value="${appFilename}-${versionNumber}.ipa" />
-
-  <target name="clean" description="Delete temp folder."> 
-    <delete dir="temp" />
-  </target>
-
-  <target name="compile" description="Compile as3 source into Main.swf."> 
-    <mkdir dir="temp" />
-    <exec executable="amxmlc" failonerror="true"> 
-      <arg line="-o temp/Main.swf" /> 
-      <arg line="-source-path ../src" />
-      <arg value="-compress=false" /> 
-      <arg value="--" /> 
-      <arg value="Main.as" /> 
-    </exec>
-  </target>
-
-  <target name="app" description="Generate application descriptor file.">
-    <mkdir dir="temp" />
-    <filter token="versionNumber" value="${versionNumber}"  />
-    <filter token="appId"         value="${appId}"          />
-    <filter token="appName"       value="${appName}"        />
-    <filter token="appFilename"   value="${appFilename}"    />
-    <copy file="application.xml" todir="temp" filtering="true" overwrite="true" />
-  </target>
-
-  <target name="test"
-          depends="compile,app"
-          description="Test as desktop application.">
-    <exec executable="adl" dir="temp">
-      <arg value="application.xml" />
-      <arg line="-screensize iPhone" />
-    </exec>
-  </target>
 
   <target name="package" 
           depends="compile,app"

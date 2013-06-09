@@ -1,48 +1,10 @@
 <project name="win-captive"> 
 
-  <property file="../props.properties" />
+  <property name="appDescriptor" value="../win/application.xml" />
+  <import file="../common.xml" />  
   <property name="exeFilename"   value="${appFilename}-captive-win-${versionNumber}.exe" />
   <property name="dirname"       value="${appFilename}-captive-win-${versionNumber}" />
   <property name="zipFilename"   value="${appFilename}-captive-win-${versionNumber}.zip" />
-
-  <target name="clean" description="Delete temp folder."> 
-    <delete dir="temp" />
-  </target>
-  
-  <target name="clean-web" description="Delete the public folder under the web folder."> 
-    <delete dir="../web/public" />
-  </target>
-
-  <target name="compile" description="Compile as3 source into Main.swf."> 
-    <mkdir dir="temp" />
-    <exec executable="cmd" failonerror="true">
-      <arg value="/c" />
-      <arg value="amxmlc.bat" />
-      <arg line="-o temp/Main.swf" /> 
-      <arg line="-source-path ../src" />
-      <arg value="-compress=true" /> 
-      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-      <arg value="--" /> 
-      <arg value="Main.as" /> 
-    </exec>
-  </target>
-
-  <target name="app" description="Generate application descriptor file.">
-    <mkdir dir="temp" />
-    <filter token="versionNumber" value="${versionNumber}"  />
-    <filter token="appId"         value="${appId}"          />
-    <filter token="appName"       value="${appName}"        />
-    <filter token="appFilename"   value="${appFilename}"    />
-    <copy file="../win/application.xml" todir="temp" filtering="true" overwrite="true" />
-  </target>
-
-  <target name="test"
-          depends="compile,app"
-          description="Test as desktop application.">
-    <exec executable="adl" dir="temp">
-      <arg value="application.xml" />
-    </exec>
-  </target>
 
   <target name="package" 
           depends="compile,app"

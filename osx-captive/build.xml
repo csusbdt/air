@@ -1,46 +1,14 @@
 <project name="osx-captive"> 
 
-  <property file="../props.properties" />
+  <property name="appDescriptor" value="../osx/application.xml" />
+  <import file="../common.xml" />
   <property name="appFilename" value="${appFilename}-captive-osx-${versionNumber}.app" />
   <property name="dmgFilename" value="${appFilename}-captive-osx-${versionNumber}.dmg" />
 
-  <target name="clean" description="Delete temp folder."> 
-    <delete dir="temp" />
-  </target>
-
-  <target name="compile" description="Compile as3 source into Main.swf."> 
-    <mkdir dir="temp" />
-    <exec executable="amxmlc" failonerror="true"> 
-      <arg line="-o temp/Main.swf" /> 
-      <arg line="-source-path ../src" />
-      <arg value="-compress=true" /> 
-      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
-      <arg value="--" /> 
-      <arg value="Main.as" /> 
-    </exec>
-  </target>
-
-  <target name="app" description="Generate application descriptor file.">
-    <mkdir dir="temp" />
-    <filter token="versionNumber" value="${versionNumber}"  />
-    <filter token="appId"         value="${appId}"          />
-    <filter token="appName"       value="${appName}"        />
-    <filter token="appFilename"   value="${appFilename}"    />
-    <copy file="../osx/application.xml" todir="temp" filtering="true" overwrite="true" />
-  </target>
-
-  <target name="test"
-          depends="compile,app"
-          description="Test as desktop application.">
-    <exec executable="adl" dir="temp">
-      <arg value="application.xml" />
-    </exec>
-  </target>
-
-  <target name="package" 
+  <target name="package"
           depends="compile,app"
           description="Generate the captive osx app.">
-    <exec executable="adt" dir="temp" failonerror="true"> 
+    <exec executable="adt" dir="temp" failonerror="true">
       <arg value="-package"                          />
       <arg line="-storetype pkcs12"                  />
       <arg line="-keystore ../../keystore/keystore"  />
@@ -72,4 +40,3 @@
   </target>
 
 </project>
-

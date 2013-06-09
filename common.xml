@@ -1,0 +1,96 @@
+<project>
+
+
+<!--
+ADD STARLING, ETC?
+      <arg value="-library-path=${airglobal}" /> 
+-->
+
+
+
+  <!--
+    IMPORTANT:  The order of property assignments is significant in unexpected way!
+                Ant properties can not be changed once set;
+                The first value assigned to a property is the final value.
+  -->
+   
+  <property file="../props.properties" />
+
+  <!-- Assign defaults to the following properties in case 
+       including script does not assign values to them. -->
+  <property name="appDescriptor" value="application.xml" />
+  <property name="compressSwf"   value="true"            />
+  <property name="testLine"      value=""                />
+
+  <target name="clean" description="Delete temp folder."> 
+    <delete dir="temp" />
+  </target>
+
+  <target name="clean-web" description="Delete the public folder under the web folder."> 
+    <delete dir="../web/public" />
+  </target>
+  
+  <target name="app" description="Generate application descriptor file.">
+    <mkdir dir="temp" />
+    <filter token="versionNumber" value="${versionNumber}"  />
+    <filter token="appId"         value="${appId}"          />
+    <filter token="appName"       value="${appName}"        />
+    <filter token="appFilename"   value="${appFilename}"    />
+    <copy file="${appDescriptor}" todir="temp" filtering="true" overwrite="true" />
+  </target>
+  
+  <target name="compile" description="Compile as3 source into Main.swf."> 
+    <mkdir dir="temp" />
+    <exec executable="amxmlc" failonerror="true" os="Mac OS X"> 
+      <arg line="-o temp/Main.swf"                                               />
+      <arg line="-source-path ../src"                                            />
+      <arg value="-compress=${compressSwf}"                                      />
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
+      <arg value="--"                                                            />
+      <arg value="Main.as"                                                       /> 
+    </exec>
+	<exec executable="cmd" failonerror="true" os="Windows XP, Windows 7, Windows 8">
+      <arg value="/c"                                                            />
+      <arg value="amxmlc.bat"                                                    />
+      <arg line="-o temp/Main.swf"                                               />
+      <arg line="-source-path ../src"                                            />
+      <arg value="-compress=${compressSwf}"                                      />
+      <arg value="-define+=CONFIG::installerSite,&quot;'${installerSite}'&quot;" /> 
+      <arg value="--"                                                            />
+      <arg value="Main.as"                                                       /> 
+	</exec>
+  </target>
+
+  <target name="test"
+          depends="compile,app"
+          description="Test as desktop application.">
+    <exec executable="adl" dir="temp">
+      <arg value="application.xml" />
+      <arg line="${testLine}" />
+    </exec>
+  </target>
+
+  <!-- The following does not work in windows.  Not sure about mac. -->
+  <target name="doc" description="Generate documentation. (Run in project root.)"> 
+    <delete dir="doc" />
+    <exec executable="aasdoc" failonerror="true" os="Mac OS X">
+      <arg value="-define+=CONFIG::installerSite,&quot;'INSTALLER_SITE'&quot;" /> 
+      <arg line="-doc-sources src" />
+      <arg line="-source-path src" />
+      <arg line="-main-title &quot;Hello Air Documentation&quot;" />
+      <arg line="-window-title &quot;Hello Air Documentation&quot;" />
+      <arg line="-output doc"  />
+    </exec>
+	<exec executable="cmd" failonerror="true" os="Windows XP, Windows 7, Windows 8">
+      <arg value="/c"                                                            />
+      <arg value="aasdoc.bat"                                                    />
+      <arg value="-define+=CONFIG::installerSite,&quot;'INSTALLER_SITE'&quot;" /> 
+      <arg line="-doc-sources src" />
+      <arg line="-source-path src" />
+      <arg line="-main-title &quot;Hello Air Documentation&quot;" />
+      <arg line="-window-title &quot;Hello Air Documentation&quot;" />
+      <arg line="-output doc"  />
+    </exec>
+  </target>
+
+</project>
