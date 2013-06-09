@@ -30,7 +30,71 @@ I unpacked the sdk to _$HOME/apps/AIRSDK_Compiler_.
     export PATH=$PATH:$AIR_SDK_HOME/bin
     export PATH=$PATH:$AIR_SDK_HOME/lib/android/bin
 
-## Uninstall AIR
+## Sub-project Notes
+
+This project is divided into several sub-projects, one for each type of installation.
+The sub-projects refer to a common code base; however, some Action Script files are
+specifically for sub-projects.  Each Sub-project has its own entry point, stored in
+Main.as in the sub-project folder.
+These sub-projects are separated into folders, and are described as follows.
+
+### desktop
+
+The desktop sub-project builds the common app code for distribution in the air file format.
+
+Currently, the desktop project only builds under OS X.  However, it runs in OS X and Windows and
+the build script can easily be changed to build the air file in Windows.
+
+The solution presented here does not use the installation badge system provided by
+Adobe, because that system is broken for the Chrome web browser.  This means the user needs to
+install the air runtime as a separate initial step.   One thing that could be done is to
+modify the installation badge code to detect if the runtime is present and if not to 
+tell the user to install it.  I did not do this because the native installation processes
+for Windows and OS X illustrated in this project provide an easier experience for the user.
+
+### osx-native/win-native
+
+The osx-native and win native sub-projects build the common app code for distribution using 
+Adobe's native installer approach.  In my experience, this approach is the easiest. 
+
+This approach is the most completely worked out example in this example application project.  
+
+Unlike the pure air approach illustrated in the desktop folder, the native installation 
+approach supports native extensions (untested here).  TODO: test native extension.
+
+### osx-captive/win-captive
+
+The osx-captive and win-captive sub-projects build the common app code for distribution 
+to OS X and Windows desktop environments with a captive runtime. This means the Action Script 
+runtime is built into the app and therefore does not depend on Adobe AIR being installed 
+on the user system.
+ 
+The example presented here shows how to generate the executable with captive runtime; 
+it does not show how to construct an installer.  However, the example does illustrate 
+how the application can detect the existence of updates and how to open a browser instance 
+from code download the update automatically without user effort.  TODO: ask the user
+if they want to download the update rather than download without asking.
+
+### ios
+
+The ios sub-project builds the common app code for distribution to iOS environments 
+with a captive runtime. This is the only way to distribute Adobe AIR programs to the
+iOS environment.  TODO: test using application developer account.
+
+Unlike captive builds for the desktop, the captive build for iOS does not include
+webkit, so HTML can not be used in the app.  The documentation says the overhead of 
+the captive runtime is 9 MB (unverified).  TODO: verify this.
+
+### droid
+
+The droid sub-project builds the common app code for distribution to Android environments 
+with a captive runtime. This is the default way to distribute Adobe AIR programs to the
+Android environment when using AIR SDK 3.7.
+
+Similar to the iOS sub-project, the captive build for Android does not include
+webkit, so HTML can not be used in the app.
+
+## How to Uninstall AIR
 
 - http://www.kevinblanchard.com/projects/uninstalling-adobe-air-on-os-x/
 - http://flash-gallery.com/help/faq/uninstall-adobe-air/

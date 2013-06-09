@@ -7,6 +7,10 @@
     <delete dir="temp" />
   </target>
 
+  <target name="clean-web" description="Delete the public folder under the web folder."> 
+    <delete dir="../web/public" />
+  </target>
+
   <target name="compile" description="Compile as3 source into Main.swf."> 
     <mkdir dir="temp" />
     <exec executable="cmd" failonerror="true">
@@ -41,7 +45,7 @@
   <target name="package" 
           depends="compile,app"
           description="Generate the native win installer.">
-    <exec executable="cmd" dir="temp">
+    <exec executable="cmd" dir="temp" failonerror="true">
       <arg value="/c" />
       <arg value="adt.bat" />
       <arg value="-package"                          />
@@ -52,7 +56,7 @@
       <arg value="${exeFilename}"                    />
       <arg value="application.xml"                   />
       <arg value="Main.swf"                          />
-      <arg line="-C ../../osx/ icons"                />  <!--  CHECK THIS !!!!!!!! -->
+      <arg line="-C ../../desktop/ icons"            />
     </exec>
     <delete file="temp/Main.swf"         />
     <delete file="temp/application.xml"  />

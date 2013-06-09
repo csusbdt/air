@@ -39,7 +39,7 @@
   <target name="package" 
           depends="compile,app"
           description="Generate the native osx installer.">
-    <exec executable="adt" dir="temp"> 
+    <exec executable="adt" dir="temp" failonerror="true"> 
       <arg value="-package"                          />
       <arg line="-storetype pkcs12"                  />
       <arg line="-keystore ../../keystore/keystore"  />

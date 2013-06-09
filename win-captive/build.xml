@@ -2,11 +2,15 @@
 
   <property file="../props.properties" />
   <property name="exeFilename"   value="${appFilename}-captive-win-${versionNumber}.exe" />
-  <property name="dirname"       value="${appName}-captive-win-${versionNumber}" />
-  <property name="zipFilename"   value="${appName}-captive-win-${versionNumber}.zip" />
+  <property name="dirname"       value="${appFilename}-captive-win-${versionNumber}" />
+  <property name="zipFilename"   value="${appFilename}-captive-win-${versionNumber}.zip" />
 
   <target name="clean" description="Delete temp folder."> 
     <delete dir="temp" />
+  </target>
+  
+  <target name="clean-web" description="Delete the public folder under the web folder."> 
+    <delete dir="../web/public" />
   </target>
 
   <target name="compile" description="Compile as3 source into Main.swf."> 
@@ -43,25 +47,23 @@
   <target name="package" 
           depends="compile,app"
           description="Generate the captive win installer (in zip file).">
-    <exec executable="cmd" dir="temp">
+    <exec executable="cmd" dir="temp" failonerror="true">
       <arg value="/c" />
       <arg value="adt.bat" />
       <arg value="-package"                          />
-      <arg line="-target bundle"                     />
-      <arg line="-storetype pkcs12"                  />
+	  <arg line="-storetype pkcs12"                  />
       <arg line="-keystore ../../keystore/keystore"  />
       <arg line="-storepass 1234"                    />
+      <arg line="-target bundle"                     />
       <arg value="${dirname}"                        />
       <arg value="application.xml"                   />
       <arg value="Main.swf"                          />
-      <arg line="-C ../../osx/ icons"                />  <!--  CHECK THIS !!!!!!!! -->
+      <arg line="-C ../../desktop/ icons"            />
     </exec>
     <zip destfile="temp/${zipFilename}" basedir="temp/${dirname}" />
-<!--
     <delete file="temp/Main.swf"         />
     <delete file="temp/application.xml"  />
-    <delete dir="${dirname}"             />
--->
+    <delete dir="temp/${dirname}"             />
   </target>
 
   <target name="web" 
@@ -69,7 +71,7 @@
           description="Publish the win captive installer to the web.">
     <mkdir dir="../web/public" />
     <copy file="temp/${zipFilename}" todir="../web/public" />
-    <concat destfile="../web/public/${zipFilename}-captive-win">${installerSite}/${zipFilename}</concat>
+    <concat destfile="../web/public/${appFilename}-captive-win">${installerSite}/${zipFilename}</concat>
     <antcall target="clean" />
   </target>
 
